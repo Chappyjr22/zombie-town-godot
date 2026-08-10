@@ -36,7 +36,7 @@ Status: playable baseline
 
 ## Prototype 0.2: Town vertical slice
 
-Status: first playable Town pass ready for engine validation
+Status: Town structural/navigation baseline validated, interaction layer in progress
 
 - [x] Establish asset import conventions for GLB/glTF
 - [ ] Import/refine detailed Town geometry/assets
@@ -50,7 +50,11 @@ Status: first playable Town pass ready for engine validation
 - [x] Port perk location markers
 - [x] Port Pack-a-Punch location marker
 - [x] Port equipment-buy location markers
-- [ ] Validate Town scale/collision/nav in Godot
+- [x] Validate Town scale/collision/nav in Godot
+- [x] Add reusable player interaction ray/prompt framework
+- [x] Add functional ammo-buy interaction for equipped ammo
+- [x] Add first functional perk-machine interactions and effects
+- [x] Add Pack-a-Punch tier/cost interaction hooks
 - [ ] Refine bar second floor, balcony, and access route
 - [ ] Refine bank vault/interior
 - [ ] Refine church tower/interior
@@ -58,8 +62,8 @@ Status: first playable Town pass ready for engine validation
 - [ ] Port doors and paid gates
 - [ ] Port wall-buy interactions
 - [ ] Port Mystery Box interaction/system
-- [ ] Port perk machines and perk effects
-- [ ] Port Pack-a-Punch interaction/system
+- [ ] Add production perk-machine models/effects presentation
+- [ ] Finish Pack-a-Punch presentation and weapon-name changes
 - [ ] Port equipment buys
 - [ ] Port power-up drops
 - [ ] Port Town ambience and gameplay audio
