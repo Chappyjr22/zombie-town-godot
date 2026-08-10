@@ -16,9 +16,8 @@ func _ready() -> void:
 	if player == null:
 		set_physics_process(false)
 		return
-	if player.weapon != null:
-		player.weapon = player.weapon.duplicate(true) as WeaponData
 	camera = player.get_node("Head/Camera3D") as Camera3D
+	player.weapon_changed.connect(_on_weapon_changed)
 	_ensure_input_map()
 
 func _physics_process(_delta: float) -> void:
@@ -62,13 +61,17 @@ func _refresh_prompt() -> void:
 	if current_interactable == null:
 		prompt_changed.emit("", true)
 		return
-	var text := _prompt_for(current_interactable)
-	var affordable := _is_affordable(current_interactable)
-	prompt_changed.emit(text, affordable)
+	prompt_changed.emit(_prompt_for(current_interactable), _is_affordable(current_interactable))
 
 func _prompt_for(interactable: ZombieTownInteractable) -> String:
 	if interactable.interaction_kind == &"perk" and has_perk(interactable.item_id):
 		return "%s  [OWNED]" % interactable.display_name
+	if interactable.interaction_kind == &"weapon":
+		if player.weapon != null and player.weapon.id == interactable.item_id:
+			if player.reserve_ammo >= player.weapon.reserve_ammo:
+				return "%s AMMO  [FULL]" % interactable.display_name
+			return "[E] Buy %s Ammo  %d PTS" % [interactable.display_name, interactable.ammo_cost]
+		return "[E] Buy %s  %d PTS" % [interactable.display_name, interactable.cost]
 	if interactable.interaction_kind == &"ammo":
 		if player.weapon != null and player.weapon.id != interactable.item_id:
 			return "%s  [NOT EQUIPPED]" % interactable.display_name
@@ -83,6 +86,8 @@ func _prompt_for(interactable: ZombieTownInteractable) -> String:
 func _is_affordable(interactable: ZombieTownInteractable) -> bool:
 	if interactable.interaction_kind == &"perk" and has_perk(interactable.item_id):
 		return true
+	if interactable.interaction_kind == &"weapon" and player.weapon != null and player.weapon.id == interactable.item_id:
+		return player.reserve_ammo >= player.weapon.reserve_ammo or player.points >= interactable.ammo_cost
 	if interactable.interaction_kind == &"pack_a_punch":
 		if pack_level >= PACK_COSTS.size():
 			return true
@@ -93,6 +98,8 @@ func _activate(interactable: ZombieTownInteractable) -> void:
 	match interactable.interaction_kind:
 		&"perk":
 			_purchase_perk(interactable.item_id, interactable.cost)
+		&"weapon":
+			_purchase_wall_weapon(interactable)
 		&"ammo":
 			_purchase_ammo(interactable.item_id, interactable.cost)
 		&"pack_a_punch":
@@ -119,6 +126,19 @@ func _purchase_perk(perk_id: StringName, cost: int) -> void:
 			player.sprint_speed *= 1.25
 		&"revive", &"mule":
 			pass
+
+func _purchase_wall_weapon(interactable: ZombieTownInteractable) -> void:
+	if player.weapon != null and player.weapon.id == interactable.item_id:
+		_purchase_ammo(interactable.item_id, interactable.ammo_cost)
+		return
+	if not _spend_points(interactable.cost):
+		return
+	var new_weapon := ZombieTownWeaponCatalog.load_weapon(interactable.item_id)
+	if new_weapon == null:
+		player.points += interactable.cost
+		player.stats_changed.emit(player.points, player.kills, player.headshots)
+		return
+	player.equip_weapon(new_weapon)
 
 func _purchase_ammo(item_id: StringName, cost: int) -> void:
 	if player.weapon == null or player.weapon.id != item_id:
@@ -151,6 +171,16 @@ func _purchase_pack_a_punch() -> void:
 	player.ammo = player.weapon.magazine_size
 	player.reserve_ammo = player.weapon.reserve_ammo
 	player.ammo_changed.emit(player.ammo, player.reserve_ammo, player.reloading)
+
+func _on_weapon_changed(_display_name: String, _weapon_id: StringName) -> void:
+	pack_level = 0
+	if player.weapon == null:
+		return
+	if has_perk(&"speed"):
+		player.weapon.reload_time *= 0.5
+	if has_perk(&"dtap"):
+		player.weapon.damage *= 1.35
+		player.weapon.fire_interval *= 0.8
 
 func _spend_points(cost: int) -> bool:
 	if cost < 0 or player.points < cost:
