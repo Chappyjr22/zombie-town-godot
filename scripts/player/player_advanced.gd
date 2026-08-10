@@ -1,6 +1,8 @@
 class_name ZombieTownAdvancedPlayer
 extends ZombieTownPlayer
 
+@onready var first_person_viewmodel: ZombieTownWeaponViewmodel = $Head/Camera3D/WeaponRoot/Viewmodel
+
 var burst_remaining := 0
 var burst_next_time := 0.0
 
@@ -21,7 +23,16 @@ func _fire() -> void:
 		if _fire_advanced_round():
 			next_fire_time = now + weapon.fire_interval
 		return
+	var ammo_before := ammo
 	super._fire()
+	if ammo < ammo_before:
+		_animate_viewmodel_fire()
+
+func _begin_reload() -> void:
+	var was_reloading := reloading
+	super._begin_reload()
+	if not was_reloading and reloading and weapon != null and first_person_viewmodel != null:
+		first_person_viewmodel.animate_reload(weapon.reload_time, weapon.shell_reload)
 
 func _start_burst() -> void:
 	if weapon == null or burst_remaining > 0:
@@ -65,6 +76,7 @@ func _fire_advanced_round() -> bool:
 		return false
 
 	ammo -= 1
+	_animate_viewmodel_fire()
 	weapon_kick = minf(weapon_kick + _kick_for_weapon(), 1.55)
 	look_pitch = clampf(look_pitch - deg_to_rad(weapon.recoil_pitch), deg_to_rad(-85.0), deg_to_rad(85.0))
 	head.rotation.x = look_pitch
@@ -86,6 +98,10 @@ func _fire_advanced_round() -> bool:
 		for _pellet_index in pellet_count:
 			_trace_shot(origin, _shot_direction())
 	return true
+
+func _animate_viewmodel_fire() -> void:
+	if first_person_viewmodel != null:
+		first_person_viewmodel.animate_fire()
 
 func _uses_advanced_effect(data: WeaponData) -> bool:
 	return data.fire_mode == &"burst" or not data.projectile_type.is_empty() or data.chain_count > 0 or data.cone_range > 0.0
@@ -303,3 +319,6 @@ func _update_weapon_visual() -> void:
 			hip_weapon_position = Vector3(0.27, -0.22, -0.60)
 			ads_weapon_position = Vector3(0.0, -0.16, -0.55)
 	weapon_root.position = hip_weapon_position
+	if first_person_viewmodel != null:
+		first_person_viewmodel.set_weapon(weapon)
+		muzzle_flash.position = first_person_viewmodel.muzzle_position_for(weapon)
