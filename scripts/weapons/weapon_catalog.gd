@@ -23,5 +23,31 @@ static func weapon_path(weapon_id: StringName) -> String:
 			return "res://resources/weapons/galil.tres"
 		&"rem870":
 			return "res://resources/weapons/rem870.tres"
+		&"an94":
+			return "res://resources/weapons/an94.tres"
+		&"skorpion":
+			return "res://resources/weapons/skorpion.tres"
+		&"luger":
+			return "res://resources/weapons/luger.tres"
+		&"flaregun":
+			return "res://resources/weapons/flaregun.tres"
+		&"rpk":
+			return "res://resources/weapons/rpk.tres"
+		&"hamr":
+			return "res://resources/weapons/hamr.tres"
+		&"m1216":
+			return "res://resources/weapons/m1216.tres"
+		&"dsr50":
+			return "res://resources/weapons/dsr50.tres"
+		&"raygun":
+			return "res://resources/weapons/raygun.tres"
+		&"raygun2":
+			return "res://resources/weapons/raygun2.tres"
+		&"warmachine":
+			return "res://resources/weapons/warmachine.tres"
+		&"thunder":
+			return "res://resources/weapons/thunder.tres"
+		&"waffe":
+			return "res://resources/weapons/waffe.tres"
 		_:
 			return ""
