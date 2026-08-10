@@ -1,0 +1,64 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/zombies/zombie.gd" id="1_zombie"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape_zombie"]
+radius = 0.36
+height = 1.82
+
+[sub_resource type="StandardMaterial3D" id="Material_body"]
+albedo_color = Color(0.19, 0.23, 0.17, 1)
+roughness = 0.92
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_body"]
+material = SubResource("Material_body")
+top_radius = 0.3
+bottom_radius = 0.36
+height = 1.22
+
+[sub_resource type="StandardMaterial3D" id="Material_skin"]
+albedo_color = Color(0.38, 0.39, 0.34, 1)
+roughness = 0.96
+
+[sub_resource type="SphereMesh" id="SphereMesh_head"]
+material = SubResource("Material_skin")
+radius = 0.245
+height = 0.49
+
+[sub_resource type="StandardMaterial3D" id="Material_eye"]
+shading_mode = 0
+albedo_color = Color(0.8, 0.02, 0.01, 1)
+emission_enabled = true
+emission = Color(1, 0.01, 0.005, 1)
+emission_energy_multiplier = 3.5
+
+[sub_resource type="SphereMesh" id="SphereMesh_eye"]
+material = SubResource("Material_eye")
+radius = 0.035
+height = 0.07
+
+[node name="Zombie" type="CharacterBody3D"]
+script = ExtResource("1_zombie")
+collision_layer = 2
+collision_mask = 1
+floor_snap_length = 0.2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.91, 0)
+shape = SubResource("CapsuleShape_zombie")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.78, 0)
+mesh = SubResource("CylinderMesh_body")
+
+[node name="Head" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.55, 0)
+mesh = SubResource("SphereMesh_head")
+
+[node name="LeftEye" type="MeshInstance3D" parent="."]
+position = Vector3(-0.08, 1.59, -0.215)
+mesh = SubResource("SphereMesh_eye")
+
+[node name="RightEye" type="MeshInstance3D" parent="."]
+position = Vector3(0.08, 1.59, -0.215)
+mesh = SubResource("SphereMesh_eye")
