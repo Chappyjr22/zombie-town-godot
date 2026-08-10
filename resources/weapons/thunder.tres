@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"thunder"
+display_name = "Thundergun"
+weapon_class = &"wonder"
+fire_mode = &"semi"
+damage = 0.0
+magazine_size = 2
+reserve_ammo = 12
+reload_time = 3.2
+fire_interval = 1.0
+range = 22.0
+spread = 0.0
+ads_spread = 0.0
+recoil_pitch = 2.4
+recoil_yaw = 0.10
+cone_range = 22.0
+cone_angle = 0.55
