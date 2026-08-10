@@ -64,6 +64,9 @@ func _refresh_prompt() -> void:
 	prompt_changed.emit(_prompt_for(current_interactable), _is_affordable(current_interactable))
 
 func _prompt_for(interactable: ZombieTownInteractable) -> String:
+	if interactable is ZombieTownMysteryBox:
+		var mystery_box := interactable as ZombieTownMysteryBox
+		return mystery_box.prompt_for(player)
 	if interactable.interaction_kind == &"perk" and has_perk(interactable.item_id):
 		return "%s  [OWNED]" % interactable.display_name
 	if interactable.interaction_kind == &"weapon":
@@ -84,6 +87,9 @@ func _prompt_for(interactable: ZombieTownInteractable) -> String:
 	return "[E] %s  %d PTS" % [interactable.display_name, interactable.cost]
 
 func _is_affordable(interactable: ZombieTownInteractable) -> bool:
+	if interactable is ZombieTownMysteryBox:
+		var mystery_box := interactable as ZombieTownMysteryBox
+		return mystery_box.affordable_for(player)
 	if interactable.interaction_kind == &"perk" and has_perk(interactable.item_id):
 		return true
 	if interactable.interaction_kind == &"weapon" and player.weapon != null and player.weapon.id == interactable.item_id:
@@ -95,6 +101,10 @@ func _is_affordable(interactable: ZombieTownInteractable) -> bool:
 	return player.points >= interactable.cost
 
 func _activate(interactable: ZombieTownInteractable) -> void:
+	if interactable is ZombieTownMysteryBox:
+		var mystery_box := interactable as ZombieTownMysteryBox
+		mystery_box.activate_for(player)
+		return
 	match interactable.interaction_kind:
 		&"perk":
 			_purchase_perk(interactable.item_id, interactable.cost)
