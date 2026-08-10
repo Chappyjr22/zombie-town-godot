@@ -18,6 +18,7 @@ var alive := true
 var attack_remaining := 0.0
 
 func _ready() -> void:
+	add_to_group(&"zombie")
 	health = max_health
 
 func set_target(node: Node3D) -> void:
