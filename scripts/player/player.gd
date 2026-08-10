@@ -171,20 +171,22 @@ func _fire() -> void:
 	var direction := -camera.global_transform.basis.z
 	var query := PhysicsRayQueryParameters3D.create(origin, origin + direction * weapon.range)
 	query.exclude = [get_rid()]
-	var result := get_world_3d().direct_space_state.intersect_ray(query)
+	var result: Dictionary = get_world_3d().direct_space_state.intersect_ray(query)
 	if result.is_empty():
 		return
 
-	var collider := result.get("collider")
-	if collider == null or not collider.has_method("take_damage"):
+	var collider_variant: Variant = result.get("collider")
+	if not collider_variant is ZombieTownZombie:
 		return
+	var zombie: ZombieTownZombie = collider_variant
 
-	var hit_position: Vector3 = result.get("position", origin)
-	var headshot := false
-	if collider.has_method("is_headshot_point"):
-		headshot = bool(collider.is_headshot_point(hit_position))
+	var hit_position_variant: Variant = result.get("position")
+	if not hit_position_variant is Vector3:
+		return
+	var hit_position: Vector3 = hit_position_variant
+	var headshot := zombie.is_headshot_point(hit_position)
 	var damage := weapon.damage * (weapon.headshot_multiplier if headshot else 1.0)
-	var outcome: Dictionary = collider.take_damage(damage, headshot, self)
+	var outcome: Dictionary = zombie.take_damage(damage, headshot, self)
 	points += 10
 	if bool(outcome.get("killed", false)):
 		kills += 1
