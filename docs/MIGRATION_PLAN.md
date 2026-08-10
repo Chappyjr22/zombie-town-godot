@@ -64,6 +64,7 @@ Status: Town structural/navigation baseline validated, interaction layer in prog
 - [x] Expand Mystery Box to supported production weapon pool
 - [x] Port browser-style weighted box odds and wonder pity scaling
 - [x] Slow Mystery Box cycling into final reveal
+- [x] Validate expanded Mystery Box weapons in live Godot test
 - [ ] Add Ballistic Knife after melee/projectile knife framework exists
 - [ ] Add Mystery Box move/teddy behavior across preserved box spots
 - [ ] Refine bar second floor, balcony, and access route
@@ -80,9 +81,18 @@ Status: Town structural/navigation baseline validated, interaction layer in prog
 
 ## Prototype 0.3: Production combat framework
 
-- [ ] Weapon scene/socket architecture
-- [ ] First-person arms
-- [ ] Reload/fire/inspect animation framework
+- [x] Reusable first-person weapon viewmodel architecture
+- [x] First procedural first-person arms/hands pass
+- [x] First fire/reload viewmodel animation pass
+- [x] Dedicated Makarov procedural viewmodel
+- [x] Dedicated AK-47 procedural viewmodel
+- [x] Dedicated Galil procedural viewmodel
+- [x] Dedicated Ray Gun procedural viewmodel
+- [x] Dedicated Ray Gun Mark II procedural viewmodel
+- [x] Class-based visual fallbacks for remaining firearms
+- [ ] Validate viewmodel scale, hand placement, ADS and muzzle positions in live Godot test
+- [ ] Replace class fallbacks with dedicated production weapon models
+- [ ] Inspect animation framework
 - [x] Base weapon behavior profiles for semi/auto/shotgun wall guns
 - [x] Burst-fire framework
 - [x] Piercing hitscan framework
@@ -94,7 +104,7 @@ Status: Town structural/navigation baseline validated, interaction layer in prog
 - [x] Thundergun cone-blast prototype
 - [x] Wunderwaffe chain-lightning prototype
 - [x] Add AN-94, Grease Gun, Luger, RPK, HAMR, M1216 and sniper box resources
-- [ ] Validate expanded box weapons in live Godot test
+- [x] Validate expanded box weapons in live Godot test
 - [ ] Production weapon recoil profiles
 - [ ] Production projectile/impact effects
 - [ ] Production wonder weapon models/audio/effects
