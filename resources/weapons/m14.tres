@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"m14"
+display_name = "M14"
+weapon_class = &"rifle"
+fire_mode = &"semi"
+damage = 118.0
+headshot_multiplier = 3.0
+pellets = 1
+magazine_size = 16
+reserve_ammo = 160
+reload_time = 2.3
+fire_interval = 0.176471
+range = 160.0
+spread = 0.020
+ads_spread = 0.002
+recoil_pitch = 1.45
+recoil_yaw = 0.45
+hip_fov = 75.0
+ads_fov = 56.0
+shell_reload = false
+wall_cost = 500
+ammo_cost = 250
