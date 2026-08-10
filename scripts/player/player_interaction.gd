@@ -16,6 +16,8 @@ func _ready() -> void:
 	if player == null:
 		set_physics_process(false)
 		return
+	if player.weapon != null:
+		player.weapon = player.weapon.duplicate(true) as WeaponData
 	camera = player.get_node("Head/Camera3D") as Camera3D
 	_ensure_input_map()
 
@@ -67,8 +69,11 @@ func _refresh_prompt() -> void:
 func _prompt_for(interactable: ZombieTownInteractable) -> String:
 	if interactable.interaction_kind == &"perk" and has_perk(interactable.item_id):
 		return "%s  [OWNED]" % interactable.display_name
-	if interactable.interaction_kind == &"ammo" and player.weapon != null and player.weapon.id != interactable.item_id:
-		return "%s  [NOT EQUIPPED]" % interactable.display_name
+	if interactable.interaction_kind == &"ammo":
+		if player.weapon != null and player.weapon.id != interactable.item_id:
+			return "%s  [NOT EQUIPPED]" % interactable.display_name
+		if player.weapon != null and player.reserve_ammo >= player.weapon.reserve_ammo:
+			return "%s  [FULL]" % interactable.display_name
 	if interactable.interaction_kind == &"pack_a_punch":
 		if pack_level >= PACK_COSTS.size():
 			return "Pack-a-Punch  [MAX TIER]"
@@ -155,8 +160,9 @@ func _spend_points(cost: int) -> bool:
 	return true
 
 func _ensure_input_map() -> void:
-	if not InputMap.has_action(&"interact"):
-		InputMap.add_action(&"interact", 0.18)
+	if InputMap.has_action(&"interact"):
+		return
+	InputMap.add_action(&"interact", 0.18)
 	var key_event := InputEventKey.new()
 	key_event.physical_keycode = KEY_E
 	InputMap.action_add_event(&"interact", key_event)
