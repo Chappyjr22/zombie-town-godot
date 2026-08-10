@@ -6,47 +6,60 @@ func _ready() -> void:
 
 func _spawn_interactables() -> void:
 	for marker_node: Node in get_tree().get_nodes_in_group(&"perk_spot"):
-		if marker_node is Marker3D and marker_node.is_ancestor_of(self) == false:
+		if marker_node is Marker3D and _belongs_to_town(marker_node):
 			_spawn_perk(marker_node as Marker3D)
 	for marker_node: Node in get_tree().get_nodes_in_group(&"ammo_buy"):
-		if marker_node is Marker3D:
+		if marker_node is Marker3D and _belongs_to_town(marker_node):
 			_spawn_ammo(marker_node as Marker3D)
 	for marker_node: Node in get_tree().get_nodes_in_group(&"pack_a_punch_spot"):
-		if marker_node is Marker3D:
+		if marker_node is Marker3D and _belongs_to_town(marker_node):
 			_spawn_pack_a_punch(marker_node as Marker3D)
+
+func _belongs_to_town(node: Node) -> bool:
+	var town_root: Node = get_parent()
+	return town_root == node or town_root.is_ancestor_of(node)
 
 func _spawn_perk(marker: Marker3D) -> void:
 	var item_id: StringName = _marker_item_id(marker)
 	var data: Dictionary = _perk_data(item_id)
 	if data.is_empty():
 		return
+	var name_variant: Variant = data.get("name", "Perk")
+	var cost_variant: Variant = data.get("cost", 0)
+	var color_variant: Variant = data.get("color", Color.WHITE)
+	var letter_variant: Variant = data.get("letter", "?")
+	if not color_variant is Color:
+		return
+	var machine_color: Color = color_variant
+	var display_name := str(name_variant)
+	var price := int(cost_variant)
 	var interactable := ZombieTownInteractable.new()
-	interactable.name = "%sInteractable" % str(data["name"])
+	interactable.name = "%sInteractable" % display_name.replace(" ", "")
+	get_parent().add_child(interactable)
 	interactable.global_position = marker.global_position
 	interactable.rotation.y = _marker_yaw(marker)
-	interactable.configure(&"perk", item_id, "Buy %s" % str(data["name"]), int(data["cost"]))
-	get_parent().add_child(interactable)
-	_add_machine_visual(interactable, data["color"] as Color, str(data["letter"]))
+	interactable.configure(&"perk", item_id, "Buy %s" % display_name, price)
+	_add_machine_visual(interactable, machine_color, str(letter_variant))
 
 func _spawn_ammo(marker: Marker3D) -> void:
 	var item_id: StringName = _marker_item_id(marker)
-	var price := 250 if item_id == &"m1911" else 400
-	var label := "M1911 Ammo" if item_id == &"m1911" else "M4A1 Ammo"
+	var price: int = 250 if item_id == &"m1911" else 400
+	var label: String = "M1911 Ammo" if item_id == &"m1911" else "M4A1 Ammo"
 	var interactable := ZombieTownInteractable.new()
 	interactable.name = "%sInteractable" % label.replace(" ", "")
+	get_parent().add_child(interactable)
 	interactable.global_position = marker.global_position
 	interactable.rotation.y = _marker_yaw(marker)
 	interactable.configure(&"ammo", item_id, "Buy %s" % label, price)
-	get_parent().add_child(interactable)
 	_add_wall_plate_visual(interactable, Color(0.72, 0.78, 0.88, 1.0), "AMMO")
 
 func _spawn_pack_a_punch(marker: Marker3D) -> void:
 	var interactable := ZombieTownInteractable.new()
 	interactable.name = "PackAPunchInteractable"
+	get_parent().add_child(interactable)
 	interactable.global_position = marker.global_position
 	interactable.rotation.y = _marker_yaw(marker)
 	interactable.configure(&"pack_a_punch", &"pap", "Pack-a-Punch", 5000)
-	get_parent().add_child(interactable)
 	_add_machine_visual(interactable, Color(0.55, 0.22, 0.75, 1.0), "PAP")
 
 func _add_machine_visual(interactable: ZombieTownInteractable, color: Color, label_text: String) -> void:
