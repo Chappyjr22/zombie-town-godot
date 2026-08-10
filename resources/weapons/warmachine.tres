@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"warmachine"
+display_name = "War Machine"
+weapon_class = &"wonder"
+fire_mode = &"semi"
+damage = 0.0
+magazine_size = 6
+reserve_ammo = 24
+reload_time = 3.6
+fire_interval = 0.428571
+range = 60.0
+spread = 0.020
+ads_spread = 0.010
+recoil_pitch = 1.85
+recoil_yaw = 0.28
+projectile_type = &"nade"
+projectile_speed = 24.0
+projectile_gravity = 9.8
+splash_damage = 420.0
+splash_radius = 5.2
+self_damage = true
