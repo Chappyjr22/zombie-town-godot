@@ -6,7 +6,7 @@ config_version=5
 [application]
 
 config/name="Zombie Town"
-run/main_scene="res://scenes/game/prototype.tscn"
+run/main_scene="res://scenes/game/town_prototype.tscn"
 
 [display]
 
