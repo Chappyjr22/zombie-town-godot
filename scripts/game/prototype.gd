@@ -9,6 +9,7 @@ var game_over := false
 
 func _ready() -> void:
 	player.health_changed.connect(hud.set_health)
+	player.weapon_changed.connect(hud.set_weapon)
 	player.ammo_changed.connect(hud.set_ammo)
 	player.stats_changed.connect(hud.set_stats)
 	player.hit_confirmed.connect(hud.show_hit)
@@ -18,6 +19,8 @@ func _ready() -> void:
 	round_manager.zombie_counts_changed.connect(hud.set_zombie_counts)
 
 	hud.set_health(player.health, player.max_health)
+	if player.weapon != null:
+		hud.set_weapon(player.weapon.display_name, player.weapon.id)
 	hud.set_ammo(player.ammo, player.reserve_ammo, player.reloading)
 	hud.set_stats(player.points, player.kills, player.headshots)
 	hud.set_zombie_counts(0, 0)
