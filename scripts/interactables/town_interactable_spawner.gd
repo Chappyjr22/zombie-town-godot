@@ -8,6 +8,9 @@ func _spawn_interactables() -> void:
 	for marker_node: Node in get_tree().get_nodes_in_group(&"perk_spot"):
 		if marker_node is Marker3D and _belongs_to_town(marker_node):
 			_spawn_perk(marker_node as Marker3D)
+	for marker_node: Node in get_tree().get_nodes_in_group(&"wall_buy"):
+		if marker_node is Marker3D and _belongs_to_town(marker_node):
+			_spawn_wall_weapon(marker_node as Marker3D)
 	for marker_node: Node in get_tree().get_nodes_in_group(&"ammo_buy"):
 		if marker_node is Marker3D and _belongs_to_town(marker_node):
 			_spawn_ammo(marker_node as Marker3D)
@@ -41,6 +44,19 @@ func _spawn_perk(marker: Marker3D) -> void:
 	interactable.configure(&"perk", item_id, "Buy %s" % display_name, price)
 	_add_machine_visual(interactable, machine_color, str(letter_variant))
 
+func _spawn_wall_weapon(marker: Marker3D) -> void:
+	var item_id: StringName = _marker_item_id(marker)
+	var weapon_data := ZombieTownWeaponCatalog.load_weapon(item_id)
+	if weapon_data == null:
+		return
+	var interactable := ZombieTownInteractable.new()
+	interactable.name = "%sWallBuy" % weapon_data.display_name.replace(" ", "")
+	get_parent().add_child(interactable)
+	interactable.global_position = marker.global_position
+	interactable.rotation.y = _marker_yaw(marker)
+	interactable.configure(&"weapon", item_id, weapon_data.display_name, weapon_data.wall_cost, weapon_data.ammo_cost)
+	_add_wall_plate_visual(interactable, Color(0.76, 0.82, 0.92, 1.0), weapon_data.display_name.to_upper(), 1.8)
+
 func _spawn_ammo(marker: Marker3D) -> void:
 	var item_id: StringName = _marker_item_id(marker)
 	var price: int = 250 if item_id == &"m1911" else 400
@@ -51,7 +67,7 @@ func _spawn_ammo(marker: Marker3D) -> void:
 	interactable.global_position = marker.global_position
 	interactable.rotation.y = _marker_yaw(marker)
 	interactable.configure(&"ammo", item_id, "Buy %s" % label, price)
-	_add_wall_plate_visual(interactable, Color(0.72, 0.78, 0.88, 1.0), "AMMO")
+	_add_wall_plate_visual(interactable, Color(0.72, 0.78, 0.88, 1.0), "AMMO", 1.4)
 
 func _spawn_pack_a_punch(marker: Marker3D) -> void:
 	var interactable := ZombieTownInteractable.new()
@@ -94,15 +110,15 @@ func _add_machine_visual(interactable: ZombieTownInteractable, color: Color, lab
 	light.omni_range = 3.0
 	interactable.add_child(light)
 
-func _add_wall_plate_visual(interactable: ZombieTownInteractable, color: Color, label_text: String) -> void:
+func _add_wall_plate_visual(interactable: ZombieTownInteractable, color: Color, label_text: String, width: float) -> void:
 	var collision_shape := BoxShape3D.new()
-	collision_shape.size = Vector3(1.5, 0.7, 0.35)
+	collision_shape.size = Vector3(width + 0.1, 0.7, 0.35)
 	var collision := CollisionShape3D.new()
 	collision.shape = collision_shape
 	interactable.add_child(collision)
 
 	var mesh := BoxMesh.new()
-	mesh.size = Vector3(1.4, 0.62, 0.18)
+	mesh.size = Vector3(width, 0.62, 0.18)
 	mesh.material = _glow_material(color)
 	var mesh_instance := MeshInstance3D.new()
 	mesh_instance.mesh = mesh
@@ -111,7 +127,7 @@ func _add_wall_plate_visual(interactable: ZombieTownInteractable, color: Color, 
 	var label := Label3D.new()
 	label.position = Vector3(0.0, 0.0, -0.105)
 	label.text = label_text
-	label.font_size = 28
+	label.font_size = 22
 	label.outline_size = 6
 	interactable.add_child(label)
 
