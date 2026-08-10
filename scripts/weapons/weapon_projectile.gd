@@ -55,7 +55,7 @@ func _physics_process(delta: float) -> void:
 		var collider_variant: Variant = result.get("collider")
 		if collider_variant is ZombieTownZombie:
 			var zombie: ZombieTownZombie = collider_variant
-			owner_player.apply_weapon_damage(zombie, direct_damage, false)
+			_apply_damage(zombie, direct_damage)
 		_explode(hit_position)
 		return
 
@@ -75,13 +75,18 @@ func _explode(position: Vector3) -> void:
 				var distance := zombie.global_position.distance_to(position)
 				if distance <= splash_radius:
 					var falloff := 1.0 - clampf(distance / maxf(splash_radius, 0.01), 0.0, 0.75)
-					owner_player.apply_weapon_damage(zombie, splash_damage * falloff, false)
+					_apply_damage(zombie, splash_damage * falloff)
 
 		if allow_self_damage and owner_player.global_position.distance_to(position) <= splash_radius:
 			var self_distance := owner_player.global_position.distance_to(position)
 			var self_falloff := 1.0 - clampf(self_distance / maxf(splash_radius, 0.01), 0.0, 0.85)
 			owner_player.take_damage(splash_damage * 0.35 * self_falloff)
 	queue_free()
+
+func _apply_damage(zombie: ZombieTownZombie, amount: float) -> void:
+	if owner_player == null or not owner_player.has_method(&"apply_weapon_damage"):
+		return
+	owner_player.call(&"apply_weapon_damage", zombie, amount, false)
 
 func _build_visual() -> void:
 	var material := StandardMaterial3D.new()
@@ -120,8 +125,8 @@ func _spawn_impact_flash(position: Vector3) -> void:
 	material.emission_energy_multiplier = 3.2
 	mesh.material = material
 	flash.mesh = mesh
-	flash.global_position = position
 	get_tree().current_scene.add_child(flash)
+	flash.global_position = position
 	var tween := flash.create_tween()
 	tween.tween_property(flash, "scale", Vector3.ONE * 3.5, 0.14)
 	tween.parallel().tween_property(flash, "modulate:a", 0.0, 0.14)
