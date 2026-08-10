@@ -25,6 +25,7 @@ extends Resource
 @export var shell_reload := false
 @export var projectile_type: StringName = &""
 @export var projectile_speed := 42.0
+@export var projectile_gravity := 0.0
 @export var splash_damage := 0.0
 @export var splash_radius := 0.0
 @export var self_damage := false
