@@ -21,6 +21,7 @@ var roll_elapsed := 0.0
 var cycle_elapsed := 0.0
 var ready_elapsed := 0.0
 var cycle_index := 0
+var rolling_player: ZombieTownPlayer
 
 var lid_pivot: Node3D
 var weapon_label: Label3D
@@ -48,7 +49,7 @@ func _process(delta: float) -> void:
 		_:
 			pass
 
-func prompt_for(player: ZombieTownPlayer) -> String:
+func prompt_for(_player: ZombieTownPlayer) -> String:
 	match state:
 		BoxState.IDLE:
 			return "[E] Mystery Box  %d PTS" % BOX_COST
@@ -84,6 +85,7 @@ func _start_roll(player: ZombieTownPlayer) -> void:
 		return
 	player.points -= BOX_COST
 	player.stats_changed.emit(player.points, player.kills, player.headshots)
+	rolling_player = player
 	state = BoxState.ROLLING
 	result_weapon_id = &""
 	roll_elapsed = 0.0
@@ -113,9 +115,19 @@ func _update_roll(delta: float) -> void:
 func _finish_roll() -> void:
 	state = BoxState.READY
 	ready_elapsed = 0.0
-	result_weapon_id = WEAPON_POOL[randi_range(0, WEAPON_POOL.size() - 1)]
+	result_weapon_id = _choose_result()
 	_show_weapon(result_weapon_id)
 	box_light.light_energy = 5.0
+
+func _choose_result() -> StringName:
+	var candidate: StringName = WEAPON_POOL[randi_range(0, WEAPON_POOL.size() - 1)]
+	if rolling_player == null or rolling_player.weapon == null or WEAPON_POOL.size() <= 1:
+		return candidate
+	for _attempt in WEAPON_POOL.size():
+		if candidate != rolling_player.weapon.id:
+			return candidate
+		candidate = WEAPON_POOL[randi_range(0, WEAPON_POOL.size() - 1)]
+	return candidate
 
 func _update_ready(delta: float) -> void:
 	ready_elapsed += delta
@@ -139,6 +151,7 @@ func _take_weapon(player: ZombieTownPlayer) -> void:
 func _reset_box() -> void:
 	state = BoxState.IDLE
 	result_weapon_id = &""
+	rolling_player = null
 	roll_elapsed = 0.0
 	cycle_elapsed = 0.0
 	ready_elapsed = 0.0
@@ -212,7 +225,8 @@ func _build_visuals() -> void:
 	base.mesh = base_mesh
 	add_child(base)
 
-	for x_position: float in [-0.83, 0.83]:
+	var band_positions: Array[float] = [-0.83, 0.83]
+	for x_position: float in band_positions:
 		var band_mesh := BoxMesh.new()
 		band_mesh.size = Vector3(0.12, 0.88, 1.18)
 		band_mesh.material = trim_material
