@@ -1,0 +1,72 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/player/player.gd" id="1_player"]
+[ext_resource type="Resource" path="res://resources/weapons/m1911.tres" id="2_weapon"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape_player"]
+radius = 0.35
+height = 1.75
+
+[sub_resource type="StandardMaterial3D" id="Material_pistol"]
+albedo_color = Color(0.12, 0.13, 0.15, 1)
+metallic = 0.72
+roughness = 0.3
+
+[sub_resource type="BoxMesh" id="BoxMesh_pistol"]
+material = SubResource("Material_pistol")
+size = Vector3(0.115, 0.13, 0.36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_grip"]
+material = SubResource("Material_pistol")
+size = Vector3(0.1, 0.22, 0.12)
+
+[sub_resource type="StandardMaterial3D" id="Material_flash"]
+shading_mode = 0
+albedo_color = Color(1, 0.62, 0.18, 1)
+emission_enabled = true
+emission = Color(1, 0.33, 0.05, 1)
+emission_energy_multiplier = 5.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_flash"]
+material = SubResource("Material_flash")
+radius = 0.065
+height = 0.13
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_player")
+weapon = ExtResource("2_weapon")
+collision_layer = 1
+collision_mask = 3
+floor_snap_length = 0.25
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.875, 0)
+shape = SubResource("CapsuleShape_player")
+
+[node name="Head" type="Node3D" parent="."]
+position = Vector3(0, 1.58, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Head"]
+current = true
+fov = 75.0
+near = 0.03
+
+[node name="WeaponRoot" type="Node3D" parent="Head/Camera3D"]
+position = Vector3(0.24, -0.2, -0.54)
+
+[node name="PistolBody" type="MeshInstance3D" parent="Head/Camera3D/WeaponRoot"]
+position = Vector3(0, 0, -0.08)
+mesh = SubResource("BoxMesh_pistol")
+cast_shadow = 0
+
+[node name="Grip" type="MeshInstance3D" parent="Head/Camera3D/WeaponRoot"]
+position = Vector3(0, -0.135, 0.025)
+rotation = Vector3(0.28, 0, 0)
+mesh = SubResource("BoxMesh_grip")
+cast_shadow = 0
+
+[node name="MuzzleFlash" type="MeshInstance3D" parent="Head/Camera3D/WeaponRoot"]
+visible = false
+position = Vector3(0, 0.005, -0.315)
+mesh = SubResource("SphereMesh_flash")
+cast_shadow = 0
