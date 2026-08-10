@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"dsr50"
+display_name = "Sniper Rifle"
+weapon_class = &"sniper"
+fire_mode = &"semi"
+damage = 1250.0
+pierce = 3
+magazine_size = 4
+reserve_ammo = 40
+reload_time = 3.2
+fire_interval = 1.25
+range = 220.0
+spread = 0.055
+ads_spread = 0.0004
+recoil_pitch = 2.25
+recoil_yaw = 0.20
+ads_fov = 28.0
