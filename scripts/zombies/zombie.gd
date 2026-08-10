@@ -43,6 +43,13 @@ func _physics_process(delta: float) -> void:
 	var distance := planar.length()
 	if distance > attack_range:
 		var direction := planar.normalized()
+		if is_on_wall():
+			var wall_normal := get_wall_normal()
+			wall_normal.y = 0.0
+			if wall_normal.length_squared() > 0.001:
+				var slide_direction := direction.slide(wall_normal.normalized())
+				if slide_direction.length_squared() > 0.04:
+					direction = slide_direction.normalized()
 		velocity.x = direction.x * move_speed
 		velocity.z = direction.z * move_speed
 		var desired_yaw := atan2(-direction.x, -direction.z)
