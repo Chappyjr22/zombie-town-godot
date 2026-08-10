@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"an94"
+display_name = "AN-94"
+weapon_class = &"rifle"
+fire_mode = &"auto"
+damage = 58.0
+magazine_size = 30
+reserve_ammo = 300
+reload_time = 2.4
+fire_interval = 0.085714
+range = 150.0
+spread = 0.027
+ads_spread = 0.0035
+recoil_pitch = 0.92
+recoil_yaw = 0.22
