@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"skorpion"
+display_name = "M3 Grease Gun"
+weapon_class = &"smg"
+fire_mode = &"auto"
+damage = 30.0
+magazine_size = 40
+reserve_ammo = 320
+reload_time = 1.9
+fire_interval = 0.0625
+range = 60.0
+spread = 0.036
+ads_spread = 0.007
+recoil_pitch = 0.72
+recoil_yaw = 0.28
