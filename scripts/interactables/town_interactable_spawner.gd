@@ -17,10 +17,31 @@ func _spawn_interactables() -> void:
 	for marker_node: Node in get_tree().get_nodes_in_group(&"pack_a_punch_spot"):
 		if marker_node is Marker3D and _belongs_to_town(marker_node):
 			_spawn_pack_a_punch(marker_node as Marker3D)
+	_spawn_active_mystery_box()
 
 func _belongs_to_town(node: Node) -> bool:
 	var town_root: Node = get_parent()
 	return town_root == node or town_root.is_ancestor_of(node)
+
+func _spawn_active_mystery_box() -> void:
+	var chosen_marker: Marker3D = null
+	var best_distance: float = INF
+	for marker_node: Node in get_tree().get_nodes_in_group(&"mystery_box_spot"):
+		if not marker_node is Marker3D or not _belongs_to_town(marker_node):
+			continue
+		var marker := marker_node as Marker3D
+		var marker_position: Vector3 = marker.global_position
+		var planar_distance := Vector2(marker_position.x, marker_position.z).length_squared()
+		if planar_distance < best_distance:
+			best_distance = planar_distance
+			chosen_marker = marker
+	if chosen_marker == null:
+		return
+	var mystery_box := ZombieTownMysteryBox.new()
+	mystery_box.name = "MysteryBox"
+	get_parent().add_child(mystery_box)
+	mystery_box.global_position = chosen_marker.global_position
+	mystery_box.rotation.y = PI
 
 func _spawn_perk(marker: Marker3D) -> void:
 	var item_id: StringName = _marker_item_id(marker)
