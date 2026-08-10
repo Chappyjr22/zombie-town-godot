@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"flaregun"
+display_name = "Flare Gun"
+weapon_class = &"pistol"
+fire_mode = &"semi"
+damage = 260.0
+magazine_size = 1
+reserve_ammo = 18
+reload_time = 1.8
+fire_interval = 1.090909
+range = 70.0
+spread = 0.018
+ads_spread = 0.006
+recoil_pitch = 1.55
+recoil_yaw = 0.32
+projectile_type = &"flare"
+projectile_speed = 30.0
+projectile_gravity = 4.5
+splash_damage = 380.0
+splash_radius = 4.0
