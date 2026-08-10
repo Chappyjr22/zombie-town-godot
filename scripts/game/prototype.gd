@@ -1,6 +1,7 @@
 extends Node3D
 
 @onready var player: ZombieTownPlayer = $Player
+@onready var interaction: ZombieTownPlayerInteraction = $Player/Interaction
 @onready var round_manager: ZombieTownRoundManager = $RoundManager
 @onready var hud: ZombieTownHUD = $HUD
 
@@ -12,6 +13,7 @@ func _ready() -> void:
 	player.stats_changed.connect(hud.set_stats)
 	player.hit_confirmed.connect(hud.show_hit)
 	player.died.connect(_on_player_died)
+	interaction.prompt_changed.connect(hud.set_interaction_prompt)
 	round_manager.round_changed.connect(hud.set_round)
 	round_manager.zombie_counts_changed.connect(hud.set_zombie_counts)
 
@@ -19,6 +21,7 @@ func _ready() -> void:
 	hud.set_ammo(player.ammo, player.reserve_ammo, player.reloading)
 	hud.set_stats(player.points, player.kills, player.headshots)
 	hud.set_zombie_counts(0, 0)
+	hud.set_interaction_prompt("", true)
 	round_manager.start_game()
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -30,4 +33,5 @@ func _unhandled_input(event: InputEvent) -> void:
 func _on_player_died() -> void:
 	game_over = true
 	round_manager.stop_game()
+	hud.set_interaction_prompt("", true)
 	hud.show_game_over(round_manager.round_number, player.kills)
