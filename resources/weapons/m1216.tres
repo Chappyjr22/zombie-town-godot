@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"m1216"
+display_name = "M1216"
+weapon_class = &"shotgun"
+fire_mode = &"burst"
+damage = 26.0
+pellets = 8
+magazine_size = 16
+reserve_ammo = 96
+reload_time = 3.4
+fire_interval = 0.857143
+burst_count = 4
+burst_interval = 0.066667
+range = 38.0
+spread = 0.052
+ads_spread = 0.040
+recoil_pitch = 1.0
+recoil_yaw = 0.34
