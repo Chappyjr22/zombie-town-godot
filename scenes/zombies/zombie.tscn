@@ -47,6 +47,14 @@ floor_snap_length = 0.2
 position = Vector3(0, 0.91, 0)
 shape = SubResource("CapsuleShape_zombie")
 
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 0.55
+target_desired_distance = 1.1
+radius = 0.45
+height = 1.8
+max_speed = 4.5
+path_max_distance = 3.0
+
 [node name="Body" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.78, 0)
 mesh = SubResource("CylinderMesh_body")
