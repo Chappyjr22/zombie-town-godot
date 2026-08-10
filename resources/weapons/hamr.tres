@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"hamr"
+display_name = "HAMR"
+weapon_class = &"lmg"
+fire_mode = &"auto"
+damage = 80.0
+magazine_size = 75
+reserve_ammo = 375
+reload_time = 4.0
+fire_interval = 0.1
+range = 160.0
+spread = 0.033
+ads_spread = 0.004
+recoil_pitch = 1.08
+recoil_yaw = 0.24
