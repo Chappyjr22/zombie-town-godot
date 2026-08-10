@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"galil"
+display_name = "Galil"
+weapon_class = &"rifle"
+fire_mode = &"auto"
+damage = 60.0
+headshot_multiplier = 3.0
+pellets = 1
+magazine_size = 35
+reserve_ammo = 315
+reload_time = 2.6
+fire_interval = 0.088235
+range = 140.0
+spread = 0.028
+ads_spread = 0.004
+recoil_pitch = 0.95
+recoil_yaw = 0.58
+hip_fov = 75.0
+ads_fov = 56.0
+shell_reload = false
+wall_cost = 1500
+ammo_cost = 750
