@@ -4,7 +4,7 @@ The browser version remains supported and acts as the reference build while the 
 
 ## Prototype 0.1: Core feel
 
-Status: in progress
+Status: playable baseline
 
 - [x] Godot project foundation
 - [x] Graybox combat arena
@@ -29,7 +29,7 @@ Status: in progress
 - [x] Round spawning and scaling
 - [x] Minimal gameplay HUD
 - [x] Game-over/restart flow
-- [ ] First live Godot playtest
+- [x] First live Godot playtest
 - [ ] Tune movement feel
 - [ ] Tune recoil/ADS feel
 - [ ] Tune zombie speed/damage/round pacing
