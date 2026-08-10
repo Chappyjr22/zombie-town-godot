@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"raygun"
+display_name = "Ray Gun"
+weapon_class = &"wonder"
+fire_mode = &"semi"
+damage = 900.0
+magazine_size = 20
+reserve_ammo = 160
+reload_time = 2.4
+fire_interval = 0.24
+range = 120.0
+spread = 0.014
+ads_spread = 0.004
+recoil_pitch = 1.15
+recoil_yaw = 0.18
+projectile_type = &"ray"
+projectile_speed = 46.0
+splash_damage = 425.0
+splash_radius = 4.2
+self_damage = true
