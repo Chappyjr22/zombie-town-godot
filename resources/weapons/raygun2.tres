@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"raygun2"
+display_name = "Ray Gun Mark II"
+weapon_class = &"wonder"
+fire_mode = &"burst"
+damage = 525.0
+magazine_size = 21
+reserve_ammo = 189
+reload_time = 2.6
+fire_interval = 0.333333
+burst_count = 3
+burst_interval = 0.085714
+range = 120.0
+spread = 0.012
+ads_spread = 0.003
+recoil_pitch = 0.65
+recoil_yaw = 0.12
+projectile_type = &"ray2"
+projectile_speed = 58.0
+splash_damage = 120.0
+splash_radius = 2.4
