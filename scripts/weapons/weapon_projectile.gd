@@ -84,7 +84,7 @@ func _explode(position: Vector3) -> void:
 	queue_free()
 
 func _apply_damage(zombie: ZombieTownZombie, amount: float) -> void:
-	if owner_player == null or not owner_player.has_method(&"apply_weapon_damage"):
+	if amount <= 0.0 or owner_player == null or not owner_player.has_method(&"apply_weapon_damage"):
 		return
 	owner_player.call(&"apply_weapon_damage", zombie, amount, false)
 
