@@ -61,7 +61,10 @@ Status: Town structural/navigation baseline validated, interaction layer in prog
 - [x] Carry weapon-affecting perks across weapon swaps
 - [x] Add first functional Mystery Box roll/cycle/take system
 - [x] Use preserved central Town Mystery Box position for prototype testing
-- [ ] Expand Mystery Box to full production weapon pool
+- [x] Expand Mystery Box to supported production weapon pool
+- [x] Port browser-style weighted box odds and wonder pity scaling
+- [x] Slow Mystery Box cycling into final reveal
+- [ ] Add Ballistic Knife after melee/projectile knife framework exists
 - [ ] Add Mystery Box move/teddy behavior across preserved box spots
 - [ ] Refine bar second floor, balcony, and access route
 - [ ] Refine bank vault/interior
@@ -81,10 +84,21 @@ Status: Town structural/navigation baseline validated, interaction layer in prog
 - [ ] First-person arms
 - [ ] Reload/fire/inspect animation framework
 - [x] Base weapon behavior profiles for semi/auto/shotgun wall guns
+- [x] Burst-fire framework
+- [x] Piercing hitscan framework
+- [x] Reusable projectile framework
+- [x] Flare Gun projectile/splash prototype
+- [x] War Machine projectile/splash prototype
+- [x] Ray Gun projectile/splash prototype
+- [x] Ray Gun Mark II burst/projectile prototype
+- [x] Thundergun cone-blast prototype
+- [x] Wunderwaffe chain-lightning prototype
+- [x] Add AN-94, Grease Gun, Luger, RPK, HAMR, M1216 and sniper box resources
+- [ ] Validate expanded box weapons in live Godot test
 - [ ] Production weapon recoil profiles
-- [ ] Projectile weapons
-- [ ] Wonder weapons
-- [ ] PAP tiers
+- [ ] Production projectile/impact effects
+- [ ] Production wonder weapon models/audio/effects
+- [ ] Finish PAP behavior across projectile/wonder weapon attributes
 - [ ] Melee/knife
 - [ ] Grenades
 - [ ] Claymores
