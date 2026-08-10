@@ -36,17 +36,31 @@ Status: playable baseline
 
 ## Prototype 0.2: Town vertical slice
 
-- [ ] Establish asset import conventions for GLB/glTF
-- [ ] Import Town geometry/assets
-- [ ] Replace graybox with Town
-- [ ] Build production collision
-- [ ] Add NavigationRegion3D/NavMesh workflow
-- [ ] Port zombie spawn locations
+Status: first playable Town pass ready for engine validation
+
+- [x] Establish asset import conventions for GLB/glTF
+- [ ] Import/refine detailed Town geometry/assets
+- [x] Replace graybox with Town
+- [x] Add native Godot collision for the first Town pass
+- [x] Add NavigationRegion3D/NavMesh workflow
+- [x] Upgrade zombies to NavigationAgent3D with steering fallback
+- [x] Port player spawn and zombie spawn locations
+- [x] Port Mystery Box location markers
+- [x] Port wall-buy/ammo-buy location markers
+- [x] Port perk location markers
+- [x] Port Pack-a-Punch location marker
+- [x] Port equipment-buy location markers
+- [ ] Validate Town scale/collision/nav in Godot
+- [ ] Refine bar second floor, balcony, and access route
+- [ ] Refine bank vault/interior
+- [ ] Refine church tower/interior
+- [ ] Refine diner/store interiors and props
 - [ ] Port doors and paid gates
-- [ ] Port wall buys
-- [ ] Port Mystery Box
-- [ ] Port perk machines
-- [ ] Port Pack-a-Punch
+- [ ] Port wall-buy interactions
+- [ ] Port Mystery Box interaction/system
+- [ ] Port perk machines and perk effects
+- [ ] Port Pack-a-Punch interaction/system
+- [ ] Port equipment buys
 - [ ] Port power-up drops
 - [ ] Port Town ambience and gameplay audio
 
