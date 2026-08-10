@@ -10,6 +10,8 @@ signal died(zombie: ZombieTownZombie)
 @export var attack_cooldown := 1.0
 @export var turn_speed := 8.0
 
+@onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
+
 var health := 120.0
 var target: Node3D
 var alive := true
@@ -20,6 +22,8 @@ func _ready() -> void:
 
 func set_target(node: Node3D) -> void:
 	target = node
+	if navigation_agent != null and is_instance_valid(node):
+		navigation_agent.target_position = node.global_position
 
 func _physics_process(delta: float) -> void:
 	if not alive:
@@ -38,11 +42,11 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 
-	var offset := target.global_position - global_position
+	var offset: Vector3 = target.global_position - global_position
 	var planar := Vector3(offset.x, 0.0, offset.z)
 	var distance := planar.length()
 	if distance > attack_range:
-		var direction := planar.normalized()
+		var direction := _navigation_direction(planar)
 		if is_on_wall():
 			var wall_normal := get_wall_normal()
 			wall_normal.y = 0.0
@@ -62,6 +66,20 @@ func _physics_process(delta: float) -> void:
 			target.take_damage(attack_damage)
 
 	move_and_slide()
+
+func _navigation_direction(fallback_planar: Vector3) -> Vector3:
+	var fallback := fallback_planar.normalized()
+	if navigation_agent == null or target == null or not is_instance_valid(target):
+		return fallback
+
+	navigation_agent.max_speed = maxf(move_speed, 0.1)
+	navigation_agent.target_position = target.global_position
+	var next_position := navigation_agent.get_next_path_position()
+	var path_delta := next_position - global_position
+	path_delta.y = 0.0
+	if path_delta.length_squared() > 0.01:
+		return path_delta.normalized()
+	return fallback
 
 func is_headshot_point(world_point: Vector3) -> bool:
 	return world_point.y > global_position.y + 1.38
