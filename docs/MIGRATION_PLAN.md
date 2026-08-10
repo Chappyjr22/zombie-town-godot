@@ -55,12 +55,15 @@ Status: Town structural/navigation baseline validated, interaction layer in prog
 - [x] Add functional ammo-buy interaction for equipped ammo
 - [x] Add first functional perk-machine interactions and effects
 - [x] Add Pack-a-Punch tier/cost interaction hooks
+- [x] Add data-driven Town wall weapon resources
+- [x] Add semi-auto, automatic, pellet/spread, and shell-reload weapon behavior
+- [x] Port functional Town wall-buy interactions and ammo repurchase
+- [x] Carry weapon-affecting perks across weapon swaps
 - [ ] Refine bar second floor, balcony, and access route
 - [ ] Refine bank vault/interior
 - [ ] Refine church tower/interior
 - [ ] Refine diner/store interiors and props
 - [ ] Port doors and paid gates
-- [ ] Port wall-buy interactions
 - [ ] Port Mystery Box interaction/system
 - [ ] Add production perk-machine models/effects presentation
 - [ ] Finish Pack-a-Punch presentation and weapon-name changes
@@ -73,7 +76,8 @@ Status: Town structural/navigation baseline validated, interaction layer in prog
 - [ ] Weapon scene/socket architecture
 - [ ] First-person arms
 - [ ] Reload/fire/inspect animation framework
-- [ ] Weapon recoil profiles
+- [x] Base weapon behavior profiles for semi/auto/shotgun wall guns
+- [ ] Production weapon recoil profiles
 - [ ] Projectile weapons
 - [ ] Wonder weapons
 - [ ] PAP tiers
