@@ -10,6 +10,7 @@ extends CanvasLayer
 @onready var count_label: Label = $Root/CountLabel
 @onready var stats_label: Label = $Root/StatsLabel
 @onready var hit_marker: Label = $Root/HitMarker
+@onready var interaction_prompt: Label = $Root/InteractionPrompt
 @onready var game_over: Label = $Root/GameOver
 
 var hit_marker_time := 0.0
@@ -41,6 +42,11 @@ func set_round(round_number: int) -> void:
 
 func set_zombie_counts(alive: int, remaining_to_spawn: int) -> void:
 	count_label.text = "%d ACTIVE   %d INCOMING" % [alive, remaining_to_spawn]
+
+func set_interaction_prompt(text: String, affordable: bool) -> void:
+	interaction_prompt.visible = not text.is_empty()
+	interaction_prompt.text = text
+	interaction_prompt.add_theme_color_override("font_color", Color(0.92, 0.72, 0.26, 1.0) if affordable else Color(0.88, 0.22, 0.16, 1.0))
 
 func show_hit(killed: bool, headshot: bool) -> void:
 	hit_marker.visible = true
