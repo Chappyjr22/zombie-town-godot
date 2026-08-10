@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"m1911"
+display_name = "M1911"
+damage = 74.0
+headshot_multiplier = 3.0
+magazine_size = 8
+reserve_ammo = 96
+reload_time = 1.6
+fire_interval = 0.142857
+range = 100.0
+recoil_pitch = 1.25
+recoil_yaw = 0.35
+hip_fov = 75.0
+ads_fov = 58.0
