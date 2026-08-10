@@ -59,12 +59,16 @@ Status: Town structural/navigation baseline validated, interaction layer in prog
 - [x] Add semi-auto, automatic, pellet/spread, and shell-reload weapon behavior
 - [x] Port functional Town wall-buy interactions and ammo repurchase
 - [x] Carry weapon-affecting perks across weapon swaps
+- [x] Add first functional Mystery Box roll/cycle/take system
+- [x] Use preserved central Town Mystery Box position for prototype testing
+- [ ] Expand Mystery Box to full production weapon pool
+- [ ] Add Mystery Box move/teddy behavior across preserved box spots
 - [ ] Refine bar second floor, balcony, and access route
 - [ ] Refine bank vault/interior
 - [ ] Refine church tower/interior
 - [ ] Refine diner/store interiors and props
 - [ ] Port doors and paid gates
-- [ ] Port Mystery Box interaction/system
+- [ ] Add production Mystery Box model/effects/audio
 - [ ] Add production perk-machine models/effects presentation
 - [ ] Finish Pack-a-Punch presentation and weapon-name changes
 - [ ] Port equipment buys
