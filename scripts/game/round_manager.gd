@@ -25,18 +25,26 @@ var spawn_points: Array[Node3D] = []
 func _ready() -> void:
 	player = get_node(player_path) as ZombieTownPlayer
 	spawn_parent = get_node(spawn_parent_path) as Node3D
-	for node in get_tree().get_nodes_in_group(&"zombie_spawn"):
-		if node is Node3D:
-			spawn_points.append(node)
+	_refresh_spawn_points()
 
 func start_game() -> void:
 	if running:
+		return
+	_refresh_spawn_points()
+	if spawn_points.is_empty():
+		push_error("No nodes in the zombie_spawn group were found for this map.")
 		return
 	running = true
 	_begin_round()
 
 func stop_game() -> void:
 	running = false
+
+func _refresh_spawn_points() -> void:
+	spawn_points.clear()
+	for node: Node in get_tree().get_nodes_in_group(&"zombie_spawn"):
+		if node is Node3D:
+			spawn_points.append(node as Node3D)
 
 func _process(delta: float) -> void:
 	if not running or waiting_for_next_round or player == null or not player.alive:
@@ -82,7 +90,7 @@ func _spawn_one() -> void:
 func _choose_spawn_point() -> Node3D:
 	var best := spawn_points[0]
 	var best_score := -INF
-	for point in spawn_points:
+	for point: Node3D in spawn_points:
 		var distance := point.global_position.distance_squared_to(player.global_position)
 		var jitter := randf_range(0.0, 20.0)
 		var score := distance + jitter
