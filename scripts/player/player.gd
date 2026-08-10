@@ -5,6 +5,7 @@ signal health_changed(current: float, maximum: float)
 signal ammo_changed(current: int, reserve: int, reloading: bool)
 signal stats_changed(points: int, kills: int, headshots: int)
 signal hit_confirmed(killed: bool, headshot: bool)
+signal weapon_changed(display_name: String, weapon_id: StringName)
 signal died
 
 @export var weapon: WeaponData
@@ -22,6 +23,8 @@ signal died
 @onready var head: Node3D = $Head
 @onready var camera: Camera3D = $Head/Camera3D
 @onready var weapon_root: Node3D = $Head/Camera3D/WeaponRoot
+@onready var weapon_body: MeshInstance3D = $Head/Camera3D/WeaponRoot/PistolBody
+@onready var weapon_grip: MeshInstance3D = $Head/Camera3D/WeaponRoot/Grip
 @onready var muzzle_flash: MeshInstance3D = $Head/Camera3D/WeaponRoot/MuzzleFlash
 
 var health := 100.0
@@ -39,11 +42,11 @@ var look_pitch := 0.0
 var muzzle_flash_remaining := 0.0
 var weapon_kick := 0.0
 var ads := false
+var hip_weapon_position := Vector3(0.24, -0.20, -0.54)
+var ads_weapon_position := Vector3(0.0, -0.155, -0.48)
 
 const STANDING_CAMERA_HEIGHT := 1.58
 const CROUCH_CAMERA_HEIGHT := 1.08
-const HIP_WEAPON_POSITION := Vector3(0.24, -0.20, -0.54)
-const ADS_WEAPON_POSITION := Vector3(0.0, -0.155, -0.48)
 
 func _ready() -> void:
 	_ensure_input_map()
@@ -51,10 +54,17 @@ func _ready() -> void:
 	points = starting_points
 	if weapon == null:
 		weapon = load("res://resources/weapons/m1911.tres") as WeaponData
-	ammo = weapon.magazine_size
-	reserve_ammo = weapon.reserve_ammo
+	if weapon != null:
+		var runtime_weapon := weapon.duplicate(true) as WeaponData
+		if runtime_weapon != null:
+			weapon = runtime_weapon
+		ammo = weapon.magazine_size
+		reserve_ammo = weapon.reserve_ammo
+		_update_weapon_visual()
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	_sync_ui()
+	if weapon != null:
+		weapon_changed.emit(weapon.display_name, weapon.id)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
@@ -95,8 +105,10 @@ func _update_actions(_delta: float) -> void:
 	if Input.is_action_just_pressed(&"reload"):
 		_begin_reload()
 
-	if Input.is_action_just_pressed(&"fire") and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-		_fire()
+	if weapon != null and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		var wants_fire := Input.is_action_pressed(&"fire") if weapon.fire_mode == &"auto" else Input.is_action_just_pressed(&"fire")
+		if wants_fire:
+			_fire()
 
 	if Input.is_action_just_pressed(&"jump") and is_on_floor() and not crouched:
 		velocity.y = jump_velocity
@@ -138,6 +150,8 @@ func _update_controller_look(delta: float) -> void:
 	head.rotation.x = look_pitch
 
 func _update_camera_and_weapon(delta: float) -> void:
+	if weapon == null:
+		return
 	var desired_height := CROUCH_CAMERA_HEIGHT if crouched else STANDING_CAMERA_HEIGHT
 	head.position.y = move_toward(head.position.y, desired_height, delta * 4.2)
 
@@ -145,21 +159,30 @@ func _update_camera_and_weapon(delta: float) -> void:
 	camera.fov = lerpf(camera.fov, desired_fov, 1.0 - exp(-delta * 11.0))
 
 	weapon_kick = move_toward(weapon_kick, 0.0, delta * 1.8)
-	var desired_weapon_position := ADS_WEAPON_POSITION if ads else HIP_WEAPON_POSITION
+	var desired_weapon_position := ads_weapon_position if ads else hip_weapon_position
 	desired_weapon_position.z += weapon_kick * 0.06
 	weapon_root.position = weapon_root.position.lerp(desired_weapon_position, 1.0 - exp(-delta * 15.0))
 	weapon_root.rotation.x = lerpf(weapon_root.rotation.x, weapon_kick * 0.08, 1.0 - exp(-delta * 14.0))
 
 func _fire() -> void:
-	if reloading or Time.get_ticks_msec() / 1000.0 < next_fire_time:
+	if weapon == null:
 		return
+	var now := float(Time.get_ticks_msec()) / 1000.0
+	if now < next_fire_time:
+		return
+	if reloading:
+		if weapon.shell_reload and ammo > 0:
+			reloading = false
+			ammo_changed.emit(ammo, reserve_ammo, false)
+		else:
+			return
 	if ammo <= 0:
 		_begin_reload()
 		return
 
 	ammo -= 1
-	next_fire_time = Time.get_ticks_msec() / 1000.0 + weapon.fire_interval
-	weapon_kick = minf(weapon_kick + 0.75, 1.25)
+	next_fire_time = now + weapon.fire_interval
+	weapon_kick = minf(weapon_kick + (0.95 if weapon.weapon_class == &"shotgun" else 0.75), 1.4)
 	look_pitch = clampf(look_pitch - deg_to_rad(weapon.recoil_pitch), deg_to_rad(-85.0), deg_to_rad(85.0))
 	head.rotation.x = look_pitch
 	rotate_y(deg_to_rad(randf_range(-weapon.recoil_yaw, weapon.recoil_yaw)))
@@ -167,8 +190,27 @@ func _fire() -> void:
 	muzzle_flash_remaining = 0.045
 	ammo_changed.emit(ammo, reserve_ammo, reloading)
 
-	var origin := camera.global_position
-	var direction := -camera.global_transform.basis.z
+	var origin: Vector3 = camera.global_position
+	var pellet_count := maxi(1, weapon.pellets)
+	for _pellet_index in pellet_count:
+		_trace_shot(origin, _shot_direction())
+
+func _shot_direction() -> Vector3:
+	var forward: Vector3 = -camera.global_transform.basis.z
+	if weapon == null:
+		return forward.normalized()
+	var spread_amount := weapon.ads_spread if ads else weapon.spread
+	if spread_amount <= 0.0:
+		return forward.normalized()
+	var right: Vector3 = camera.global_transform.basis.x
+	var up: Vector3 = camera.global_transform.basis.y
+	var spread_x := randf_range(-spread_amount, spread_amount)
+	var spread_y := randf_range(-spread_amount, spread_amount)
+	return (forward + right * spread_x + up * spread_y).normalized()
+
+func _trace_shot(origin: Vector3, direction: Vector3) -> void:
+	if weapon == null:
+		return
 	var query := PhysicsRayQueryParameters3D.create(origin, origin + direction * weapon.range)
 	query.exclude = [get_rid()]
 	var result: Dictionary = get_world_3d().direct_space_state.intersect_ray(query)
@@ -179,6 +221,8 @@ func _fire() -> void:
 	if not collider_variant is ZombieTownZombie:
 		return
 	var zombie: ZombieTownZombie = collider_variant
+	if not zombie.alive:
+		return
 
 	var hit_position_variant: Variant = result.get("position")
 	if not hit_position_variant is Vector3:
@@ -197,17 +241,27 @@ func _fire() -> void:
 	hit_confirmed.emit(bool(outcome.get("killed", false)), headshot)
 
 func _begin_reload() -> void:
-	if reloading or ammo >= weapon.magazine_size or reserve_ammo <= 0:
+	if weapon == null or reloading or ammo >= weapon.magazine_size or reserve_ammo <= 0:
 		return
 	reloading = true
 	reload_remaining = weapon.reload_time
 	ammo_changed.emit(ammo, reserve_ammo, true)
 
 func _update_reload(delta: float) -> void:
-	if not reloading:
+	if not reloading or weapon == null:
 		return
 	reload_remaining -= delta
 	if reload_remaining > 0.0:
+		return
+	if weapon.shell_reload:
+		if ammo < weapon.magazine_size and reserve_ammo > 0:
+			ammo += 1
+			reserve_ammo -= 1
+		if ammo >= weapon.magazine_size or reserve_ammo <= 0:
+			reloading = false
+		else:
+			reload_remaining = weapon.reload_time
+		ammo_changed.emit(ammo, reserve_ammo, reloading)
 		return
 	var needed := weapon.magazine_size - ammo
 	var loaded := mini(needed, reserve_ammo)
@@ -222,6 +276,53 @@ func _update_muzzle_flash(delta: float) -> void:
 	muzzle_flash_remaining -= delta
 	if muzzle_flash_remaining <= 0.0:
 		muzzle_flash.visible = false
+
+func equip_weapon(new_weapon: WeaponData) -> bool:
+	if new_weapon == null:
+		return false
+	var runtime_weapon := new_weapon.duplicate(true) as WeaponData
+	if runtime_weapon == null:
+		return false
+	weapon = runtime_weapon
+	ammo = weapon.magazine_size
+	reserve_ammo = weapon.reserve_ammo
+	reloading = false
+	reload_remaining = 0.0
+	next_fire_time = 0.0
+	weapon_kick = 0.0
+	_update_weapon_visual()
+	ammo_changed.emit(ammo, reserve_ammo, false)
+	weapon_changed.emit(weapon.display_name, weapon.id)
+	return true
+
+func _update_weapon_visual() -> void:
+	if weapon == null:
+		return
+	weapon_body.position = Vector3(0.0, 0.0, -0.08)
+	weapon_grip.position = Vector3(0.0, -0.135, 0.025)
+	weapon_grip.rotation = Vector3(0.28, 0.0, 0.0)
+	match weapon.weapon_class:
+		&"smg":
+			weapon_body.scale = Vector3(1.2, 0.9, 1.8)
+			weapon_grip.scale = Vector3(1.0, 1.1, 1.0)
+			hip_weapon_position = Vector3(0.23, -0.19, -0.58)
+			ads_weapon_position = Vector3(0.0, -0.15, -0.54)
+		&"rifle":
+			weapon_body.scale = Vector3(1.3, 0.88, 2.35)
+			weapon_grip.scale = Vector3(1.05, 1.18, 1.05)
+			hip_weapon_position = Vector3(0.25, -0.20, -0.64)
+			ads_weapon_position = Vector3(0.0, -0.15, -0.59)
+		&"shotgun":
+			weapon_body.scale = Vector3(1.18, 0.82, 2.65)
+			weapon_grip.scale = Vector3(1.0, 1.2, 1.0)
+			hip_weapon_position = Vector3(0.26, -0.21, -0.66)
+			ads_weapon_position = Vector3(0.0, -0.15, -0.61)
+		_:
+			weapon_body.scale = Vector3.ONE
+			weapon_grip.scale = Vector3.ONE
+			hip_weapon_position = Vector3(0.24, -0.20, -0.54)
+			ads_weapon_position = Vector3(0.0, -0.155, -0.48)
+	weapon_root.position = hip_weapon_position
 
 func take_damage(amount: float) -> void:
 	if not alive:
