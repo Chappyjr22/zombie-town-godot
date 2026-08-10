@@ -170,7 +170,7 @@ func _fire() -> void:
 	var origin := camera.global_position
 	var direction := -camera.global_transform.basis.z
 	var query := PhysicsRayQueryParameters3D.create(origin, origin + direction * weapon.range)
-	query.exclude = [self]
+	query.exclude = [get_rid()]
 	var result := get_world_3d().direct_space_state.intersect_ray(query)
 	if result.is_empty():
 		return
@@ -268,25 +268,25 @@ func _ensure_input_map() -> void:
 	_add_joy_axis_action(&"fire", JOY_AXIS_TRIGGER_RIGHT, 1.0)
 	_add_joy_axis_action(&"ads", JOY_AXIS_TRIGGER_LEFT, 1.0)
 
-func _add_key_action(action: StringName, keycode: Key) -> void:
+func _add_key_action(action: StringName, keycode: int) -> void:
 	_ensure_action(action)
 	var event := InputEventKey.new()
 	event.physical_keycode = keycode
 	InputMap.action_add_event(action, event)
 
-func _add_mouse_action(action: StringName, button: MouseButton) -> void:
+func _add_mouse_action(action: StringName, button: int) -> void:
 	_ensure_action(action)
 	var event := InputEventMouseButton.new()
 	event.button_index = button
 	InputMap.action_add_event(action, event)
 
-func _add_joy_button_action(action: StringName, button: JoyButton) -> void:
+func _add_joy_button_action(action: StringName, button: int) -> void:
 	_ensure_action(action)
 	var event := InputEventJoypadButton.new()
 	event.button_index = button
 	InputMap.action_add_event(action, event)
 
-func _add_joy_axis_action(action: StringName, axis: JoyAxis, value: float) -> void:
+func _add_joy_axis_action(action: StringName, axis: int, value: float) -> void:
 	_ensure_action(action)
 	var event := InputEventJoypadMotion.new()
 	event.axis = axis
