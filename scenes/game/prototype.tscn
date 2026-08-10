@@ -1,0 +1,187 @@
+[gd_scene load_steps=17 format=3]
+
+[ext_resource type="Script" path="res://scripts/game/prototype.gd" id="1_game"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/zombies/zombie.tscn" id="3_zombie"]
+[ext_resource type="Script" path="res://scripts/game/round_manager.gd" id="4_rounds"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="5_hud"]
+
+[sub_resource type="Environment" id="Environment_arena"]
+background_mode = 1
+background_color = Color(0.025, 0.03, 0.04, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.28, 0.3, 0.34, 1)
+ambient_light_energy = 0.48
+
+[sub_resource type="StandardMaterial3D" id="Material_floor"]
+albedo_color = Color(0.15, 0.16, 0.18, 1)
+roughness = 0.94
+
+[sub_resource type="BoxMesh" id="Mesh_floor"]
+material = SubResource("Material_floor")
+size = Vector3(32, 0.5, 32)
+
+[sub_resource type="BoxShape3D" id="Shape_floor"]
+size = Vector3(32, 0.5, 32)
+
+[sub_resource type="StandardMaterial3D" id="Material_wall"]
+albedo_color = Color(0.115, 0.12, 0.14, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="Mesh_wall_long"]
+material = SubResource("Material_wall")
+size = Vector3(32, 3.2, 0.5)
+
+[sub_resource type="BoxShape3D" id="Shape_wall_long"]
+size = Vector3(32, 3.2, 0.5)
+
+[sub_resource type="BoxMesh" id="Mesh_wall_side"]
+material = SubResource("Material_wall")
+size = Vector3(0.5, 3.2, 32)
+
+[sub_resource type="BoxShape3D" id="Shape_wall_side"]
+size = Vector3(0.5, 3.2, 32)
+
+[sub_resource type="StandardMaterial3D" id="Material_cover"]
+albedo_color = Color(0.27, 0.22, 0.16, 1)
+roughness = 0.82
+
+[sub_resource type="BoxMesh" id="Mesh_cover"]
+material = SubResource("Material_cover")
+size = Vector3(2.2, 2, 2.2)
+
+[sub_resource type="BoxShape3D" id="Shape_cover"]
+size = Vector3(2.2, 2, 2.2)
+
+[node name="Prototype" type="Node3D"]
+script = ExtResource("1_game")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_arena")
+
+[node name="MoonLight" type="DirectionalLight3D" parent="."]
+rotation = Vector3(-0.872665, -0.523599, 0)
+light_color = Color(0.72, 0.78, 0.92, 1)
+light_energy = 1.15
+shadow_enabled = true
+
+[node name="Arena" type="Node3D" parent="."]
+
+[node name="Floor" type="StaticBody3D" parent="Arena"]
+position = Vector3(0, -0.25, 0)
+collision_layer = 1
+collision_mask = 3
+
+[node name="Mesh" type="MeshInstance3D" parent="Arena/Floor"]
+mesh = SubResource("Mesh_floor")
+
+[node name="Collision" type="CollisionShape3D" parent="Arena/Floor"]
+shape = SubResource("Shape_floor")
+
+[node name="NorthWall" type="StaticBody3D" parent="Arena"]
+position = Vector3(0, 1.6, -16)
+collision_layer = 1
+collision_mask = 3
+
+[node name="Mesh" type="MeshInstance3D" parent="Arena/NorthWall"]
+mesh = SubResource("Mesh_wall_long")
+
+[node name="Collision" type="CollisionShape3D" parent="Arena/NorthWall"]
+shape = SubResource("Shape_wall_long")
+
+[node name="SouthWall" type="StaticBody3D" parent="Arena"]
+position = Vector3(0, 1.6, 16)
+collision_layer = 1
+collision_mask = 3
+
+[node name="Mesh" type="MeshInstance3D" parent="Arena/SouthWall"]
+mesh = SubResource("Mesh_wall_long")
+
+[node name="Collision" type="CollisionShape3D" parent="Arena/SouthWall"]
+shape = SubResource("Shape_wall_long")
+
+[node name="WestWall" type="StaticBody3D" parent="Arena"]
+position = Vector3(-16, 1.6, 0)
+collision_layer = 1
+collision_mask = 3
+
+[node name="Mesh" type="MeshInstance3D" parent="Arena/WestWall"]
+mesh = SubResource("Mesh_wall_side")
+
+[node name="Collision" type="CollisionShape3D" parent="Arena/WestWall"]
+shape = SubResource("Shape_wall_side")
+
+[node name="EastWall" type="StaticBody3D" parent="Arena"]
+position = Vector3(16, 1.6, 0)
+collision_layer = 1
+collision_mask = 3
+
+[node name="Mesh" type="MeshInstance3D" parent="Arena/EastWall"]
+mesh = SubResource("Mesh_wall_side")
+
+[node name="Collision" type="CollisionShape3D" parent="Arena/EastWall"]
+shape = SubResource("Shape_wall_side")
+
+[node name="CoverA" type="StaticBody3D" parent="Arena"]
+position = Vector3(-5.5, 1, -3)
+collision_layer = 1
+collision_mask = 3
+
+[node name="Mesh" type="MeshInstance3D" parent="Arena/CoverA"]
+mesh = SubResource("Mesh_cover")
+
+[node name="Collision" type="CollisionShape3D" parent="Arena/CoverA"]
+shape = SubResource("Shape_cover")
+
+[node name="CoverB" type="StaticBody3D" parent="Arena"]
+position = Vector3(5.5, 1, 2.5)
+collision_layer = 1
+collision_mask = 3
+
+[node name="Mesh" type="MeshInstance3D" parent="Arena/CoverB"]
+mesh = SubResource("Mesh_cover")
+
+[node name="Collision" type="CollisionShape3D" parent="Arena/CoverB"]
+shape = SubResource("Shape_cover")
+
+[node name="CoverC" type="StaticBody3D" parent="Arena"]
+position = Vector3(0, 1, -8)
+collision_layer = 1
+collision_mask = 3
+
+[node name="Mesh" type="MeshInstance3D" parent="Arena/CoverC"]
+mesh = SubResource("Mesh_cover")
+
+[node name="Collision" type="CollisionShape3D" parent="Arena/CoverC"]
+shape = SubResource("Shape_cover")
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+position = Vector3(0, 0.06, 7)
+
+[node name="Zombies" type="Node3D" parent="."]
+
+[node name="Spawns" type="Node3D" parent="."]
+
+[node name="NorthWest" type="Marker3D" parent="Spawns" groups=["zombie_spawn"]]
+position = Vector3(-13, 0.05, -13)
+
+[node name="NorthEast" type="Marker3D" parent="Spawns" groups=["zombie_spawn"]]
+position = Vector3(13, 0.05, -13)
+
+[node name="SouthWest" type="Marker3D" parent="Spawns" groups=["zombie_spawn"]]
+position = Vector3(-13, 0.05, 13)
+
+[node name="SouthEast" type="Marker3D" parent="Spawns" groups=["zombie_spawn"]]
+position = Vector3(13, 0.05, 13)
+
+[node name="WestMid" type="Marker3D" parent="Spawns" groups=["zombie_spawn"]]
+position = Vector3(-13, 0.05, 0)
+
+[node name="EastMid" type="Marker3D" parent="Spawns" groups=["zombie_spawn"]]
+position = Vector3(13, 0.05, 0)
+
+[node name="RoundManager" type="Node" parent="."]
+script = ExtResource("4_rounds")
+zombie_scene = ExtResource("3_zombie")
+
+[node name="HUD" parent="." instance=ExtResource("5_hud")]
