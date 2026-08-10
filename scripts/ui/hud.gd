@@ -45,7 +45,7 @@ func set_zombie_counts(alive: int, remaining_to_spawn: int) -> void:
 func show_hit(killed: bool, headshot: bool) -> void:
 	hit_marker.visible = true
 	hit_marker.text = "X" if not killed else "+"
-	hit_marker.theme_override_colors.font_color = Color(1.0, 0.3, 0.2) if headshot else Color(0.95, 0.92, 0.8)
+	hit_marker.add_theme_color_override("font_color", Color(1.0, 0.3, 0.2) if headshot else Color(0.95, 0.92, 0.8))
 	hit_marker.modulate.a = 1.0
 	hit_marker_time = 0.16 if not killed else 0.24
 
