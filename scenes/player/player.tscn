@@ -36,6 +36,7 @@ height = 0.13
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_player")
 weapon = ExtResource("2_weapon")
+starting_points = 10000
 collision_layer = 1
 collision_mask = 3
 floor_snap_length = 0.25
