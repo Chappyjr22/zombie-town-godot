@@ -7,6 +7,26 @@ func _spawn_interactables() -> void:
 		if marker_node is Marker3D and _belongs_to_town(marker_node):
 			_spawn_equipment(marker_node as Marker3D)
 
+func _spawn_active_mystery_box() -> void:
+	var chosen_marker: Marker3D = null
+	var best_distance: float = INF
+	for marker_node: Node in get_tree().get_nodes_in_group(&"mystery_box_spot"):
+		if not marker_node is Marker3D or not _belongs_to_town(marker_node):
+			continue
+		var marker := marker_node as Marker3D
+		var marker_position: Vector3 = marker.global_position
+		var planar_distance: float = Vector2(marker_position.x, marker_position.z).length_squared()
+		if planar_distance < best_distance:
+			best_distance = planar_distance
+			chosen_marker = marker
+	if chosen_marker == null:
+		return
+	var mystery_box := ZombieTownGameplayMysteryBox.new()
+	mystery_box.name = "MysteryBox"
+	get_parent().add_child(mystery_box)
+	mystery_box.global_position = chosen_marker.global_position
+	mystery_box.rotation.y = PI
+
 func _spawn_equipment(marker: Marker3D) -> void:
 	var item_id: StringName = _marker_item_id(marker)
 	var label: String = "Equipment"
