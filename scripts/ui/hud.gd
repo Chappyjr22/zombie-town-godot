@@ -4,6 +4,7 @@ extends CanvasLayer
 @onready var health_bar: ProgressBar = $Root/HealthBar
 @onready var health_label: Label = $Root/HealthLabel
 @onready var weapon_label: Label = $Root/WeaponLabel
+@onready var slot_label: Label = $Root/SlotLabel
 @onready var ammo_label: Label = $Root/AmmoLabel
 @onready var reload_label: Label = $Root/ReloadLabel
 @onready var points_label: Label = $Root/PointsLabel
@@ -31,6 +32,9 @@ func set_health(current: float, maximum: float) -> void:
 
 func set_weapon(display_name: String, _weapon_id: StringName = &"") -> void:
 	weapon_label.text = display_name.to_upper()
+
+func set_weapon_slots(summary: String) -> void:
+	slot_label.text = summary
 
 func set_ammo(current: int, reserve: int, reloading: bool) -> void:
 	ammo_label.text = "%02d / %03d" % [current, reserve]
