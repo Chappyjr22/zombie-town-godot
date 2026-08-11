@@ -54,10 +54,18 @@ func _try_build_production_asset(data: WeaponData) -> bool:
 	anchor.add_child(asset_root)
 	asset_root.rotation = ZombieTownProductionWeaponAssets.rotation_radians(data.id)
 	_prepare_imported_meshes(asset_root)
+	_remove_known_loose_components(asset_root, data.id)
 	_auto_orient_long_axis(asset_root, anchor)
 	_normalize_imported_weapon(asset_root, anchor, data.id)
 	_build_arms(data.weapon_class)
 	return true
+
+func _remove_known_loose_components(asset_root: Node3D, weapon_id: StringName) -> void:
+	if weapon_id != &"m1911":
+		return
+	var loose_magazine: Node = asset_root.find_child("Magazine", true, false)
+	if loose_magazine != null:
+		loose_magazine.free()
 
 func _prepare_imported_meshes(root: Node) -> void:
 	if root is MeshInstance3D:
