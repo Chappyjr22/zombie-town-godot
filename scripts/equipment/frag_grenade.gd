@@ -73,7 +73,9 @@ func _explode() -> void:
 		if player_distance < BLAST_RADIUS:
 			var player_falloff: float = clampf(1.0 - player_distance / BLAST_RADIUS, 0.0, 1.0)
 			owner_player.take_damage(SELF_DAMAGE * player_falloff)
-	_spawn_blast_visual(origin)
+	var effect: ZombieTownExplosionEffect = ZombieTownExplosionEffect.new()
+	get_tree().current_scene.add_child(effect)
+	effect.configure_frag(origin)
 	queue_free()
 
 func _build_visual() -> void:
@@ -101,25 +103,3 @@ func _build_visual() -> void:
 	blink_light.light_energy = 0.25
 	blink_light.omni_range = 1.4
 	add_child(blink_light)
-
-func _spawn_blast_visual(origin: Vector3) -> void:
-	var blast := MeshInstance3D.new()
-	var mesh := SphereMesh.new()
-	mesh.radius = 0.35
-	mesh.height = 0.70
-	var material := StandardMaterial3D.new()
-	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	material.albedo_color = Color(1.0, 0.42, 0.08, 0.76)
-	material.emission_enabled = true
-	material.emission = Color(1.0, 0.20, 0.02, 1.0)
-	material.emission_energy_multiplier = 5.5
-	mesh.material = material
-	blast.mesh = mesh
-	blast.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	get_tree().current_scene.add_child(blast)
-	blast.global_position = origin
-	var tween: Tween = blast.create_tween()
-	tween.tween_property(blast, "scale", Vector3(11.0, 8.0, 11.0), 0.20)
-	tween.parallel().tween_property(blast, "modulate:a", 0.0, 0.22)
-	tween.tween_callback(blast.queue_free)
