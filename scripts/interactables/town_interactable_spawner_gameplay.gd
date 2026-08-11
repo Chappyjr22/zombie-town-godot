@@ -9,7 +9,7 @@ func _spawn_interactables() -> void:
 
 func _spawn_equipment(marker: Marker3D) -> void:
 	var item_id: StringName = _marker_item_id(marker)
-	var label := "Equipment"
+	var label: String = "Equipment"
 	var price := 0
 	var color := Color(0.72, 0.76, 0.65, 1.0)
 	match item_id:
@@ -26,7 +26,7 @@ func _spawn_equipment(marker: Marker3D) -> void:
 	var interactable := ZombieTownInteractable.new()
 	interactable.name = "%sEquipmentBuy" % label.replace(" ", "")
 	get_parent().add_child(interactable)
-	interactable.global_position = marker.global_position
+	interactable.global_position = marker.global_position + Vector3(0.0, 1.45, 0.0)
 	interactable.rotation.y = _marker_yaw(marker)
 	interactable.configure(&"equipment", item_id, label, price)
 	_add_wall_plate_visual(interactable, color, label.to_upper(), 1.7)
