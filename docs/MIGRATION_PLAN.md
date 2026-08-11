@@ -97,7 +97,7 @@ Status: Town structural/navigation baseline validated, gameplay systems in progr
 - [x] Add Brute boss health scaling, heavy melee and ground-slam attack
 - [x] Make the Brute resistant to Insta-Kill, Nuke and Thundergun instant-kill behavior
 - [x] Add dedicated boss health bar HUD and debug-only F10 boss-round test shortcut
-- [ ] Validate Brute boss round in live Godot test
+- [x] Validate Brute boss round in live Godot test
 - [ ] Refine bar second floor, balcony, and access route
 - [ ] Refine bank vault/interior
 - [ ] Refine church tower/interior
