@@ -9,8 +9,23 @@ var town: ZombieTownTown
 var power_on := false
 var gates: Dictionary = {}
 var power_switch: ZombieTownPowerSwitch
+var built := false
+
+func _ready() -> void:
+	call_deferred("_initialize_from_parent")
+
+func _initialize_from_parent() -> void:
+	if built:
+		return
+	var parent_node := get_parent()
+	if not parent_node is ZombieTownTown:
+		return
+	build_for(parent_node as ZombieTownTown)
 
 func build_for(town_node: ZombieTownTown) -> void:
+	if built:
+		return
+	built = true
 	town = town_node
 	name = "TownProgression"
 	add_to_group(&"map_progression")
@@ -29,6 +44,7 @@ func build_for(town_node: ZombieTownTown) -> void:
 	power_switch = ZombieTownPowerSwitch.new()
 	add_child(power_switch)
 	power_switch.configure_switch(self, Vector3(30.55, 0.0, -14.0), -PI * 0.5)
+	request_navigation_rebake()
 
 func is_power_on() -> bool:
 	return power_on
@@ -43,7 +59,9 @@ func activate_power() -> bool:
 func request_navigation_rebake() -> void:
 	if town == null or not is_instance_valid(town):
 		return
-	town.call_deferred("request_navigation_rebake")
+	if town.navigation_region == null or town.navigation_mesh == null:
+		return
+	town.navigation_region.call_deferred("bake_navigation_mesh", true)
 
 func _add_gate(
 	gate_id: StringName,
