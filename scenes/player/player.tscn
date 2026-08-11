@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://scripts/player/player_gameplay.gd" id="1_player"]
 [ext_resource type="Resource" path="res://resources/weapons/m1911.tres" id="2_weapon"]
 [ext_resource type="Script" path="res://scripts/player/player_interaction_gameplay.gd" id="3_interaction"]
 [ext_resource type="Script" path="res://scripts/weapons/weapon_viewmodel_production.gd" id="4_viewmodel"]
 [ext_resource type="Script" path="res://scripts/equipment/player_equipment.gd" id="5_equipment"]
+[ext_resource type="Script" path="res://scripts/melee/player_melee.gd" id="6_melee"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape_player"]
 radius = 0.35
@@ -48,6 +49,9 @@ script = ExtResource("3_interaction")
 
 [node name="Equipment" type="Node" parent="."]
 script = ExtResource("5_equipment")
+
+[node name="Melee" type="Node" parent="."]
+script = ExtResource("6_melee")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 position = Vector3(0, 0.875, 0)
