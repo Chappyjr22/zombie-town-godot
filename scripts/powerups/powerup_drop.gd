@@ -39,6 +39,8 @@ func _on_body_entered(body: Node3D) -> void:
 		return
 	if not body is ZombieTownPlayer:
 		return
+	if body.has_method(&"is_downed") and bool(body.call(&"is_downed")):
+		return
 	manager.call("activate_powerup", powerup_id)
 	queue_free()
 
