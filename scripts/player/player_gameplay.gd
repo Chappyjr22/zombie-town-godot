@@ -15,7 +15,7 @@ func apply_weapon_damage(zombie: ZombieTownZombie, amount: float, headshot: bool
 	if zombie == null or not is_instance_valid(zombie) or not zombie.alive:
 		return
 	var resolved_damage := amount
-	if is_insta_kill_active():
+	if is_insta_kill_active() and not zombie.insta_kill_immune:
 		resolved_damage = maxf(zombie.max_health * 20.0, 50000.0)
 	var outcome: Dictionary = zombie.take_damage(resolved_damage, headshot, self)
 	var multiplier := get_point_multiplier()
@@ -33,7 +33,7 @@ func apply_melee_damage(zombie: ZombieTownZombie, amount: float) -> void:
 	if zombie == null or not is_instance_valid(zombie) or not zombie.alive:
 		return
 	var resolved_damage := amount
-	if is_insta_kill_active():
+	if is_insta_kill_active() and not zombie.insta_kill_immune:
 		resolved_damage = maxf(zombie.max_health * 20.0, 50000.0)
 	var outcome: Dictionary = zombie.take_damage(resolved_damage, false, self)
 	var multiplier: int = get_point_multiplier()
