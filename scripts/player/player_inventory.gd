@@ -44,16 +44,16 @@ func equip_weapon(new_weapon: WeaponData) -> bool:
 	if not inventory_ready:
 		return super.equip_weapon(new_weapon)
 
-	var existing_index := get_weapon_slot_index(new_weapon.id)
+	var existing_index: int = get_weapon_slot_index(new_weapon.id)
 	if existing_index >= 0:
 		return switch_weapon_slot(existing_index)
 
 	_save_active_slot()
-	var runtime_weapon := new_weapon.duplicate(true) as WeaponData
+	var runtime_weapon: WeaponData = new_weapon.duplicate(true) as WeaponData
 	if runtime_weapon == null:
 		return false
 
-	var target_slot := active_weapon_slot
+	var target_slot: int = active_weapon_slot
 	if weapon_slots.size() < max_weapon_slots:
 		target_slot = weapon_slots.size()
 		weapon_slots.append(_make_slot(runtime_weapon, runtime_weapon.magazine_size, runtime_weapon.reserve_ammo, 0))
@@ -77,8 +77,8 @@ func switch_weapon_slot(slot_index: int) -> bool:
 func cycle_weapon(direction: int) -> void:
 	if weapon_slots.size() <= 1:
 		return
-	var step := 1 if direction >= 0 else -1
-	var next_slot := posmod(active_weapon_slot + step, weapon_slots.size())
+	var step: int = 1 if direction >= 0 else -1
+	var next_slot: int = (active_weapon_slot + step + weapon_slots.size()) % weapon_slots.size()
 	switch_weapon_slot(next_slot)
 
 func unlock_third_weapon_slot() -> void:
@@ -118,7 +118,7 @@ func get_weapon_resources() -> Array[WeaponData]:
 	return weapons
 
 func is_weapon_reserve_full(weapon_id: StringName) -> bool:
-	var index := get_weapon_slot_index(weapon_id)
+	var index: int = get_weapon_slot_index(weapon_id)
 	if index < 0:
 		return false
 	if index == active_weapon_slot:
@@ -132,7 +132,7 @@ func is_weapon_reserve_full(weapon_id: StringName) -> bool:
 	return int(reserve_variant) >= slot_weapon.reserve_ammo
 
 func refill_weapon_reserve(weapon_id: StringName) -> bool:
-	var index := get_weapon_slot_index(weapon_id)
+	var index: int = get_weapon_slot_index(weapon_id)
 	if index < 0:
 		return false
 	if index == active_weapon_slot:
@@ -167,14 +167,14 @@ func set_active_pack_level(level: int) -> void:
 func weapon_slot_summary() -> String:
 	var parts: Array[String] = []
 	for index in max_weapon_slots:
-		var label := "EMPTY"
+		var label: String = "EMPTY"
 		if index < weapon_slots.size():
 			var slot: Dictionary = weapon_slots[index]
 			var weapon_variant: Variant = slot.get("weapon")
 			if weapon_variant is WeaponData:
 				var slot_weapon: WeaponData = weapon_variant
 				label = slot_weapon.display_name.to_upper()
-		var marker := ">" if index == active_weapon_slot and index < weapon_slots.size() else ""
+		var marker: String = ">" if index == active_weapon_slot and index < weapon_slots.size() else ""
 		parts.append("%s%d:%s" % [marker, index + 1, label])
 	return "   ".join(parts)
 
