@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/zombies/brute_boss.gd" id="1_boss"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape_boss"]
+radius = 0.58
+height = 2.55
+
+[node name="BruteBoss" type="CharacterBody3D"]
+script = ExtResource("1_boss")
+collision_layer = 2
+collision_mask = 1
+floor_snap_length = 0.2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.275, 0)
+shape = SubResource("CapsuleShape_boss")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 0.65
+target_desired_distance = 1.45
+radius = 0.62
+height = 2.55
+max_speed = 3.0
+path_max_distance = 3.5
