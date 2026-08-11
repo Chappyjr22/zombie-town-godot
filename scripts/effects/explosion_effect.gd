@@ -147,7 +147,7 @@ func _spawn_smoke(directional: bool) -> void:
 	smoke_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	smoke_material.roughness = 1.0
 
-	for index: int in SMOKE_PUFFS:
+	for _index: int in SMOKE_PUFFS:
 		var mesh := SphereMesh.new()
 		mesh.radius = randf_range(0.28, 0.48)
 		mesh.height = mesh.radius * 2.0
