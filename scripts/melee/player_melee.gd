@@ -29,6 +29,10 @@ func _process(delta: float) -> void:
 		if attacking:
 			_finish_attack()
 		return
+	if player.has_method(&"is_downed") and bool(player.call(&"is_downed")):
+		if attacking:
+			_finish_attack()
+		return
 	if not attacking and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and Input.is_action_just_pressed(&"melee"):
 		_start_attack()
 	if attacking:
@@ -128,7 +132,8 @@ func _finish_attack() -> void:
 	if knife_root != null:
 		knife_root.visible = false
 	if player != null and is_instance_valid(player):
-		player.weapon_root.visible = true
+		if not player.has_method(&"is_downed") or not bool(player.call(&"is_downed")):
+			player.weapon_root.visible = true
 	melee_state_changed.emit(false)
 
 func _build_viewmodel() -> void:
