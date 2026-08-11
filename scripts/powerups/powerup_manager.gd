@@ -40,6 +40,8 @@ func _process(delta: float) -> void:
 func activate_powerup(powerup_id: StringName) -> void:
 	if player == null or not player.alive:
 		return
+	if player.has_method(&"is_downed") and bool(player.call(&"is_downed")):
+		return
 	match powerup_id:
 		&"max_ammo":
 			_activate_max_ammo()
