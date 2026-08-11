@@ -27,8 +27,8 @@ func _physics_process(delta: float) -> void:
 		_explode()
 		return
 	velocity.y -= float(ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)) * delta
-	var start := global_position
-	var finish := start + velocity * delta
+	var start: Vector3 = global_position
+	var finish: Vector3 = start + velocity * delta
 	var query := PhysicsRayQueryParameters3D.create(start, finish)
 	if owner_player != null and is_instance_valid(owner_player):
 		query.exclude = [owner_player.get_rid()]
@@ -39,7 +39,8 @@ func _physics_process(delta: float) -> void:
 		var position_variant: Variant = result.get("position")
 		var normal_variant: Variant = result.get("normal")
 		if position_variant is Vector3:
-			global_position = position_variant as Vector3
+			var hit_position: Vector3 = position_variant
+			global_position = hit_position
 		if normal_variant is Vector3:
 			var normal: Vector3 = normal_variant
 			velocity = velocity.bounce(normal) * 0.42
@@ -54,23 +55,23 @@ func _explode() -> void:
 	if exploded:
 		return
 	exploded = true
-	var origin := global_position
+	var origin: Vector3 = global_position
 	for node: Node in get_tree().get_nodes_in_group(&"zombie"):
 		if not node is ZombieTownZombie:
 			continue
 		var zombie := node as ZombieTownZombie
 		if not zombie.alive:
 			continue
-		var distance := zombie.global_position.distance_to(origin)
+		var distance: float = zombie.global_position.distance_to(origin)
 		if distance > BLAST_RADIUS:
 			continue
-		var falloff := clampf(1.0 - distance / BLAST_RADIUS, 0.22, 1.0)
+		var falloff: float = clampf(1.0 - distance / BLAST_RADIUS, 0.22, 1.0)
 		if owner_player != null and is_instance_valid(owner_player):
 			owner_player.apply_weapon_damage(zombie, MAX_DAMAGE * falloff, false)
 	if owner_player != null and is_instance_valid(owner_player) and owner_player.alive:
-		var player_distance := owner_player.global_position.distance_to(origin)
+		var player_distance: float = owner_player.global_position.distance_to(origin)
 		if player_distance < BLAST_RADIUS:
-			var player_falloff := clampf(1.0 - player_distance / BLAST_RADIUS, 0.0, 1.0)
+			var player_falloff: float = clampf(1.0 - player_distance / BLAST_RADIUS, 0.0, 1.0)
 			owner_player.take_damage(SELF_DAMAGE * player_falloff)
 	_spawn_blast_visual(origin)
 	queue_free()
@@ -118,7 +119,7 @@ func _spawn_blast_visual(origin: Vector3) -> void:
 	blast.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	get_tree().current_scene.add_child(blast)
 	blast.global_position = origin
-	var tween := blast.create_tween()
+	var tween: Tween = blast.create_tween()
 	tween.tween_property(blast, "scale", Vector3(11.0, 8.0, 11.0), 0.20)
 	tween.parallel().tween_property(blast, "modulate:a", 0.0, 0.22)
 	tween.tween_callback(blast.queue_free)
