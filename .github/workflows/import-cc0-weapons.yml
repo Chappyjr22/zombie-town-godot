@@ -107,10 +107,6 @@ jobs:
 
       - name: Commit imported assets
         run: |
-          if git diff --quiet -- assets/weapons/cc0 && git diff --cached --quiet; then
-            echo "Weapon assets are already current."
-            exit 0
-          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets/weapons/cc0
