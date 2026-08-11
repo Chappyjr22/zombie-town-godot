@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/player/player_inventory.gd" id="1_player"]
 [ext_resource type="Resource" path="res://resources/weapons/m1911.tres" id="2_weapon"]
-[ext_resource type="Script" path="res://scripts/player/player_interaction.gd" id="3_interaction"]
+[ext_resource type="Script" path="res://scripts/player/player_interaction_progression.gd" id="3_interaction"]
 [ext_resource type="Script" path="res://scripts/weapons/weapon_viewmodel_production.gd" id="4_viewmodel"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape_player"]
