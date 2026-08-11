@@ -39,6 +39,8 @@ static func weapon_path(weapon_id: StringName) -> String:
 			return "res://resources/weapons/m1216.tres"
 		&"dsr50":
 			return "res://resources/weapons/dsr50.tres"
+		&"bknife":
+			return "res://resources/weapons/bknife.tres"
 		&"raygun":
 			return "res://resources/weapons/raygun.tres"
 		&"raygun2":
