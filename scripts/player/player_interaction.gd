@@ -3,12 +3,14 @@ extends Node
 
 signal prompt_changed(text: String, affordable: bool)
 
-const PACK_COSTS := [5000, 15000, 150000]
+const PACK_COSTS: Array[int] = [5000, 15000, 150000]
 
 var player: ZombieTownPlayer
 var camera: Camera3D
 var current_interactable: ZombieTownInteractable
 var perks: Dictionary = {}
+var speed_applied: Dictionary = {}
+var double_tap_applied: Dictionary = {}
 var pack_level := 0
 
 func _ready() -> void:
@@ -70,20 +72,20 @@ func _prompt_for(interactable: ZombieTownInteractable) -> String:
 	if interactable.interaction_kind == &"perk" and has_perk(interactable.item_id):
 		return "%s  [OWNED]" % interactable.display_name
 	if interactable.interaction_kind == &"weapon":
-		if player.weapon != null and player.weapon.id == interactable.item_id:
-			if player.reserve_ammo >= player.weapon.reserve_ammo:
+		if _owns_weapon(interactable.item_id):
+			if _weapon_reserve_full(interactable.item_id):
 				return "%s AMMO  [FULL]" % interactable.display_name
 			return "[E] Buy %s Ammo  %d PTS" % [interactable.display_name, interactable.ammo_cost]
 		return "[E] Buy %s  %d PTS" % [interactable.display_name, interactable.cost]
 	if interactable.interaction_kind == &"ammo":
-		if player.weapon != null and player.weapon.id != interactable.item_id:
-			return "%s  [NOT EQUIPPED]" % interactable.display_name
-		if player.weapon != null and player.reserve_ammo >= player.weapon.reserve_ammo:
+		if not _owns_weapon(interactable.item_id):
+			return "%s  [NOT OWNED]" % interactable.display_name
+		if _weapon_reserve_full(interactable.item_id):
 			return "%s  [FULL]" % interactable.display_name
 	if interactable.interaction_kind == &"pack_a_punch":
 		if pack_level >= PACK_COSTS.size():
 			return "Pack-a-Punch  [MAX TIER]"
-		return "[E] Pack-a-Punch  %d PTS" % int(PACK_COSTS[pack_level])
+		return "[E] Pack-a-Punch  %d PTS" % PACK_COSTS[pack_level]
 	return "[E] %s  %d PTS" % [interactable.display_name, interactable.cost]
 
 func _is_affordable(interactable: ZombieTownInteractable) -> bool:
@@ -92,12 +94,12 @@ func _is_affordable(interactable: ZombieTownInteractable) -> bool:
 		return mystery_box.affordable_for(player)
 	if interactable.interaction_kind == &"perk" and has_perk(interactable.item_id):
 		return true
-	if interactable.interaction_kind == &"weapon" and player.weapon != null and player.weapon.id == interactable.item_id:
-		return player.reserve_ammo >= player.weapon.reserve_ammo or player.points >= interactable.ammo_cost
+	if interactable.interaction_kind == &"weapon" and _owns_weapon(interactable.item_id):
+		return _weapon_reserve_full(interactable.item_id) or player.points >= interactable.ammo_cost
 	if interactable.interaction_kind == &"pack_a_punch":
 		if pack_level >= PACK_COSTS.size():
 			return true
-		return player.points >= int(PACK_COSTS[pack_level])
+		return player.points >= PACK_COSTS[pack_level]
 	return player.points >= interactable.cost
 
 func _activate(interactable: ZombieTownInteractable) -> void:
@@ -125,20 +127,21 @@ func _purchase_perk(perk_id: StringName, cost: int) -> void:
 			player.health = player.max_health
 			player.health_changed.emit(player.health, player.max_health)
 		&"speed":
-			if player.weapon != null:
-				player.weapon.reload_time *= 0.5
+			_apply_perk_to_all_weapons(&"speed")
 		&"dtap":
-			if player.weapon != null:
-				player.weapon.damage *= 1.35
-				player.weapon.fire_interval *= 0.8
+			_apply_perk_to_all_weapons(&"dtap")
 		&"stamin":
 			player.walk_speed *= 1.10
 			player.sprint_speed *= 1.25
-		&"revive", &"mule":
+		&"mule":
+			if player is ZombieTownInventoryPlayer:
+				var inventory_player := player as ZombieTownInventoryPlayer
+				inventory_player.unlock_third_weapon_slot()
+		&"revive":
 			pass
 
 func _purchase_wall_weapon(interactable: ZombieTownInteractable) -> void:
-	if player.weapon != null and player.weapon.id == interactable.item_id:
+	if _owns_weapon(interactable.item_id):
 		_purchase_ammo(interactable.item_id, interactable.ammo_cost)
 		return
 	if not _spend_points(interactable.cost):
@@ -148,14 +151,24 @@ func _purchase_wall_weapon(interactable: ZombieTownInteractable) -> void:
 		player.points += interactable.cost
 		player.stats_changed.emit(player.points, player.kills, player.headshots)
 		return
-	player.equip_weapon(new_weapon)
+	if not player.equip_weapon(new_weapon):
+		player.points += interactable.cost
+		player.stats_changed.emit(player.points, player.kills, player.headshots)
 
 func _purchase_ammo(item_id: StringName, cost: int) -> void:
-	if player.weapon == null or player.weapon.id != item_id:
-		return
-	if player.reserve_ammo >= player.weapon.reserve_ammo:
+	if not _owns_weapon(item_id) or _weapon_reserve_full(item_id):
 		return
 	if not _spend_points(cost):
+		return
+	if player is ZombieTownInventoryPlayer:
+		var inventory_player := player as ZombieTownInventoryPlayer
+		if not inventory_player.refill_weapon_reserve(item_id):
+			player.points += cost
+			player.stats_changed.emit(player.points, player.kills, player.headshots)
+		return
+	if player.weapon == null or player.weapon.id != item_id:
+		player.points += cost
+		player.stats_changed.emit(player.points, player.kills, player.headshots)
 		return
 	player.reserve_ammo = player.weapon.reserve_ammo
 	player.ammo_changed.emit(player.ammo, player.reserve_ammo, player.reloading)
@@ -163,7 +176,7 @@ func _purchase_ammo(item_id: StringName, cost: int) -> void:
 func _purchase_pack_a_punch() -> void:
 	if player.weapon == null or pack_level >= PACK_COSTS.size():
 		return
-	var cost: int = int(PACK_COSTS[pack_level])
+	var cost := PACK_COSTS[pack_level]
 	if not _spend_points(cost):
 		return
 	pack_level += 1
@@ -181,16 +194,68 @@ func _purchase_pack_a_punch() -> void:
 	player.ammo = player.weapon.magazine_size
 	player.reserve_ammo = player.weapon.reserve_ammo
 	player.ammo_changed.emit(player.ammo, player.reserve_ammo, player.reloading)
+	if player is ZombieTownInventoryPlayer:
+		var inventory_player := player as ZombieTownInventoryPlayer
+		inventory_player.set_active_pack_level(pack_level)
 
 func _on_weapon_changed(_display_name: String, _weapon_id: StringName) -> void:
-	pack_level = 0
 	if player.weapon == null:
 		return
+	if player is ZombieTownInventoryPlayer:
+		var inventory_player := player as ZombieTownInventoryPlayer
+		pack_level = inventory_player.get_active_pack_level()
+	else:
+		pack_level = 0
+	_apply_current_weapon_perks()
+
+func _apply_current_weapon_perks() -> void:
+	if player.weapon == null:
+		return
+	_apply_perks_to_weapon(player.weapon)
+
+func _apply_perk_to_all_weapons(perk_id: StringName) -> void:
+	if player is ZombieTownInventoryPlayer:
+		var inventory_player := player as ZombieTownInventoryPlayer
+		for slot_weapon: WeaponData in inventory_player.get_weapon_resources():
+			_apply_single_weapon_perk(slot_weapon, perk_id)
+		return
+	if player.weapon != null:
+		_apply_single_weapon_perk(player.weapon, perk_id)
+
+func _apply_perks_to_weapon(slot_weapon: WeaponData) -> void:
 	if has_perk(&"speed"):
-		player.weapon.reload_time *= 0.5
+		_apply_single_weapon_perk(slot_weapon, &"speed")
 	if has_perk(&"dtap"):
-		player.weapon.damage *= 1.35
-		player.weapon.fire_interval *= 0.8
+		_apply_single_weapon_perk(slot_weapon, &"dtap")
+
+func _apply_single_weapon_perk(slot_weapon: WeaponData, perk_id: StringName) -> void:
+	var instance_id := slot_weapon.get_instance_id()
+	match perk_id:
+		&"speed":
+			if speed_applied.has(instance_id):
+				return
+			slot_weapon.reload_time *= 0.5
+			speed_applied[instance_id] = true
+		&"dtap":
+			if double_tap_applied.has(instance_id):
+				return
+			slot_weapon.damage *= 1.35
+			slot_weapon.fire_interval *= 0.8
+			double_tap_applied[instance_id] = true
+
+func _owns_weapon(item_id: StringName) -> bool:
+	if player is ZombieTownInventoryPlayer:
+		var inventory_player := player as ZombieTownInventoryPlayer
+		return inventory_player.owns_weapon(item_id)
+	return player.weapon != null and player.weapon.id == item_id
+
+func _weapon_reserve_full(item_id: StringName) -> bool:
+	if player is ZombieTownInventoryPlayer:
+		var inventory_player := player as ZombieTownInventoryPlayer
+		return inventory_player.is_weapon_reserve_full(item_id)
+	if player.weapon == null or player.weapon.id != item_id:
+		return false
+	return player.reserve_ammo >= player.weapon.reserve_ammo
 
 func _spend_points(cost: int) -> bool:
 	if cost < 0 or player.points < cost:
