@@ -27,6 +27,7 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
+          import numpy as np
           import trimesh
 
           source = Path('assets/weapons/cc0/makarov.glb')
@@ -34,21 +35,17 @@ jobs:
           destination.parent.mkdir(parents=True, exist_ok=True)
 
           loaded = trimesh.load(source, force='scene', process=False)
-          if not isinstance(loaded, trimesh.Scene):
-              scene = trimesh.Scene(loaded)
-          else:
-              scene = loaded
+          scene = loaded if isinstance(loaded, trimesh.Scene) else trimesh.Scene(loaded)
 
           meshes = []
           for node_name in scene.graph.nodes_geometry:
               transform, geometry_name = scene.graph.get(node_name)
-              geometry = scene.geometry[geometry_name].copy()
-              geometry.apply_transform(transform)
-              geometry.visual = trimesh.visual.ColorVisuals(
-                  mesh=geometry,
-                  face_colors=[96, 96, 96, 255],
-              )
-              meshes.append(geometry)
+              geometry = scene.geometry[geometry_name]
+              vertices = np.asarray(geometry.vertices, dtype=np.float64)
+              faces = np.asarray(geometry.faces, dtype=np.int64)
+              clean = trimesh.Trimesh(vertices=vertices, faces=faces, process=False)
+              clean.apply_transform(transform)
+              meshes.append(clean)
 
           if not meshes:
               raise RuntimeError('No mesh geometry found in Makarov GLB')
@@ -56,7 +53,18 @@ jobs:
           combined = trimesh.util.concatenate(meshes)
           combined.remove_unreferenced_vertices()
           combined.merge_vertices()
-          combined.export(destination, file_type='obj', include_texture=False)
+
+          # Write a deliberately minimal OBJ ourselves so no texture, material,
+          # color, animation or glTF metadata can reach Godot's importer.
+          with destination.open('w', encoding='utf-8', newline='\n') as output:
+              output.write('# Sanitized geometry-only Makarov runtime mesh\n')
+              for vertex in combined.vertices:
+                  output.write(f'v {vertex[0]:.8f} {vertex[1]:.8f} {vertex[2]:.8f}\n')
+              for normal in combined.vertex_normals:
+                  output.write(f'vn {normal[0]:.8f} {normal[1]:.8f} {normal[2]:.8f}\n')
+              for face in combined.faces:
+                  a, b, c = (int(index) + 1 for index in face)
+                  output.write(f'f {a}//{a} {b}//{b} {c}//{c}\n')
 
           print(f'Exported {destination}')
           print(f'Vertices: {len(combined.vertices)}')
