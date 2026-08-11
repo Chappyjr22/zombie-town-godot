@@ -1,3 +1,4 @@
+# One-time/re-runnable importer for the CC0 production weapon set.
 name: Import CC0 weapon assets
 
 on:
