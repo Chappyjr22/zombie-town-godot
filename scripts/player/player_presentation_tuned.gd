@@ -25,6 +25,9 @@ func _update_weapon_visual() -> void:
 			hip_weapon_position = Vector3(0.305, -0.250, -0.64)
 
 	match weapon.id:
+		&"ak74u":
+			# COD-style hip framing: closer, lower, and farther right while ADS stays centered.
+			hip_weapon_position = Vector3(0.360, -0.270, -0.560)
 		&"raygun":
 			ads_weapon_position = Vector3(0.0, -0.245, -0.60)
 		&"raygun2":
