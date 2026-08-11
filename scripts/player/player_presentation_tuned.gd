@@ -8,6 +8,9 @@ func _update_weapon_visual() -> void:
 	match weapon.weapon_class:
 		&"pistol":
 			hip_weapon_position = Vector3(0.285, -0.235, -0.57)
+		&"knife":
+			hip_weapon_position = Vector3(0.285, -0.230, -0.54)
+			ads_weapon_position = Vector3(0.0, -0.155, -0.50)
 		&"smg":
 			hip_weapon_position = Vector3(0.285, -0.225, -0.61)
 		&"rifle":
