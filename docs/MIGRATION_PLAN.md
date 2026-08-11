@@ -81,8 +81,11 @@ Status: Town structural/navigation baseline validated, gameplay systems in progr
 - [x] Add functional Frag Grenade and Claymore wall purchases
 - [x] Add reusable Max Ammo, Double Points, Insta-Kill and Nuke drop framework
 - [x] Add equipment counts and active power-up HUD feedback
-- [ ] Validate equipment and power-up drops in live Godot test
-- [ ] Add Ballistic Knife after melee/projectile knife framework exists
+- [x] Add layered Frag Grenade and directional Claymore explosion effects
+- [x] Validate equipment and power-up drops in live Godot test
+- [x] Add reusable melee knife framework and dedicated melee scoring
+- [x] Restore Ballistic Knife resource/projectile and Mystery Box weight
+- [ ] Validate melee and Ballistic Knife in live Godot test
 - [ ] Add Mystery Box move/teddy behavior across preserved box spots
 - [ ] Refine bar second floor, balcony, and access route
 - [ ] Refine bank vault/interior
@@ -122,11 +125,14 @@ Status: Town structural/navigation baseline validated, gameplay systems in progr
 - [x] Validate expanded box weapons in live Godot test
 - [x] Frag grenade throw/fuse/bounce/splash prototype
 - [x] Claymore placement/arming/directional blast prototype
+- [x] Melee knife input/range/cooldown/viewmodel prototype
+- [x] Ballistic Knife projectile prototype
+- [ ] Validate melee and Ballistic Knife in live Godot test
 - [ ] Production weapon recoil profiles
 - [ ] Production projectile/impact effects
 - [ ] Production wonder weapon models/audio/effects
 - [ ] Finish PAP behavior across projectile/wonder weapon attributes
-- [ ] Melee/knife
+- [ ] Production melee/knife model and animation
 - [ ] Production grenade/Claymore models, animations and audio
 - [ ] Damage feedback and hit indicators
 
