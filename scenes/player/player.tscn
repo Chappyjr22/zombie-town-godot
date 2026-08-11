@@ -1,8 +1,8 @@
 [gd_scene load_steps=13 format=3]
 
-[ext_resource type="Script" path="res://scripts/player/player_gameplay.gd" id="1_player"]
+[ext_resource type="Script" path="res://scripts/player/player_survival.gd" id="1_player"]
 [ext_resource type="Resource" path="res://resources/weapons/m1911.tres" id="2_weapon"]
-[ext_resource type="Script" path="res://scripts/player/player_interaction_gameplay.gd" id="3_interaction"]
+[ext_resource type="Script" path="res://scripts/player/player_interaction_survival.gd" id="3_interaction"]
 [ext_resource type="Script" path="res://scripts/weapons/weapon_viewmodel_production.gd" id="4_viewmodel"]
 [ext_resource type="Script" path="res://scripts/equipment/player_equipment.gd" id="5_equipment"]
 [ext_resource type="Script" path="res://scripts/melee/player_melee.gd" id="6_melee"]
