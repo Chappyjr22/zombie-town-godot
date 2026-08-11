@@ -1,11 +1,12 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
-[ext_resource type="Script" path="res://scripts/game/prototype.gd" id="1_game"]
+[ext_resource type="Script" path="res://scripts/game/prototype_gameplay.gd" id="1_game"]
 [ext_resource type="PackedScene" path="res://scenes/maps/town.tscn" id="2_town"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="3_player"]
 [ext_resource type="PackedScene" path="res://scenes/zombies/zombie.tscn" id="4_zombie"]
-[ext_resource type="Script" path="res://scripts/game/round_manager.gd" id="5_rounds"]
+[ext_resource type="Script" path="res://scripts/game/round_manager_gameplay.gd" id="5_rounds"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="6_hud"]
+[ext_resource type="Script" path="res://scripts/powerups/powerup_manager.gd" id="7_powerups"]
 
 [node name="TownPrototype" type="Node3D"]
 script = ExtResource("1_game")
@@ -21,5 +22,8 @@ rotation = Vector3(0, 3.141593, 0)
 [node name="RoundManager" type="Node" parent="."]
 script = ExtResource("5_rounds")
 zombie_scene = ExtResource("4_zombie")
+
+[node name="PowerupManager" type="Node" parent="."]
+script = ExtResource("7_powerups")
 
 [node name="HUD" parent="." instance=ExtResource("6_hud")]
