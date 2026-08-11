@@ -26,6 +26,7 @@ func _ready() -> void:
 	powerup_manager.pickup_announced.connect(hud.show_powerup)
 	round_manager.round_changed.connect(hud.set_round)
 	round_manager.zombie_counts_changed.connect(hud.set_zombie_counts)
+	round_manager.boss_status_changed.connect(hud.set_boss_status)
 
 	hud.set_health(player.health, player.max_health)
 	if player.weapon != null:
@@ -36,11 +37,16 @@ func _ready() -> void:
 	hud.set_equipment(equipment.equipment_summary())
 	hud.set_buffs("")
 	hud.set_downed_status(false, 0.0, 0.0)
+	hud.set_boss_status(false, "", 0.0, 0.0)
 	hud.set_zombie_counts(0, 0)
 	hud.set_interaction_prompt("", true)
 	round_manager.start_game()
 
 func _unhandled_input(event: InputEvent) -> void:
+	if not game_over and OS.is_debug_build() and event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F10:
+		round_manager.debug_force_boss_round()
+		get_viewport().set_input_as_handled()
+		return
 	if not game_over:
 		return
 	if event is InputEventKey and event.pressed and (event.keycode == KEY_ENTER or event.keycode == KEY_KP_ENTER):
@@ -50,4 +56,5 @@ func _on_player_died() -> void:
 	game_over = true
 	round_manager.stop_game()
 	hud.set_interaction_prompt("", true)
+	hud.set_boss_status(false, "", 0.0, 0.0)
 	hud.show_game_over(round_manager.round_number, player.kills)
