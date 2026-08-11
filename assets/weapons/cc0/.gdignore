@@ -1,0 +1,3 @@
+# Raw CC0 source assets are intentionally ignored by Godot.
+# These GLBs are retained in the repository for provenance/source processing only.
+# Optimized runtime-ready weapon assets belong in assets/weapons/runtime/.
