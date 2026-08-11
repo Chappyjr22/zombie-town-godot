@@ -88,6 +88,11 @@ Status: Town structural/navigation baseline validated, gameplay systems in progr
 - [x] Validate melee and Ballistic Knife in live Godot test
 - [x] Add Mystery Box teddy result, relocation and locator beam across preserved box spots
 - [x] Validate Mystery Box teddy and relocation in live Godot test
+- [x] Add reusable downed, bleed-out and revive player state
+- [x] Make solo Quick Revive grant a timed self-revive with a three-purchase cap
+- [x] Add crawl-only downed movement, interaction/combat restrictions and downed HUD feedback
+- [x] Add short post-revive invulnerability window
+- [ ] Validate solo downed state and Quick Revive in live Godot test
 - [ ] Refine bar second floor, balcony, and access route
 - [ ] Refine bank vault/interior
 - [ ] Refine church tower/interior
