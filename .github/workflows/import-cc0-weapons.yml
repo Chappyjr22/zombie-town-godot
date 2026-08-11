@@ -1,0 +1,121 @@
+name: Import CC0 weapon assets
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/import-cc0-weapons.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  import-weapons:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download converted GLB pack
+        run: |
+          curl --fail --location --retry 4 --retry-delay 3 \
+            "https://github.com/BoQsc/cc0-guns-explosives-pack-glb/releases/download/0/Guns.Explosives_glb.zip" \
+            --output /tmp/cc0-weapons.zip
+
+      - name: Extract normalized production weapon set
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          import json
+          import shutil
+
+          archive = Path('/tmp/cc0-weapons.zip')
+          destination = Path('assets/weapons/cc0')
+          destination.mkdir(parents=True, exist_ok=True)
+
+          mappings = {
+              'makarov.glb': 'Pistol_MK/Makarov.glb',
+              'ak47.glb': 'AK-47/AK47.glb',
+              'suomi_kp.glb': 'Suomi_KP/Suomi_KP.glb',
+              'grease_gun.glb': 'GreaseGun/Grease_Gun.glb',
+              'luger.glb': 'Luger/Luger.glb',
+              'flare_gun.glb': 'Flare_Gun/FlareGun.glb',
+              'shotgun.glb': 'Shotgun/Shotgun.glb',
+              'sniper.glb': 'Sniper/Sniper.glb',
+          }
+
+          imported = {}
+          with ZipFile(archive) as pack:
+              members = [name.replace('\\', '/') for name in pack.namelist()]
+              for output_name, source_suffix in mappings.items():
+                  matches = [name for name in members if name.endswith(source_suffix)]
+                  if len(matches) != 1:
+                      raise RuntimeError(f'Expected exactly one {source_suffix}, found {matches}')
+                  source_name = matches[0]
+                  output_path = destination / output_name
+                  with pack.open(source_name) as source, output_path.open('wb') as target:
+                      shutil.copyfileobj(source, target)
+                  imported[output_name] = {
+                      'source_member': source_name,
+                      'bytes': output_path.stat().st_size,
+                  }
+
+          manifest = {
+              'original_pack': 'https://3dmodelscc0.itch.io/free-cc0-guns-explosives-pack',
+              'converted_release': 'https://github.com/BoQsc/cc0-guns-explosives-pack-glb/releases/tag/0',
+              'license': 'CC0-1.0',
+              'files': imported,
+          }
+          (destination / 'IMPORT_MANIFEST.json').write_text(
+              json.dumps(manifest, indent=2) + '\n', encoding='utf-8'
+          )
+          PY
+
+      - name: Preserve CC0 license and source notes
+        run: |
+          curl --fail --location \
+            "https://raw.githubusercontent.com/BoQsc/cc0-guns-explosives-pack-glb/main/LICENSE" \
+            --output assets/weapons/cc0/LICENSE-CC0.txt
+          cat > assets/weapons/cc0/SOURCE.md <<'EOF'
+          # CC0 Guns & Explosives production assets
+
+          These models originate from the **Free CC0 Guns & Explosives Pack** by 3dmodelscc0.
+
+          Original pack:
+          https://3dmodelscc0.itch.io/free-cc0-guns-explosives-pack
+
+          The GLB files used by this project come from BoQsc's material-fixed Blender conversion release:
+          https://github.com/BoQsc/cc0-guns-explosives-pack-glb/releases/tag/0
+
+          The source pack and conversion repository identify the assets as **CC0 1.0 Universal / public domain**. Attribution is not required, but the source information is kept here for provenance.
+
+          Normalized game mappings in this first import:
+
+          - `makarov.glb` -> M1911 gameplay slot
+          - `ak47.glb` -> AK-74u gameplay slot
+          - `suomi_kp.glb` -> MP5 gameplay slot
+          - `grease_gun.glb` -> M3 Grease Gun gameplay slot
+          - `luger.glb` -> Luger P08
+          - `flare_gun.glb` -> Flare Gun
+          - `shotgun.glb` -> Olympia gameplay slot
+          - `sniper.glb` -> DSR-50 / Sniper Rifle gameplay slot
+          EOF
+
+      - name: Commit imported assets
+        run: |
+          if git diff --quiet -- assets/weapons/cc0 && git diff --cached --quiet; then
+            echo "Weapon assets are already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/weapons/cc0
+          if git diff --cached --quiet; then
+            echo "Weapon assets are already current."
+            exit 0
+          fi
+          git commit -m "Import CC0 production weapon models"
+          git push origin HEAD:main
