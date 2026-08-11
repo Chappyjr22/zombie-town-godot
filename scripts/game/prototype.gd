@@ -18,6 +18,13 @@ func _ready() -> void:
 	round_manager.round_changed.connect(hud.set_round)
 	round_manager.zombie_counts_changed.connect(hud.set_zombie_counts)
 
+	if player is ZombieTownInventoryPlayer:
+		var inventory_player := player as ZombieTownInventoryPlayer
+		inventory_player.weapon_slots_changed.connect(hud.set_weapon_slots)
+		hud.set_weapon_slots(inventory_player.weapon_slot_summary())
+	else:
+		hud.set_weapon_slots("")
+
 	hud.set_health(player.health, player.max_health)
 	if player.weapon != null:
 		hud.set_weapon(player.weapon.display_name, player.weapon.id)
