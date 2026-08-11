@@ -1,10 +1,14 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/maps/town.gd" id="1_town"]
 [ext_resource type="Script" path="res://scripts/interactables/town_interactable_spawner.gd" id="2_interactables"]
+[ext_resource type="Script" path="res://scripts/progression/town_progression.gd" id="3_progression"]
 
 [node name="Town" type="Node3D"]
 script = ExtResource("1_town")
 
 [node name="InteractableSpawner" type="Node" parent="."]
 script = ExtResource("2_interactables")
+
+[node name="TownProgression" type="Node3D" parent="."]
+script = ExtResource("3_progression")
