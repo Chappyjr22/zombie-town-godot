@@ -10,6 +10,7 @@ var power_on := false
 var gates: Dictionary = {}
 var power_switch: ZombieTownPowerSwitch
 var built := false
+var navigation_rebake_queued := false
 
 func _ready() -> void:
 	call_deferred("_initialize_from_parent")
@@ -17,7 +18,7 @@ func _ready() -> void:
 func _initialize_from_parent() -> void:
 	if built:
 		return
-	var parent_node := get_parent()
+	var parent_node: Node = get_parent()
 	if not parent_node is ZombieTownTown:
 		return
 	build_for(parent_node as ZombieTownTown)
@@ -37,9 +38,10 @@ func build_for(town_node: ZombieTownTown) -> void:
 	_add_gate(&"store_front", "Open General Store", 750, Vector3(17.0, 0.0, 14.0), Vector3(3.15, 3.0, 0.42), PI * 0.5, false)
 	_add_gate(&"church_front", "Open Church", 750, Vector3(0.0, 0.0, 20.0), Vector3(3.35, 3.0, 0.42), 0.0, false)
 
-	# These secondary entrances become shortcuts after the player restores power.
-	_add_gate(&"bar_shortcut", "Open Powered Bar Shortcut", 1000, Vector3(-14.0, 0.0, -16.0), Vector3(3.15, 3.0, 0.42), PI * 0.5, true)
-	_add_gate(&"bank_shortcut", "Open Powered Bank Shortcut", 1000, Vector3(14.0, 0.0, -16.0), Vector3(3.15, 3.0, 0.42), PI * 0.5, true)
+	# Secondary routes are true shortcuts now. They are never purchased separately.
+	# Once the building has been paid for and Town power is online, its side exit opens automatically.
+	_add_gate(&"bar_shortcut", "Bar Powered Exit", 0, Vector3(-14.0, 0.0, -16.0), Vector3(3.15, 3.0, 0.42), PI * 0.5, true, true)
+	_add_gate(&"bank_shortcut", "Bank Powered Exit", 0, Vector3(14.0, 0.0, -16.0), Vector3(3.15, 3.0, 0.42), PI * 0.5, true, true)
 
 	power_switch = ZombieTownPowerSwitch.new()
 	add_child(power_switch)
@@ -53,14 +55,48 @@ func activate_power() -> bool:
 		return false
 	power_on = true
 	power_changed.emit(true)
+	_refresh_automatic_shortcuts()
 	return true
 
 func request_navigation_rebake() -> void:
+	if navigation_rebake_queued:
+		return
+	navigation_rebake_queued = true
+	call_deferred("_perform_navigation_rebake")
+
+func _perform_navigation_rebake() -> void:
+	navigation_rebake_queued = false
 	if town == null or not is_instance_valid(town):
 		return
 	if town.navigation_region == null or town.navigation_mesh == null:
 		return
-	town.navigation_region.call_deferred("bake_navigation_mesh", true)
+	town.navigation_region.bake_navigation_mesh(true)
+
+func _on_gate_opened(_gate_id: StringName) -> void:
+	_refresh_automatic_shortcuts()
+
+func _refresh_automatic_shortcuts() -> void:
+	if not power_on:
+		return
+	if _gate_is_open(&"bar_front"):
+		_open_gate_if_closed(&"bar_shortcut")
+	if _gate_is_open(&"bank_front"):
+		_open_gate_if_closed(&"bank_shortcut")
+
+func _gate_is_open(gate_id: StringName) -> bool:
+	var gate_variant: Variant = gates.get(gate_id)
+	if not gate_variant is ZombieTownMapGate:
+		return false
+	var gate: ZombieTownMapGate = gate_variant
+	return gate.opened
+
+func _open_gate_if_closed(gate_id: StringName) -> void:
+	var gate_variant: Variant = gates.get(gate_id)
+	if not gate_variant is ZombieTownMapGate:
+		return
+	var gate: ZombieTownMapGate = gate_variant
+	if not gate.opened:
+		gate.open_gate()
 
 func _add_gate(
 	gate_id: StringName,
@@ -69,9 +105,11 @@ func _add_gate(
 	position: Vector3,
 	size: Vector3,
 	yaw: float,
-	requires_power: bool
+	requires_power: bool,
+	automatic: bool = false
 ) -> void:
 	var gate := ZombieTownMapGate.new()
 	add_child(gate)
-	gate.configure_gate(self, gate_id, label, cost, position, size, yaw, requires_power)
+	gate.configure_gate(self, gate_id, label, cost, position, size, yaw, requires_power, automatic)
+	gate.gate_opened.connect(_on_gate_opened)
 	gates[gate_id] = gate
