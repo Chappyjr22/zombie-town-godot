@@ -23,6 +23,8 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if player == null or not player.alive or Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
 		return
+	if player.has_method(&"is_downed") and bool(player.call(&"is_downed")):
+		return
 	if Input.is_action_just_pressed(&"throw_grenade"):
 		_throw_frag()
 	if Input.is_action_just_pressed(&"place_claymore"):
