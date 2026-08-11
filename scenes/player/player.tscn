@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=12 format=3]
 
-[ext_resource type="Script" path="res://scripts/player/player_inventory.gd" id="1_player"]
+[ext_resource type="Script" path="res://scripts/player/player_gameplay.gd" id="1_player"]
 [ext_resource type="Resource" path="res://resources/weapons/m1911.tres" id="2_weapon"]
-[ext_resource type="Script" path="res://scripts/player/player_interaction_progression.gd" id="3_interaction"]
+[ext_resource type="Script" path="res://scripts/player/player_interaction_gameplay.gd" id="3_interaction"]
 [ext_resource type="Script" path="res://scripts/weapons/weapon_viewmodel_production.gd" id="4_viewmodel"]
+[ext_resource type="Script" path="res://scripts/equipment/player_equipment.gd" id="5_equipment"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape_player"]
 radius = 0.35
@@ -44,6 +45,9 @@ floor_snap_length = 0.25
 
 [node name="Interaction" type="Node" parent="."]
 script = ExtResource("3_interaction")
+
+[node name="Equipment" type="Node" parent="."]
+script = ExtResource("5_equipment")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 position = Vector3(0, 0.875, 0)
