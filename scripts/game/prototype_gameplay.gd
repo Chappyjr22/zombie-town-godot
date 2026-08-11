@@ -1,8 +1,8 @@
 class_name ZombieTownGameplayPrototype
 extends Node3D
 
-@onready var player: ZombieTownGameplayPlayer = $Player
-@onready var interaction: ZombieTownGameplayInteraction = $Player/Interaction
+@onready var player: ZombieTownSurvivalPlayer = $Player
+@onready var interaction: ZombieTownSurvivalInteraction = $Player/Interaction
 @onready var equipment: ZombieTownPlayerEquipment = $Player/Equipment
 @onready var round_manager: ZombieTownGameplayRoundManager = $RoundManager
 @onready var powerup_manager: ZombieTownPowerupManager = $PowerupManager
@@ -17,6 +17,8 @@ func _ready() -> void:
 	player.stats_changed.connect(hud.set_stats)
 	player.hit_confirmed.connect(hud.show_hit)
 	player.weapon_slots_changed.connect(hud.set_weapon_slots)
+	player.downed_status_changed.connect(hud.set_downed_status)
+	player.revived.connect(hud.show_revived)
 	player.died.connect(_on_player_died)
 	interaction.prompt_changed.connect(hud.set_interaction_prompt)
 	equipment.equipment_changed.connect(hud.set_equipment)
@@ -33,6 +35,7 @@ func _ready() -> void:
 	hud.set_weapon_slots(player.weapon_slot_summary())
 	hud.set_equipment(equipment.equipment_summary())
 	hud.set_buffs("")
+	hud.set_downed_status(false, 0.0, 0.0)
 	hud.set_zombie_counts(0, 0)
 	hud.set_interaction_prompt("", true)
 	round_manager.start_game()
