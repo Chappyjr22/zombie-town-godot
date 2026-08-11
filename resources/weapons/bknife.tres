@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon_data"]
+
+[resource]
+script = ExtResource("1_weapon_data")
+id = &"bknife"
+display_name = "Ballistic Knife"
+weapon_class = &"knife"
+fire_mode = &"semi"
+damage = 340.0
+headshot_multiplier = 1.0
+pellets = 1
+pierce = 1
+magazine_size = 2
+reserve_ammo = 24
+reload_time = 1.1
+fire_interval = 0.352941
+burst_count = 1
+burst_interval = 0.08
+range = 45.0
+spread = 0.01
+ads_spread = 0.003
+recoil_pitch = 0.55
+recoil_yaw = 0.12
+hip_fov = 75.0
+ads_fov = 62.0
+shell_reload = false
+projectile_type = &"knife"
+projectile_speed = 55.0
+projectile_gravity = 1.5
+splash_damage = 0.0
+splash_radius = 0.0
+self_damage = false
+chain_count = 0
+chain_radius = 0.0
+cone_range = 0.0
+cone_angle = 0.0
+wall_cost = 0
+ammo_cost = 0
