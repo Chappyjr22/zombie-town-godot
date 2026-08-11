@@ -16,6 +16,9 @@ var health := 120.0
 var target: Node3D
 var alive := true
 var attack_remaining := 0.0
+var insta_kill_immune := false
+var nuke_immune := false
+var thundergun_immune := false
 
 func _ready() -> void:
 	add_to_group(&"zombie")
