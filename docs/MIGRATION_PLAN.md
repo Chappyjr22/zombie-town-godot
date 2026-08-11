@@ -72,10 +72,12 @@ Status: Town structural/navigation baseline validated, gameplay progression in p
 - [x] Validate weapon-slot inventory in live Godot test
 - [x] Add reusable paid gate/door progression interactable
 - [x] Add paid Town entrances for Bar, Bank, Diner, General Store and Church
-- [x] Add Bank power switch and powered Bar/Bank shortcut doors
+- [x] Add Bank power switch
 - [x] Require Town power before Pack-a-Punch can operate
 - [x] Rebuild runtime navigation when progression doors open
-- [ ] Validate Town paid-route and power progression in live Godot test
+- [x] Validate Town paid-route and power progression in live Godot test
+- [x] Remove redundant powered side-door shortcuts from current Town geometry
+- [ ] Add a meaningful powered traversal shortcut when refined Town geometry supports one
 - [ ] Add Ballistic Knife after melee/projectile knife framework exists
 - [ ] Add Mystery Box move/teddy behavior across preserved box spots
 - [ ] Refine bar second floor, balcony, and access route
