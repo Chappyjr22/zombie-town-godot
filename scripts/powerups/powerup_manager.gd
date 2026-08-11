@@ -9,7 +9,7 @@ const DOUBLE_POINTS_DURATION := 30.0
 const INSTA_KILL_DURATION := 30.0
 
 var player: ZombieTownInventoryPlayer
-var round_manager: ZombieTownRoundManager
+var round_manager: ZombieTownGameplayRoundManager
 var double_points_remaining := 0.0
 var insta_kill_remaining := 0.0
 var suppress_drops := false
@@ -17,7 +17,7 @@ var last_buff_text := ""
 
 func _ready() -> void:
 	player = get_node("../Player") as ZombieTownInventoryPlayer
-	round_manager = get_node("../RoundManager") as ZombieTownRoundManager
+	round_manager = get_node("../RoundManager") as ZombieTownGameplayRoundManager
 	if round_manager != null:
 		round_manager.zombie_killed.connect(_on_zombie_killed)
 	_emit_buffs_if_changed()
@@ -58,7 +58,7 @@ func activate_powerup(powerup_id: StringName) -> void:
 func _on_zombie_killed(zombie: ZombieTownZombie) -> void:
 	if suppress_drops or zombie == null or randf() > DROP_CHANCE:
 		return
-	var active_drops := get_tree().get_nodes_in_group(&"powerup_drop").size()
+	var active_drops: int = get_tree().get_nodes_in_group(&"powerup_drop").size()
 	if active_drops >= 3:
 		return
 	var drop := ZombieTownPowerupDrop.new()
@@ -67,7 +67,7 @@ func _on_zombie_killed(zombie: ZombieTownZombie) -> void:
 	drop.configure(self, _choose_powerup(), zombie.global_position)
 
 func _choose_powerup() -> StringName:
-	var roll := randf()
+	var roll: float = randf()
 	if roll < 0.30:
 		return &"max_ammo"
 	if roll < 0.55:
@@ -99,7 +99,6 @@ func _activate_nuke() -> void:
 	if killed_count > 0:
 		player.kills += killed_count
 	player.award_points(400)
-	player.stats_changed.emit(player.points, player.kills, player.headshots)
 	pickup_announced.emit("NUKE")
 
 func _emit_buffs_if_changed() -> void:
@@ -108,7 +107,7 @@ func _emit_buffs_if_changed() -> void:
 		parts.append("DOUBLE POINTS %ds" % ceili(double_points_remaining))
 	if insta_kill_remaining > 0.0:
 		parts.append("INSTA-KILL %ds" % ceili(insta_kill_remaining))
-	var text := "   ".join(parts)
+	var text: String = "   ".join(parts)
 	if text == last_buff_text:
 		return
 	last_buff_text = text
