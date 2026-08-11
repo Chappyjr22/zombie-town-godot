@@ -118,6 +118,7 @@ func _add_machine_visual(interactable: ZombieTownInteractable, color: Color, lab
 
 	var label := Label3D.new()
 	label.position = Vector3(0.0, 1.3, -0.405)
+	label.rotation.y = PI
 	label.text = label_text
 	label.font_size = 40
 	label.modulate = Color(0.95, 0.94, 0.88, 1.0)
@@ -147,6 +148,7 @@ func _add_wall_plate_visual(interactable: ZombieTownInteractable, color: Color, 
 
 	var label := Label3D.new()
 	label.position = Vector3(0.0, 0.0, -0.105)
+	label.rotation.y = PI
 	label.text = label_text
 	label.font_size = 22
 	label.outline_size = 6
