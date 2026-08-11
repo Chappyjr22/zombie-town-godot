@@ -17,7 +17,7 @@ const CONFIG := {
 	&"ak74u": {
 		"path": ASSET_ROOT + "/ak47.glb",
 		"target_length": 0.98,
-		"back_z": 0.34,
+		"back_z": 0.28,
 		"rotation_degrees": Vector3.ZERO
 	},
 	&"mp5": {
