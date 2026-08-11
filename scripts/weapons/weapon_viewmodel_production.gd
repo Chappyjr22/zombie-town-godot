@@ -54,9 +54,9 @@ func _try_build_production_asset(data: WeaponData) -> bool:
 	anchor.add_child(asset_root)
 	asset_root.rotation = ZombieTownProductionWeaponAssets.rotation_radians(data.id)
 	_prepare_imported_meshes(asset_root)
-	_remove_known_loose_components(asset_root, data.id)
 	_auto_orient_long_axis(asset_root, anchor)
 	_normalize_imported_weapon(asset_root, anchor, data.id)
+	_remove_known_loose_components(asset_root, data.id)
 	_build_arms(data.weapon_class)
 	return true
 
