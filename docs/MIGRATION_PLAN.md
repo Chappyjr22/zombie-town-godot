@@ -93,6 +93,11 @@ Status: Town structural/navigation baseline validated, gameplay systems in progr
 - [x] Add crawl-only downed movement, interaction/combat restrictions and downed HUD feedback
 - [x] Add short post-revive invulnerability window
 - [x] Validate solo downed state and Quick Revive in live Godot test
+- [x] Add reusable boss round every 10 rounds with a 10-zombie escort cap
+- [x] Add Brute boss health scaling, heavy melee and ground-slam attack
+- [x] Make the Brute resistant to Insta-Kill, Nuke and Thundergun instant-kill behavior
+- [x] Add dedicated boss health bar HUD and debug-only F10 boss-round test shortcut
+- [ ] Validate Brute boss round in live Godot test
 - [ ] Refine bar second floor, balcony, and access route
 - [ ] Refine bank vault/interior
 - [ ] Refine church tower/interior
@@ -150,7 +155,8 @@ Status: Town structural/navigation baseline validated, gameplay systems in progr
 - [ ] Remote third-person animation states
 - [ ] Zombie production model
 - [ ] Zombie animation state machine
-- [ ] Brute boss model/animation
+- [x] Temporary procedural Brute boss presentation
+- [ ] Brute boss production model/animation
 - [ ] Blood/impact effects
 
 ## Prototype 0.5: Multiplayer
@@ -176,7 +182,7 @@ After Town multiplayer is solid, migrate the remaining content through reusable 
 - Last Stop
 - Crossroads Day/Night
 - Overpass Day/Night
-- Boss rounds
+- Boss round variants/rewards
 - Fire Sale
 - Remaining weapons/perks
 - Native desktop builds
