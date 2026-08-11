@@ -7,6 +7,8 @@ var weapon_slots: Array[Dictionary] = []
 var active_weapon_slot := 0
 var max_weapon_slots := 2
 var inventory_ready := false
+var double_points_active := false
+var insta_kill_active := false
 
 func _ready() -> void:
 	super._ready()
@@ -85,6 +87,45 @@ func unlock_third_weapon_slot() -> void:
 	if max_weapon_slots >= 3:
 		return
 	max_weapon_slots = 3
+	_emit_weapon_slots_changed()
+
+func set_double_points_active(enabled: bool) -> void:
+	double_points_active = enabled
+
+func set_insta_kill_active(enabled: bool) -> void:
+	insta_kill_active = enabled
+
+func get_point_multiplier() -> int:
+	return 2 if double_points_active else 1
+
+func is_insta_kill_active() -> bool:
+	return insta_kill_active
+
+func award_points(base_amount: int) -> void:
+	if base_amount <= 0:
+		return
+	points += base_amount * get_point_multiplier()
+	stats_changed.emit(points, kills, headshots)
+
+func refill_all_weapon_ammo() -> void:
+	if weapon_slots.is_empty():
+		return
+	_save_active_slot()
+	for index in weapon_slots.size():
+		var slot: Dictionary = weapon_slots[index]
+		var weapon_variant: Variant = slot.get("weapon")
+		if not weapon_variant is WeaponData:
+			continue
+		var slot_weapon: WeaponData = weapon_variant
+		slot["reserve"] = slot_weapon.reserve_ammo
+		weapon_slots[index] = slot
+	if active_weapon_slot >= 0 and active_weapon_slot < weapon_slots.size():
+		var active_slot: Dictionary = weapon_slots[active_weapon_slot]
+		var active_weapon_variant: Variant = active_slot.get("weapon")
+		if active_weapon_variant is WeaponData:
+			var active_slot_weapon: WeaponData = active_weapon_variant
+			reserve_ammo = active_slot_weapon.reserve_ammo
+			ammo_changed.emit(ammo, reserve_ammo, reloading)
 	_emit_weapon_slots_changed()
 
 func get_weapon_slot_index(weapon_id: StringName) -> int:
