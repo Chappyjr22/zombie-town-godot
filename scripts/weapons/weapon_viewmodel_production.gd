@@ -67,6 +67,34 @@ func _remove_known_loose_components(asset_root: Node3D, weapon_id: StringName) -
 	if loose_magazine != null:
 		loose_magazine.free()
 
+func _build_arms(weapon_class: StringName) -> void:
+	if current_weapon_id == &"ak74u":
+		_build_production_ak_hands()
+		return
+	super._build_arms(weapon_class)
+
+func _build_production_ak_hands() -> void:
+	# Trigger hand follows the real AK pistol grip instead of the generic rifle pose.
+	# Most sleeve geometry stays below the frame so the imported rifle remains the focus.
+	_arm_cylinder(0.042, 0.29, Vector3(0.18, -0.415, 0.035), Vector3(deg_to_rad(66.0), 0.0, deg_to_rad(-16.0)), sleeve)
+	_arm_box(Vector3(0.088, 0.068, 0.080), Vector3(0.095, -0.255, -0.120), sleeve, Vector3(deg_to_rad(14.0), 0.0, deg_to_rad(-9.0)))
+	_arm_cylinder(0.036, 0.105, Vector3(0.074, -0.208, -0.175), Vector3(deg_to_rad(69.0), 0.0, deg_to_rad(-13.0)), skin)
+	_arm_box(Vector3(0.092, 0.112, 0.084), Vector3(0.025, -0.148, -0.238), skin, Vector3(deg_to_rad(17.0), deg_to_rad(-4.0), deg_to_rad(-6.0)))
+	for y_position: float in [-0.150, -0.181, -0.212]:
+		_arm_box(Vector3(0.022, 0.040, 0.064), Vector3(-0.014, y_position, -0.272), skin, Vector3(deg_to_rad(12.0), 0.0, deg_to_rad(8.0)))
+	_arm_box(Vector3(0.026, 0.040, 0.082), Vector3(0.063, -0.114, -0.255), skin, Vector3(deg_to_rad(8.0), deg_to_rad(-20.0), deg_to_rad(-24.0)))
+
+	# Support hand cups the underside of the wooden fore-end. The palm intentionally
+	# intersects the lower edge slightly so it reads as a firm grip rather than floating.
+	_arm_cylinder(0.043, 0.31, Vector3(-0.215, -0.395, -0.315), Vector3(deg_to_rad(72.0), deg_to_rad(-8.0), deg_to_rad(20.0)), sleeve)
+	_arm_box(Vector3(0.090, 0.068, 0.082), Vector3(-0.118, -0.238, -0.445), sleeve, Vector3(deg_to_rad(10.0), deg_to_rad(-3.0), deg_to_rad(10.0)))
+	_arm_cylinder(0.036, 0.105, Vector3(-0.090, -0.180, -0.505), Vector3(deg_to_rad(75.0), deg_to_rad(-6.0), deg_to_rad(18.0)), skin)
+	_arm_box(Vector3(0.108, 0.072, 0.108), Vector3(-0.012, -0.075, -0.565), skin, Vector3(deg_to_rad(4.0), deg_to_rad(3.0), deg_to_rad(6.0)))
+	var finger_x_positions: Array[float] = [-0.039, -0.013, 0.013, 0.039]
+	for x_position: float in finger_x_positions:
+		_arm_box(Vector3(0.019, 0.044, 0.062), Vector3(x_position, -0.119, -0.570), skin, Vector3(deg_to_rad(9.0), 0.0, deg_to_rad(-3.0)))
+	_arm_box(Vector3(0.027, 0.040, 0.090), Vector3(0.054, -0.052, -0.535), skin, Vector3(deg_to_rad(-5.0), deg_to_rad(-19.0), deg_to_rad(-27.0)))
+
 func _prepare_imported_meshes(root: Node) -> void:
 	if root is MeshInstance3D:
 		var root_mesh := root as MeshInstance3D
