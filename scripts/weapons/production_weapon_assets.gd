@@ -59,7 +59,7 @@ const CONFIG := {
 }
 
 static func supports(weapon_id: StringName) -> bool:
-	return PRODUCTION_ASSETS_ENABLED and weapon_id == &"m1911" and CONFIG.has(weapon_id)
+	return PRODUCTION_ASSETS_ENABLED and (weapon_id == &"m1911" or weapon_id == &"ak74u") and CONFIG.has(weapon_id)
 
 static func asset_path(weapon_id: StringName) -> String:
 	var config_variant: Variant = CONFIG.get(weapon_id, {})
