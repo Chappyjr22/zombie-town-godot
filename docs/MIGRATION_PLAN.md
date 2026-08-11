@@ -36,7 +36,7 @@ Status: playable baseline
 
 ## Prototype 0.2: Town vertical slice
 
-Status: Town structural/navigation baseline validated, gameplay progression in progress
+Status: Town structural/navigation baseline validated, gameplay systems in progress
 
 - [x] Establish asset import conventions for GLB/glTF
 - [ ] Import/refine detailed Town geometry/assets
@@ -78,6 +78,10 @@ Status: Town structural/navigation baseline validated, gameplay progression in p
 - [x] Rebuild runtime navigation when progression doors open
 - [x] Validate Town paid-route and power progression in live Godot test
 - [ ] Add a meaningful powered traversal shortcut when refined Town geometry supports one
+- [x] Add functional Frag Grenade and Claymore wall purchases
+- [x] Add reusable Max Ammo, Double Points, Insta-Kill and Nuke drop framework
+- [x] Add equipment counts and active power-up HUD feedback
+- [ ] Validate equipment and power-up drops in live Godot test
 - [ ] Add Ballistic Knife after melee/projectile knife framework exists
 - [ ] Add Mystery Box move/teddy behavior across preserved box spots
 - [ ] Refine bar second floor, balcony, and access route
@@ -87,8 +91,6 @@ Status: Town structural/navigation baseline validated, gameplay progression in p
 - [ ] Add production Mystery Box model/effects/audio
 - [ ] Add production perk-machine models/effects presentation
 - [ ] Finish Pack-a-Punch presentation and weapon-name changes
-- [ ] Port equipment buys
-- [ ] Port power-up drops
 - [ ] Port Town ambience and gameplay audio
 
 ## Prototype 0.3: Production combat framework
@@ -118,13 +120,14 @@ Status: Town structural/navigation baseline validated, gameplay progression in p
 - [x] Wunderwaffe chain-lightning prototype
 - [x] Add AN-94, Grease Gun, Luger, RPK, HAMR, M1216 and sniper box resources
 - [x] Validate expanded box weapons in live Godot test
+- [x] Frag grenade throw/fuse/bounce/splash prototype
+- [x] Claymore placement/arming/directional blast prototype
 - [ ] Production weapon recoil profiles
 - [ ] Production projectile/impact effects
 - [ ] Production wonder weapon models/audio/effects
 - [ ] Finish PAP behavior across projectile/wonder weapon attributes
 - [ ] Melee/knife
-- [ ] Grenades
-- [ ] Claymores
+- [ ] Production grenade/Claymore models, animations and audio
 - [ ] Damage feedback and hit indicators
 
 ## Prototype 0.4: Character and zombie presentation
