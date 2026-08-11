@@ -1,7 +1,12 @@
 class_name ZombieTownProductionWeaponAssets
 extends RefCounted
 
-const ASSET_ROOT := "res://assets/weapons/cc0"
+# Raw source GLBs live under assets/weapons/cc0 and are ignored by Godot because
+# importing the full unoptimized pack can overwhelm the editor. Runtime-ready,
+# optimized weapon models will be introduced under assets/weapons/runtime one at
+# a time and this flag will be enabled again after live validation.
+const PRODUCTION_ASSETS_ENABLED := false
+const ASSET_ROOT := "res://assets/weapons/runtime"
 
 const CONFIG := {
 	&"m1911": {
@@ -55,7 +60,7 @@ const CONFIG := {
 }
 
 static func supports(weapon_id: StringName) -> bool:
-	return CONFIG.has(weapon_id)
+	return PRODUCTION_ASSETS_ENABLED and CONFIG.has(weapon_id)
 
 static func asset_path(weapon_id: StringName) -> String:
 	var config_variant: Variant = CONFIG.get(weapon_id, {})
@@ -65,7 +70,9 @@ static func asset_path(weapon_id: StringName) -> String:
 	return str(config.get("path", ""))
 
 static func asset_available(weapon_id: StringName) -> bool:
-	var path := asset_path(weapon_id)
+	if not PRODUCTION_ASSETS_ENABLED:
+		return false
+	var path: String = asset_path(weapon_id)
 	return not path.is_empty() and ResourceLoader.exists(path)
 
 static func target_length(weapon_id: StringName) -> float:
