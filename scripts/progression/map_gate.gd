@@ -1,9 +1,12 @@
 class_name ZombieTownMapGate
 extends ZombieTownInteractable
 
+signal gate_opened(gate_id: StringName)
+
 var progression: Node
 var gate_id: StringName = &"gate"
 var requires_power := false
+var automatic := false
 var opened := false
 var gate_size := Vector3(3.0, 3.0, 0.4)
 
@@ -21,11 +24,13 @@ func configure_gate(
 	world_position: Vector3,
 	size: Vector3,
 	yaw: float,
-	needs_power: bool
+	needs_power: bool,
+	auto_open: bool = false
 ) -> void:
 	progression = progression_node
 	gate_id = id
 	requires_power = needs_power
+	automatic = auto_open
 	gate_size = size
 	interaction_kind = &"map_gate"
 	item_id = id
@@ -33,28 +38,28 @@ func configure_gate(
 	cost = price
 	position = world_position
 	rotation.y = yaw
-	collision_layer = 4
+	collision_layer = 0 if automatic else 4
 	collision_mask = 0
 	monitoring = false
-	monitorable = true
+	monitorable = not automatic
 	_build_gate()
 
 func prompt_for(_player: ZombieTownPlayer) -> String:
-	if opened:
+	if opened or automatic:
 		return ""
 	if requires_power and not _power_available():
 		return "%s  [POWER REQUIRED]" % display_name
 	return "[E] %s  %d PTS" % [display_name, cost]
 
 func affordable_for(player: ZombieTownPlayer) -> bool:
-	if opened or player == null:
+	if opened or automatic or player == null:
 		return true
 	if requires_power and not _power_available():
 		return false
 	return player.points >= cost
 
 func activate_for(player: ZombieTownPlayer) -> void:
-	if opened or player == null or not player.alive:
+	if opened or automatic or player == null or not player.alive:
 		return
 	if requires_power and not _power_available():
 		return
@@ -82,6 +87,7 @@ func open_gate() -> void:
 		tween.set_trans(Tween.TRANS_QUAD)
 		tween.set_ease(Tween.EASE_IN_OUT)
 		tween.tween_property(blocker, "position", target_position, 0.48)
+	gate_opened.emit(gate_id)
 	if progression != null and progression.has_method("request_navigation_rebake"):
 		progression.call("request_navigation_rebake")
 
@@ -118,19 +124,18 @@ func _build_gate() -> void:
 	gate_mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	blocker.add_child(gate_mesh)
 
-	# The interaction volume extends farther than the physical blocker so the Area
-	# wins the interaction ray before the StaticBody surface does.
 	var interaction_shape := BoxShape3D.new()
 	interaction_shape.size = Vector3(gate_size.x + 0.25, gate_size.y + 0.30, 1.35)
 	interaction_collision = CollisionShape3D.new()
 	interaction_collision.position = Vector3(0.0, gate_size.y * 0.5, 0.0)
 	interaction_collision.shape = interaction_shape
+	interaction_collision.disabled = automatic
 	add_child(interaction_collision)
 
 	status_label = Label3D.new()
 	status_label.name = "GateLabel"
 	status_label.position = Vector3(0.0, gate_size.y + 0.32, 0.0)
-	status_label.text = "POWER" if requires_power else "%d" % cost
+	status_label.text = "POWERED EXIT" if automatic else ("POWER" if requires_power else "%d" % cost)
 	status_label.font_size = 24
 	status_label.outline_size = 6
 	status_label.modulate = Color(0.85, 0.25, 0.16, 1.0) if requires_power else Color(0.92, 0.72, 0.26, 1.0)
