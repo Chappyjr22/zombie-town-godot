@@ -1,8 +1,12 @@
 class_name ZombieTownWeaponViewmodelProduction
 extends ZombieTownWeaponViewmodelVideoTuned
 
+var imported_muzzle_positions: Dictionary = {}
+
 func set_weapon(data: WeaponData) -> void:
 	if data == null:
+		return
+	if _try_build_production_asset(data):
 		return
 	if data.id == &"mp5" or data.id == &"olympia" or data.id == &"bknife":
 		current_weapon_id = data.id
@@ -19,6 +23,119 @@ func set_weapon(data: WeaponData) -> void:
 			_build_pistol_hands()
 		return
 	super.set_weapon(data)
+
+func _try_build_production_asset(data: WeaponData) -> bool:
+	if not ZombieTownProductionWeaponAssets.supports(data.id):
+		return false
+	if not ZombieTownProductionWeaponAssets.asset_available(data.id):
+		return false
+	var asset_path: String = ZombieTownProductionWeaponAssets.asset_path(data.id)
+	var loaded_resource: Resource = ResourceLoader.load(asset_path)
+	if not loaded_resource is PackedScene:
+		push_warning("Production weapon asset is not a PackedScene: %s" % asset_path)
+		return false
+	var packed_scene: PackedScene = loaded_resource as PackedScene
+	var instance_node: Node = packed_scene.instantiate()
+	if not instance_node is Node3D:
+		instance_node.queue_free()
+		push_warning("Production weapon asset root is not Node3D: %s" % asset_path)
+		return false
+
+	current_weapon_id = data.id
+	_clear_children(model_root)
+	_clear_children(arms_root)
+	imported_muzzle_positions.erase(data.id)
+
+	var anchor := Node3D.new()
+	anchor.name = "ProductionAssetAnchor"
+	model_root.add_child(anchor)
+	var asset_root: Node3D = instance_node as Node3D
+	asset_root.name = "ImportedWeapon"
+	anchor.add_child(asset_root)
+	asset_root.rotation = ZombieTownProductionWeaponAssets.rotation_radians(data.id)
+	_prepare_imported_meshes(asset_root)
+	_auto_orient_long_axis(asset_root, anchor)
+	_normalize_imported_weapon(asset_root, anchor, data.id)
+	_build_arms(data.weapon_class)
+	return true
+
+func _prepare_imported_meshes(root: Node) -> void:
+	if root is MeshInstance3D:
+		var root_mesh := root as MeshInstance3D
+		root_mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	for child: Node in root.get_children():
+		_prepare_imported_meshes(child)
+
+func _auto_orient_long_axis(asset_root: Node3D, anchor: Node3D) -> void:
+	var bounds: AABB = _bounds_for_subtree(asset_root, anchor)
+	if bounds.size.length_squared() <= 0.000001:
+		return
+	if bounds.size.x > bounds.size.z * 1.18 and bounds.size.x >= bounds.size.y:
+		asset_root.rotation.y += deg_to_rad(90.0)
+	elif bounds.size.y > bounds.size.z * 1.18 and bounds.size.y >= bounds.size.x:
+		asset_root.rotation.x += deg_to_rad(90.0)
+
+func _normalize_imported_weapon(asset_root: Node3D, anchor: Node3D, weapon_id: StringName) -> void:
+	var bounds: AABB = _bounds_for_subtree(asset_root, anchor)
+	if bounds.size.length_squared() <= 0.000001:
+		push_warning("Production weapon has no measurable mesh bounds: %s" % weapon_id)
+		return
+	var source_length: float = maxf(bounds.size.z, 0.0001)
+	var target_length: float = ZombieTownProductionWeaponAssets.target_length(weapon_id)
+	var uniform_scale: float = target_length / source_length
+	asset_root.scale = Vector3.ONE * uniform_scale
+
+	bounds = _bounds_for_subtree(asset_root, anchor)
+	var center: Vector3 = bounds.position + bounds.size * 0.5
+	var desired_back_z: float = ZombieTownProductionWeaponAssets.back_z(weapon_id)
+	asset_root.position += Vector3(-center.x, -center.y, desired_back_z - bounds.end.z)
+
+	bounds = _bounds_for_subtree(asset_root, anchor)
+	var muzzle_y: float = bounds.position.y + bounds.size.y * 0.57
+	var muzzle_position := Vector3(0.0, muzzle_y, bounds.position.z - 0.025)
+	imported_muzzle_positions[weapon_id] = muzzle_position
+
+func _bounds_for_subtree(subtree: Node, relative_to: Node3D) -> AABB:
+	var mesh_instances: Array[MeshInstance3D] = []
+	_collect_mesh_instances(subtree, mesh_instances)
+	if mesh_instances.is_empty():
+		return AABB()
+	var minimum := Vector3(INF, INF, INF)
+	var maximum := Vector3(-INF, -INF, -INF)
+	var relative_inverse: Transform3D = relative_to.global_transform.affine_inverse()
+	for mesh_instance: MeshInstance3D in mesh_instances:
+		if mesh_instance.mesh == null:
+			continue
+		var local_bounds: AABB = mesh_instance.get_aabb()
+		var to_relative: Transform3D = relative_inverse * mesh_instance.global_transform
+		for x_index in 2:
+			for y_index in 2:
+				for z_index in 2:
+					var corner := local_bounds.position + Vector3(
+						local_bounds.size.x * float(x_index),
+						local_bounds.size.y * float(y_index),
+						local_bounds.size.z * float(z_index)
+					)
+					var point: Vector3 = to_relative * corner
+					minimum = Vector3(
+						minf(minimum.x, point.x),
+						minf(minimum.y, point.y),
+						minf(minimum.z, point.z)
+					)
+					maximum = Vector3(
+						maxf(maximum.x, point.x),
+						maxf(maximum.y, point.y),
+						maxf(maximum.z, point.z)
+					)
+	if minimum.x == INF:
+		return AABB()
+	return AABB(minimum, maximum - minimum)
+
+func _collect_mesh_instances(node: Node, output: Array[MeshInstance3D]) -> void:
+	if node is MeshInstance3D:
+		output.append(node as MeshInstance3D)
+	for child: Node in node.get_children():
+		_collect_mesh_instances(child, output)
 
 func _build_suomi() -> void:
 	_cylinder(0.055, 0.42, Vector3(0.0, 0.045, -0.27), metal_mid)
@@ -72,6 +189,9 @@ func _add_ray_sights(mark_two: bool) -> void:
 func muzzle_position_for(data: WeaponData) -> Vector3:
 	if data == null:
 		return super.muzzle_position_for(data)
+	var imported_variant: Variant = imported_muzzle_positions.get(data.id)
+	if imported_variant is Vector3:
+		return imported_variant
 	match data.id:
 		&"mp5":
 			return Vector3(0.0, 0.045, -0.90)
