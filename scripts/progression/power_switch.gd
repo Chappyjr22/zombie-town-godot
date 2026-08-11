@@ -1,13 +1,13 @@
 class_name ZombieTownPowerSwitch
 extends ZombieTownInteractable
 
-var progression: ZombieTownTownProgression
+var progression: Node
 var screen_material: StandardMaterial3D
 var screen_mesh: MeshInstance3D
 var lever: MeshInstance3D
 var interaction_collision: CollisionShape3D
 
-func configure_switch(progression_node: ZombieTownTownProgression, world_position: Vector3, yaw: float) -> void:
+func configure_switch(progression_node: Node, world_position: Vector3, yaw: float) -> void:
 	progression = progression_node
 	interaction_kind = &"power_switch"
 	item_id = &"town_power"
@@ -22,7 +22,7 @@ func configure_switch(progression_node: ZombieTownTownProgression, world_positio
 	_build_switch()
 
 func prompt_for(_player: ZombieTownPlayer) -> String:
-	if progression != null and progression.is_power_on():
+	if _power_is_on():
 		return "POWER  [ON]"
 	return "[E] Turn On Power"
 
@@ -30,9 +30,16 @@ func affordable_for(_player: ZombieTownPlayer) -> bool:
 	return true
 
 func activate_for(_player: ZombieTownPlayer) -> void:
-	if progression == null or not progression.activate_power():
+	if progression == null or not progression.has_method("activate_power"):
+		return
+	if not bool(progression.call("activate_power")):
 		return
 	_update_powered_visual()
+
+func _power_is_on() -> bool:
+	if progression == null or not progression.has_method("is_power_on"):
+		return false
+	return bool(progression.call("is_power_on"))
 
 func _build_switch() -> void:
 	var panel_material := StandardMaterial3D.new()
@@ -101,7 +108,7 @@ func _update_powered_visual() -> void:
 		screen_material.emission = Color(0.14, 0.95, 0.36, 1.0)
 		screen_material.emission_energy_multiplier = 2.6
 	if lever != null:
-		var tween := create_tween()
+		var tween: Tween = create_tween()
 		tween.set_trans(Tween.TRANS_QUAD)
 		tween.set_ease(Tween.EASE_OUT)
 		tween.tween_property(lever, "rotation:x", deg_to_rad(28.0), 0.28)
