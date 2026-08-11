@@ -1,7 +1,7 @@
 class_name ZombieTownMapGate
 extends ZombieTownInteractable
 
-var progression: ZombieTownTownProgression
+var progression: Node
 var gate_id: StringName = &"gate"
 var requires_power := false
 var opened := false
@@ -14,7 +14,7 @@ var gate_mesh: MeshInstance3D
 var status_label: Label3D
 
 func configure_gate(
-	progression_node: ZombieTownTownProgression,
+	progression_node: Node,
 	id: StringName,
 	label: String,
 	price: int,
@@ -42,21 +42,21 @@ func configure_gate(
 func prompt_for(_player: ZombieTownPlayer) -> String:
 	if opened:
 		return ""
-	if requires_power and (progression == null or not progression.is_power_on()):
+	if requires_power and not _power_available():
 		return "%s  [POWER REQUIRED]" % display_name
 	return "[E] %s  %d PTS" % [display_name, cost]
 
 func affordable_for(player: ZombieTownPlayer) -> bool:
 	if opened or player == null:
 		return true
-	if requires_power and (progression == null or not progression.is_power_on()):
+	if requires_power and not _power_available():
 		return false
 	return player.points >= cost
 
 func activate_for(player: ZombieTownPlayer) -> void:
 	if opened or player == null or not player.alive:
 		return
-	if requires_power and (progression == null or not progression.is_power_on()):
+	if requires_power and not _power_available():
 		return
 	if player.points < cost:
 		return
@@ -77,13 +77,18 @@ func open_gate() -> void:
 	if status_label != null:
 		status_label.visible = false
 	if blocker != null:
-		var target_position := blocker.position + Vector3(0.0, gate_size.y + 0.55, 0.0)
-		var tween := create_tween()
+		var target_position: Vector3 = blocker.position + Vector3(0.0, gate_size.y + 0.55, 0.0)
+		var tween: Tween = create_tween()
 		tween.set_trans(Tween.TRANS_QUAD)
 		tween.set_ease(Tween.EASE_IN_OUT)
 		tween.tween_property(blocker, "position", target_position, 0.48)
-	if progression != null:
-		progression.request_navigation_rebake()
+	if progression != null and progression.has_method("request_navigation_rebake"):
+		progression.call("request_navigation_rebake")
+
+func _power_available() -> bool:
+	if progression == null or not progression.has_method("is_power_on"):
+		return false
+	return bool(progression.call("is_power_on"))
 
 func _build_gate() -> void:
 	blocker = StaticBody3D.new()
