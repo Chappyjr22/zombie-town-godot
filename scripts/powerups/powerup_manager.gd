@@ -92,7 +92,7 @@ func _activate_nuke() -> void:
 		if not node is ZombieTownZombie:
 			continue
 		var zombie := node as ZombieTownZombie
-		if not zombie.alive:
+		if not zombie.alive or zombie.nuke_immune:
 			continue
 		var outcome: Dictionary = zombie.take_damage(maxf(zombie.max_health * 20.0, 50000.0), false, player)
 		if bool(outcome.get("killed", false)):
