@@ -87,7 +87,7 @@ Status: Town structural/navigation baseline validated, gameplay systems in progr
 - [x] Restore Ballistic Knife resource/projectile and Mystery Box weight
 - [x] Validate melee and Ballistic Knife in live Godot test
 - [x] Add Mystery Box teddy result, relocation and locator beam across preserved box spots
-- [ ] Validate Mystery Box teddy and relocation in live Godot test
+- [x] Validate Mystery Box teddy and relocation in live Godot test
 - [ ] Refine bar second floor, balcony, and access route
 - [ ] Refine bank vault/interior
 - [ ] Refine church tower/interior
