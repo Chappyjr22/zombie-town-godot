@@ -4,7 +4,7 @@ extends Node
 signal buffs_changed(text: String)
 signal pickup_announced(text: String)
 
-const DROP_CHANCE := 0.08
+const DROP_CHANCE := 0.12
 const DOUBLE_POINTS_DURATION := 30.0
 const INSTA_KILL_DURATION := 30.0
 
