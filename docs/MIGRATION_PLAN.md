@@ -65,6 +65,11 @@ Status: Town structural/navigation baseline validated, interaction layer in prog
 - [x] Port browser-style weighted box odds and wonder pity scaling
 - [x] Slow Mystery Box cycling into final reveal
 - [x] Validate expanded Mystery Box weapons in live Godot test
+- [x] Add persistent two-weapon inventory and switching
+- [x] Make wall buys and Mystery Box inventory aware
+- [x] Make PAP tier/ammo persist per weapon slot
+- [x] Make Mule Kick unlock a third weapon slot
+- [ ] Validate weapon-slot inventory in live Godot test
 - [ ] Add Ballistic Knife after melee/projectile knife framework exists
 - [ ] Add Mystery Box move/teddy behavior across preserved box spots
 - [ ] Refine bar second floor, balcony, and access route
@@ -90,8 +95,9 @@ Status: Town structural/navigation baseline validated, interaction layer in prog
 - [x] Dedicated Ray Gun procedural viewmodel
 - [x] Dedicated Ray Gun Mark II procedural viewmodel
 - [x] Class-based visual fallbacks for remaining firearms
-- [ ] Validate viewmodel scale, hand placement, ADS and muzzle positions in live Godot test
-- [ ] Replace class fallbacks with dedicated production weapon models
+- [x] Validate prototype viewmodel scale, hand placement, ADS and muzzle positions in live Godot tests
+- [ ] Import user-provided production weapon pack and map assets to WeaponData IDs
+- [ ] Replace temporary procedural viewmodels with weapon-pack scenes
 - [ ] Inspect animation framework
 - [x] Base weapon behavior profiles for semi/auto/shotgun wall guns
 - [x] Burst-fire framework
