@@ -1,0 +1,39 @@
+{
+  "original_pack": "https://3dmodelscc0.itch.io/free-cc0-guns-explosives-pack",
+  "converted_release": "https://github.com/BoQsc/cc0-guns-explosives-pack-glb/releases/tag/0",
+  "license": "CC0-1.0",
+  "files": {
+    "makarov.glb": {
+      "source_member": "Guns&Explosives_glb/Pistol_MK/Makarov.glb",
+      "bytes": 4203840
+    },
+    "ak47.glb": {
+      "source_member": "Guns&Explosives_glb/AK-47/AK47.glb",
+      "bytes": 5906744
+    },
+    "suomi_kp.glb": {
+      "source_member": "Guns&Explosives_glb/Suomi_KP/Suomi_KP.glb",
+      "bytes": 11116764
+    },
+    "grease_gun.glb": {
+      "source_member": "Guns&Explosives_glb/GreaseGun/Grease_Gun.glb",
+      "bytes": 9386032
+    },
+    "luger.glb": {
+      "source_member": "Guns&Explosives_glb/Luger/Luger.glb",
+      "bytes": 9967396
+    },
+    "flare_gun.glb": {
+      "source_member": "Guns&Explosives_glb/Flare_Gun/FlareGun.glb",
+      "bytes": 4822808
+    },
+    "shotgun.glb": {
+      "source_member": "Guns&Explosives_glb/Shotgun/Shotgun.glb",
+      "bytes": 11636352
+    },
+    "sniper.glb": {
+      "source_member": "Guns&Explosives_glb/Sniper/Sniper.glb",
+      "bytes": 3499544
+    }
+  }
+}
