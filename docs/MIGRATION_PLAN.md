@@ -119,8 +119,12 @@ Status: Town structural/navigation baseline validated, gameplay systems in progr
 - [x] Dedicated Ray Gun Mark II procedural viewmodel
 - [x] Class-based visual fallbacks for remaining firearms
 - [x] Validate prototype viewmodel scale, hand placement, ADS and muzzle positions in live Godot tests
-- [ ] Import user-provided production weapon pack and map assets to WeaponData IDs
-- [ ] Replace temporary procedural viewmodels with weapon-pack scenes
+- [x] Add automated CC0 production weapon import pipeline with source/license provenance
+- [x] Import first production firearm batch: Makarov, AK-47, Suomi KP, M3 Grease Gun, Luger, Flare Gun, Shotgun and Sniper
+- [x] Map imported firearm assets to existing WeaponData IDs without changing gameplay stats
+- [x] Add imported-model auto scaling/centering, dynamic muzzle placement and procedural fallback
+- [ ] Validate production firearm orientation, hand placement, ADS and muzzle positions in live Godot test
+- [ ] Replace remaining temporary procedural firearm viewmodels with production assets where matching models exist
 - [ ] Inspect animation framework
 - [x] Base weapon behavior profiles for semi/auto/shotgun wall guns
 - [x] Burst-fire framework
