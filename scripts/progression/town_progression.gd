@@ -44,7 +44,6 @@ func build_for(town_node: ZombieTownTown) -> void:
 	power_switch = ZombieTownPowerSwitch.new()
 	add_child(power_switch)
 	power_switch.configure_switch(self, Vector3(30.55, 0.0, -14.0), -PI * 0.5)
-	request_navigation_rebake()
 
 func is_power_on() -> bool:
 	return power_on
