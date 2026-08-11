@@ -159,7 +159,7 @@ func _choose_relocation_marker() -> Marker3D:
 	for marker_node: Node in get_tree().get_nodes_in_group(&"mystery_box_spot"):
 		if not marker_node is Marker3D:
 			continue
-		var marker: Marker3D = marker_node
+		var marker: Marker3D = marker_node as Marker3D
 		if town_root != marker and not town_root.is_ancestor_of(marker):
 			continue
 		if marker.global_position.distance_squared_to(global_position) <= 1.0:
