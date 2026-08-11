@@ -20,4 +20,12 @@ func _update_weapon_visual() -> void:
 			hip_weapon_position = Vector3(0.315, -0.245, -0.76)
 		&"wonder":
 			hip_weapon_position = Vector3(0.305, -0.250, -0.64)
+
+	match weapon.id:
+		&"raygun":
+			ads_weapon_position = Vector3(0.0, -0.245, -0.60)
+		&"raygun2":
+			ads_weapon_position = Vector3(0.0, -0.245, -0.63)
+		_:
+			pass
 	weapon_root.position = hip_weapon_position
