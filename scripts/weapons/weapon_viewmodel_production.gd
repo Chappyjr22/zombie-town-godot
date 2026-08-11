@@ -4,15 +4,19 @@ extends ZombieTownWeaponViewmodelVideoTuned
 func set_weapon(data: WeaponData) -> void:
 	if data == null:
 		return
-	if data.id == &"mp5" or data.id == &"olympia":
+	if data.id == &"mp5" or data.id == &"olympia" or data.id == &"bknife":
 		current_weapon_id = data.id
 		_clear_children(model_root)
 		_clear_children(arms_root)
 		if data.id == &"mp5":
 			_build_suomi()
-		else:
+			_build_arms(data.weapon_class)
+		elif data.id == &"olympia":
 			_build_olympia()
-		_build_arms(data.weapon_class)
+			_build_arms(data.weapon_class)
+		else:
+			_build_ballistic_knife()
+			_build_pistol_hands()
 		return
 	super.set_weapon(data)
 
@@ -40,6 +44,14 @@ func _build_olympia() -> void:
 	_box(Vector3(0.018, 0.055, 0.045), Vector3(0.0, 0.16, -0.88), metal_light)
 	_box(Vector3(0.055, 0.025, 0.04), Vector3(0.0, 0.15, -0.07), metal_light)
 
+func _build_ballistic_knife() -> void:
+	_box(Vector3(0.075, 0.070, 0.20), Vector3(0.0, 0.005, 0.03), metal_mid)
+	_cylinder(0.028, 0.20, Vector3(0.0, 0.025, -0.05), metal_dark, Vector3(deg_to_rad(90.0), 0.0, 0.0))
+	_box(Vector3(0.040, 0.018, 0.31), Vector3(0.0, 0.025, -0.28), metal_light)
+	_box(Vector3(0.082, 0.025, 0.05), Vector3(0.0, 0.025, -0.11), metal_light)
+	_box(Vector3(0.080, 0.20, 0.09), Vector3(0.0, -0.115, 0.06), polymer_dark, Vector3(deg_to_rad(15.0), 0.0, 0.0))
+	_box(Vector3(0.018, 0.042, 0.030), Vector3(0.0, 0.080, -0.30), metal_light)
+
 func _build_ray_gun() -> void:
 	super._build_ray_gun()
 	_add_ray_sights(false)
@@ -65,5 +77,7 @@ func muzzle_position_for(data: WeaponData) -> Vector3:
 			return Vector3(0.0, 0.045, -0.90)
 		&"olympia":
 			return Vector3(0.0, 0.055, -1.06)
+		&"bknife":
+			return Vector3(0.0, 0.025, -0.46)
 		_:
 			return super.muzzle_position_for(data)
