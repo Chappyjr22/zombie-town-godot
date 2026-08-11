@@ -164,14 +164,17 @@ func _choose_result() -> StringName:
 	var total_weight := 0.0
 	var weighted_ids: Array[StringName] = []
 	var weighted_values: Array[float] = []
-	var held_id: StringName = &""
-	if rolling_player != null and rolling_player.weapon != null:
-		held_id = rolling_player.weapon.id
+	var held_ids: Array[StringName] = []
+	if rolling_player is ZombieTownInventoryPlayer:
+		var inventory_player := rolling_player as ZombieTownInventoryPlayer
+		held_ids = inventory_player.get_held_weapon_ids()
+	elif rolling_player != null and rolling_player.weapon != null:
+		held_ids.append(rolling_player.weapon.id)
 
 	var pity_multiplier := minf(4.0, 1.0 + float(dry_streak) * 0.13)
 	for weapon_variant: Variant in WEAPON_WEIGHTS.keys():
 		var weapon_id := StringName(str(weapon_variant))
-		if weapon_id == held_id:
+		if weapon_id in held_ids:
 			continue
 		var weight_variant: Variant = WEAPON_WEIGHTS.get(weapon_id, 0.0)
 		var weight := float(weight_variant)
