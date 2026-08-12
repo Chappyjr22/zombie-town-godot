@@ -1,0 +1,42 @@
+name: Tune AK COD framing
+
+on:
+  push:
+    paths:
+      - ".github/workflows/tune-ak-framing.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  tune:
+    if: github.event.head_commit.message == 'Tune AK COD framing'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Reframe AK hip viewmodel
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('scripts/player/player_presentation_tuned.gd')
+          text = path.read_text()
+          replacements = {
+              'const AK_HIP_POSITION := Vector3(0.315, -0.255, -0.690)': 'const AK_HIP_POSITION := Vector3(0.415, -0.305, -0.635)',
+              'const AK_HIP_ROTATION := Vector3(-0.02618, 0.09599, -0.04363)': 'const AK_HIP_ROTATION := Vector3(-0.03491, 0.13963, -0.06109)',
+          }
+          for old, new in replacements.items():
+              if text.count(old) != 1:
+                  raise SystemExit(f'Expected exactly one match for: {old}')
+              text = text.replace(old, new)
+          path.write_text(text)
+          PY
+      - name: Commit framing pass
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/player/player_presentation_tuned.gd
+          git commit -m "Reframe AK hip-fire viewmodel"
+          git push origin main
