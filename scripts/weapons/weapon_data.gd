@@ -35,3 +35,4 @@ extends Resource
 @export var cone_angle := 0.0
 @export var wall_cost := 0
 @export var ammo_cost := 250
+@export var viewmodel_profile: WeaponViewmodelProfile

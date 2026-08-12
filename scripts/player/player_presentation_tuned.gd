@@ -2,14 +2,6 @@ class_name ZombieTownPresentationTunedPlayer
 extends ZombieTownAdvancedPlayer
 
 const DEFAULT_VIEWMODEL_FOV := 75.0
-const AK_VIEWMODEL_HIP_FOV := 62.0
-const AK_VIEWMODEL_ADS_FOV := 58.0
-const AK_VIEWMODEL_SPRINT_FOV := 65.0
-
-const AK_HIP_POSITION := Vector3(0.398, -0.298, -0.642)
-const AK_HIP_ROTATION := Vector3(-0.03150, 0.10800, -0.05200)
-const AK_SPRINT_POSITION_OFFSET := Vector3(0.105, -0.115, 0.055)
-const AK_SPRINT_ROTATION_OFFSET := Vector3(0.13963, -0.17453, -0.20944)
 
 var viewmodel_viewport: SubViewport
 var viewmodel_camera: Camera3D
@@ -21,6 +13,7 @@ var hip_weapon_rotation := Vector3.ZERO
 var ads_weapon_rotation := Vector3.ZERO
 var viewmodel_hip_fov := DEFAULT_VIEWMODEL_FOV
 var viewmodel_ads_fov := DEFAULT_VIEWMODEL_FOV
+var active_viewmodel_profile: WeaponViewmodelProfile
 
 var look_lag_rotation := Vector3.ZERO
 var look_lag_position := Vector3.ZERO
@@ -128,6 +121,7 @@ func _update_weapon_visual() -> void:
 	ads_weapon_rotation = Vector3.ZERO
 	viewmodel_hip_fov = DEFAULT_VIEWMODEL_FOV
 	viewmodel_ads_fov = DEFAULT_VIEWMODEL_FOV
+	active_viewmodel_profile = weapon.viewmodel_profile
 
 	match weapon.weapon_class:
 		&"pistol":
@@ -148,20 +142,21 @@ func _update_weapon_visual() -> void:
 		&"wonder":
 			hip_weapon_position = Vector3(0.305, -0.250, -0.64)
 
-	match weapon.id:
-		&"ak74u":
-			# The AK uses an authored transform and a narrower first-person lens.
-			# Position alone cannot create the perspective or shoulder-mounted feel.
-			hip_weapon_position = AK_HIP_POSITION
-			hip_weapon_rotation = AK_HIP_ROTATION
-			viewmodel_hip_fov = AK_VIEWMODEL_HIP_FOV
-			viewmodel_ads_fov = AK_VIEWMODEL_ADS_FOV
-		&"raygun":
-			ads_weapon_position = Vector3(0.0, -0.245, -0.60)
-		&"raygun2":
-			ads_weapon_position = Vector3(0.0, -0.245, -0.63)
-		_:
-			pass
+	if active_viewmodel_profile != null:
+		hip_weapon_position = active_viewmodel_profile.hip_position
+		hip_weapon_rotation = active_viewmodel_profile.hip_rotation_radians()
+		ads_weapon_position = active_viewmodel_profile.resolved_ads_position()
+		ads_weapon_rotation = active_viewmodel_profile.ads_rotation_radians()
+		viewmodel_hip_fov = active_viewmodel_profile.hip_viewmodel_fov
+		viewmodel_ads_fov = active_viewmodel_profile.ads_viewmodel_fov
+	else:
+		match weapon.id:
+			&"raygun":
+				ads_weapon_position = Vector3(0.0, -0.245, -0.60)
+			&"raygun2":
+				ads_weapon_position = Vector3(0.0, -0.245, -0.63)
+			_:
+				pass
 
 	weapon_root.position = hip_weapon_position
 	weapon_root.rotation = hip_weapon_rotation
@@ -183,8 +178,8 @@ func _update_camera_and_weapon(delta: float) -> void:
 	_sync_viewmodel_viewport_size()
 	weapon_kick = move_toward(weapon_kick, 0.0, delta * 1.8)
 
-	if weapon.id == &"ak74u":
-		_update_ak_viewmodel(delta)
+	if active_viewmodel_profile != null:
+		_update_profile_viewmodel(delta, active_viewmodel_profile)
 	else:
 		_update_standard_viewmodel(delta)
 
@@ -213,7 +208,7 @@ func _update_standard_viewmodel(delta: float) -> void:
 		)
 
 
-func _update_ak_viewmodel(delta: float) -> void:
+func _update_profile_viewmodel(delta: float, profile: WeaponViewmodelProfile) -> void:
 	var move_input := Input.get_vector(&"move_left", &"move_right", &"move_forward", &"move_back")
 	var horizontal_speed := Vector2(velocity.x, velocity.z).length()
 	var moving := is_on_floor() and horizontal_speed > 0.12
@@ -231,11 +226,12 @@ func _update_ak_viewmodel(delta: float) -> void:
 	last_player_yaw = current_yaw
 	last_look_pitch = look_pitch
 
-	var lag_weight := 0.28 if ads else 1.0
+	var lag_weight := profile.ads_motion_scale if ads else 1.0
+	var lag_limit := profile.look_lag_limit_radians()
 	var target_lag_rotation := Vector3(
-		clampf(-pitch_step * 6.0, -0.052, 0.052),
-		clampf(-yaw_step * 7.5, -0.082, 0.082),
-		clampf(yaw_step * 2.8, -0.032, 0.032)
+		clampf(-pitch_step * profile.look_lag_pitch, -lag_limit.x, lag_limit.x),
+		clampf(-yaw_step * profile.look_lag_yaw, -lag_limit.y, lag_limit.y),
+		clampf(yaw_step * profile.look_lag_roll, -lag_limit.z, lag_limit.z)
 	) * lag_weight
 	look_lag_rotation = look_lag_rotation.lerp(
 		target_lag_rotation,
@@ -243,8 +239,8 @@ func _update_ak_viewmodel(delta: float) -> void:
 	)
 
 	var target_lag_position := Vector3(
-		-look_lag_rotation.y * 0.16,
-		look_lag_rotation.x * 0.11,
+		-look_lag_rotation.y * profile.look_lag_position_scale.x,
+		look_lag_rotation.x * profile.look_lag_position_scale.y,
 		0.0
 	)
 	look_lag_position = look_lag_position.lerp(
@@ -256,18 +252,20 @@ func _update_ak_viewmodel(delta: float) -> void:
 	var target_bob_rotation := Vector3.ZERO
 	if moving:
 		var speed_ratio := clampf(horizontal_speed / maxf(walk_speed, 0.01), 0.0, 1.55)
-		var cadence := 13.0 if sprinting else 10.2
+		var cadence := profile.sprint_bob_cadence if sprinting else profile.walk_bob_cadence
 		bob_phase += delta * cadence * clampf(speed_ratio, 0.65, 1.45)
-		var bob_weight := (0.20 if ads else 1.0) * clampf(speed_ratio, 0.35, 1.25)
+		var bob_weight := profile.ads_motion_scale if ads else 1.0
+		bob_weight *= clampf(speed_ratio, 0.35, 1.25)
 		target_bob_position = Vector3(
-			sin(bob_phase) * 0.010,
-			cos(bob_phase * 2.0) * 0.0065,
-			0.0
+			sin(bob_phase) * profile.bob_position.x,
+			cos(bob_phase * 2.0) * profile.bob_position.y,
+			profile.bob_position.z
 		) * bob_weight
+		var bob_rotation_amount := profile.bob_rotation_radians()
 		target_bob_rotation = Vector3(
-			cos(bob_phase * 2.0) * 0.0045,
-			sin(bob_phase) * 0.0065,
-			sin(bob_phase) * 0.010
+			cos(bob_phase * 2.0) * bob_rotation_amount.x,
+			sin(bob_phase) * bob_rotation_amount.y,
+			sin(bob_phase) * bob_rotation_amount.z
 		) * bob_weight
 
 	bob_position = bob_position.lerp(
@@ -282,33 +280,34 @@ func _update_ak_viewmodel(delta: float) -> void:
 	idle_time += delta
 	var idle_weight := 0.22 if moving else 1.0
 	if ads:
-		idle_weight *= 0.32
+		idle_weight *= profile.ads_motion_scale
 	var idle_position := Vector3(
-		sin(idle_time * 0.86) * 0.0018,
-		sin(idle_time * 1.37) * 0.0026,
-		0.0
+		sin(idle_time * 0.86) * profile.idle_position.x,
+		sin(idle_time * 1.37) * profile.idle_position.y,
+		profile.idle_position.z
 	) * idle_weight
+	var idle_rotation_amount := profile.idle_rotation_radians()
 	var idle_rotation := Vector3(
-		sin(idle_time * 1.11) * 0.0024,
-		cos(idle_time * 0.73) * 0.0028,
-		sin(idle_time * 0.91) * 0.0018
+		sin(idle_time * 1.11) * idle_rotation_amount.x,
+		cos(idle_time * 0.73) * idle_rotation_amount.y,
+		sin(idle_time * 0.91) * idle_rotation_amount.z
 	) * idle_weight
 
 	visual_recoil_position = visual_recoil_position.lerp(
 		Vector3.ZERO,
-		1.0 - exp(-delta * 18.5)
+		1.0 - exp(-delta * profile.recoil_position_recovery)
 	)
 	visual_recoil_rotation = visual_recoil_rotation.lerp(
 		Vector3.ZERO,
-		1.0 - exp(-delta * 16.0)
+		1.0 - exp(-delta * profile.recoil_rotation_recovery)
 	)
 
 	var desired_position := ads_weapon_position if ads else hip_weapon_position
 	var desired_rotation := ads_weapon_rotation if ads else hip_weapon_rotation
 
 	if sprinting:
-		desired_position += AK_SPRINT_POSITION_OFFSET
-		desired_rotation += AK_SPRINT_ROTATION_OFFSET
+		desired_position = profile.sprint_position
+		desired_rotation = profile.sprint_rotation_radians()
 
 	desired_position += look_lag_position
 	desired_position += bob_position
@@ -320,8 +319,11 @@ func _update_ak_viewmodel(delta: float) -> void:
 	desired_rotation += idle_rotation
 	desired_rotation += visual_recoil_rotation
 
-	var position_response := 23.0 if ads else 16.0
-	var rotation_response := 25.0 if ads else 17.0
+	var position_response := profile.ads_position_response if ads else profile.hip_position_response
+	var rotation_response := profile.ads_rotation_response if ads else profile.hip_rotation_response
+	if sprinting:
+		position_response = profile.sprint_position_response
+		rotation_response = profile.sprint_rotation_response
 	weapon_root.position = weapon_root.position.lerp(
 		desired_position,
 		1.0 - exp(-delta * position_response)
@@ -335,53 +337,51 @@ func _update_ak_viewmodel(delta: float) -> void:
 	if viewmodel_camera != null:
 		var target_viewmodel_fov := viewmodel_ads_fov if ads else viewmodel_hip_fov
 		if sprinting:
-			target_viewmodel_fov = AK_VIEWMODEL_SPRINT_FOV
+			target_viewmodel_fov = profile.sprint_viewmodel_fov
 		viewmodel_camera.fov = lerpf(
 			viewmodel_camera.fov,
 			target_viewmodel_fov,
-			1.0 - exp(-delta * 13.0)
+			1.0 - exp(-delta * profile.fov_response)
 		)
 
 
 func _animate_viewmodel_fire() -> void:
 	super._animate_viewmodel_fire()
-	if weapon == null or weapon.id != &"ak74u":
+	if weapon == null or active_viewmodel_profile == null:
 		return
+	var profile := active_viewmodel_profile
 
 	# Keep the existing mesh kick subtle and let the root spring provide the
 	# heavier shoulder impulse so the whole gun and hands move together.
 	if first_person_viewmodel != null:
-		first_person_viewmodel.fire_kick = minf(first_person_viewmodel.fire_kick, 0.38)
+		first_person_viewmodel.fire_kick = minf(
+			first_person_viewmodel.fire_kick,
+			profile.model_fire_kick_limit
+		)
 
-	visual_recoil_position += Vector3(
-		randf_range(-0.0025, 0.0025),
-		randf_range(-0.0010, 0.0020),
-		0.034
+	visual_recoil_position += profile.recoil_position_impulse
+	visual_recoil_position.x += randf_range(
+		-profile.recoil_position_random_x,
+		profile.recoil_position_random_x
 	)
-	visual_recoil_rotation += Vector3(
-		deg_to_rad(1.55),
-		deg_to_rad(randf_range(-0.32, 0.32)),
-		deg_to_rad(randf_range(-0.42, 0.42))
-	)
+	visual_recoil_rotation += profile.recoil_rotation_impulse_radians()
+	visual_recoil_rotation.y += deg_to_rad(randf_range(
+		-profile.recoil_yaw_random_degrees,
+		profile.recoil_yaw_random_degrees
+	))
+	visual_recoil_rotation.z += deg_to_rad(randf_range(
+		-profile.recoil_roll_random_degrees,
+		profile.recoil_roll_random_degrees
+	))
 
-	visual_recoil_position.x = clampf(visual_recoil_position.x, -0.010, 0.010)
-	visual_recoil_position.y = clampf(visual_recoil_position.y, -0.008, 0.010)
-	visual_recoil_position.z = clampf(visual_recoil_position.z, 0.0, 0.075)
-	visual_recoil_rotation.x = clampf(
-		visual_recoil_rotation.x,
-		deg_to_rad(-0.4),
-		deg_to_rad(3.8)
-	)
-	visual_recoil_rotation.y = clampf(
-		visual_recoil_rotation.y,
-		deg_to_rad(-1.1),
-		deg_to_rad(1.1)
-	)
-	visual_recoil_rotation.z = clampf(
-		visual_recoil_rotation.z,
-		deg_to_rad(-1.4),
-		deg_to_rad(1.4)
-	)
+	var position_limit := profile.recoil_position_limit
+	visual_recoil_position.x = clampf(visual_recoil_position.x, -position_limit.x, position_limit.x)
+	visual_recoil_position.y = clampf(visual_recoil_position.y, -position_limit.y, position_limit.y)
+	visual_recoil_position.z = clampf(visual_recoil_position.z, 0.0, position_limit.z)
+	var rotation_limit := profile.recoil_rotation_limit_radians()
+	visual_recoil_rotation.x = clampf(visual_recoil_rotation.x, -rotation_limit.x, rotation_limit.x)
+	visual_recoil_rotation.y = clampf(visual_recoil_rotation.y, -rotation_limit.y, rotation_limit.y)
+	visual_recoil_rotation.z = clampf(visual_recoil_rotation.z, -rotation_limit.z, rotation_limit.z)
 
 
 func _reset_viewmodel_motion() -> void:

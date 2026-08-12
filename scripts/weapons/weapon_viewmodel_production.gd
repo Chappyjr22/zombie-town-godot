@@ -2,6 +2,7 @@ class_name ZombieTownWeaponViewmodelProduction
 extends ZombieTownWeaponViewmodelVideoTuned
 
 var imported_muzzle_positions: Dictionary = {}
+var active_profile: WeaponViewmodelProfile
 
 func set_weapon(data: WeaponData) -> void:
 	if data == null:
@@ -25,20 +26,29 @@ func set_weapon(data: WeaponData) -> void:
 	super.set_weapon(data)
 
 func _try_build_production_asset(data: WeaponData) -> bool:
-	if not ZombieTownProductionWeaponAssets.supports(data.id):
-		return false
-	if not ZombieTownProductionWeaponAssets.asset_available(data.id):
-		return false
-	var asset_path: String = ZombieTownProductionWeaponAssets.asset_path(data.id)
-	var loaded_resource: Resource = ResourceLoader.load(asset_path)
-	if not loaded_resource is PackedScene:
-		push_warning("Production weapon asset is not a PackedScene: %s" % asset_path)
-		return false
-	var packed_scene: PackedScene = loaded_resource as PackedScene
+	active_profile = data.viewmodel_profile
+	var packed_scene: PackedScene
+	var asset_label := ""
+	if active_profile != null and active_profile.model_scene != null:
+		packed_scene = active_profile.model_scene
+		asset_label = packed_scene.resource_path
+	else:
+		active_profile = null
+		if not ZombieTownProductionWeaponAssets.supports(data.id):
+			return false
+		if not ZombieTownProductionWeaponAssets.asset_available(data.id):
+			return false
+		var asset_path: String = ZombieTownProductionWeaponAssets.asset_path(data.id)
+		var loaded_resource: Resource = ResourceLoader.load(asset_path)
+		if not loaded_resource is PackedScene:
+			push_warning("Production weapon asset is not a PackedScene: %s" % asset_path)
+			return false
+		packed_scene = loaded_resource as PackedScene
+		asset_label = asset_path
 	var instance_node: Node = packed_scene.instantiate()
 	if not instance_node is Node3D:
 		instance_node.queue_free()
-		push_warning("Production weapon asset root is not Node3D: %s" % asset_path)
+		push_warning("Production weapon asset root is not Node3D: %s" % asset_label)
 		return false
 
 	current_weapon_id = data.id
@@ -52,10 +62,14 @@ func _try_build_production_asset(data: WeaponData) -> bool:
 	var asset_root: Node3D = instance_node as Node3D
 	asset_root.name = "ImportedWeapon"
 	anchor.add_child(asset_root)
-	asset_root.rotation = ZombieTownProductionWeaponAssets.rotation_radians(data.id)
+	asset_root.rotation = (
+		active_profile.model_rotation_radians()
+		if active_profile != null
+		else ZombieTownProductionWeaponAssets.rotation_radians(data.id)
+	)
 	_prepare_imported_meshes(asset_root)
 	_auto_orient_long_axis(asset_root, anchor)
-	_normalize_imported_weapon(asset_root, anchor, data.id)
+	_normalize_imported_weapon(asset_root, anchor, data)
 	_remove_known_loose_components(asset_root, data.id)
 	_build_arms(data.weapon_class)
 	return true
@@ -68,32 +82,125 @@ func _remove_known_loose_components(asset_root: Node3D, weapon_id: StringName) -
 		loose_magazine.free()
 
 func _build_arms(weapon_class: StringName) -> void:
-	if current_weapon_id == &"ak74u":
-		_build_production_ak_hands()
+	if active_profile != null:
+		_build_profile_hands(active_profile)
 		return
 	super._build_arms(weapon_class)
 
-func _build_production_ak_hands() -> void:
-	# Trigger hand follows the real AK pistol grip instead of the generic rifle pose.
-	# Most sleeve geometry stays below the frame so the imported rifle remains the focus.
-	_arm_cylinder(0.042, 0.29, Vector3(0.18, -0.415, 0.035), Vector3(deg_to_rad(66.0), 0.0, deg_to_rad(-16.0)), sleeve)
-	_arm_box(Vector3(0.088, 0.068, 0.080), Vector3(0.095, -0.255, -0.120), sleeve, Vector3(deg_to_rad(14.0), 0.0, deg_to_rad(-9.0)))
-	_arm_cylinder(0.036, 0.105, Vector3(0.074, -0.208, -0.175), Vector3(deg_to_rad(69.0), 0.0, deg_to_rad(-13.0)), skin)
-	_arm_box(Vector3(0.092, 0.112, 0.084), Vector3(0.025, -0.148, -0.238), skin, Vector3(deg_to_rad(17.0), deg_to_rad(-4.0), deg_to_rad(-6.0)))
-	for y_position: float in [-0.150, -0.181, -0.212]:
-		_arm_box(Vector3(0.022, 0.040, 0.064), Vector3(-0.014, y_position, -0.272), skin, Vector3(deg_to_rad(12.0), 0.0, deg_to_rad(8.0)))
-	_arm_box(Vector3(0.026, 0.040, 0.082), Vector3(0.063, -0.114, -0.255), skin, Vector3(deg_to_rad(8.0), deg_to_rad(-20.0), deg_to_rad(-24.0)))
+func _build_profile_hands(profile: WeaponViewmodelProfile) -> void:
+	_build_profile_hand(
+		profile.right_hand_position,
+		profile.right_hand_rotation_radians(),
+		profile.right_hand_scale,
+		profile.right_arm_origin,
+		profile.right_hand_pose,
+		true
+	)
+	_build_profile_hand(
+		profile.left_hand_position,
+		profile.left_hand_rotation_radians(),
+		profile.left_hand_scale,
+		profile.left_arm_origin,
+		profile.left_hand_pose,
+		false
+	)
 
-	# Support hand cups the underside of the wooden fore-end. The palm intentionally
-	# intersects the lower edge slightly so it reads as a firm grip rather than floating.
-	_arm_cylinder(0.043, 0.31, Vector3(-0.215, -0.395, -0.315), Vector3(deg_to_rad(72.0), deg_to_rad(-8.0), deg_to_rad(20.0)), sleeve)
-	_arm_box(Vector3(0.090, 0.068, 0.082), Vector3(-0.118, -0.238, -0.445), sleeve, Vector3(deg_to_rad(10.0), deg_to_rad(-3.0), deg_to_rad(10.0)))
-	_arm_cylinder(0.036, 0.105, Vector3(-0.090, -0.180, -0.505), Vector3(deg_to_rad(75.0), deg_to_rad(-6.0), deg_to_rad(18.0)), skin)
-	_arm_box(Vector3(0.108, 0.072, 0.108), Vector3(-0.012, -0.075, -0.565), skin, Vector3(deg_to_rad(4.0), deg_to_rad(3.0), deg_to_rad(6.0)))
-	var finger_x_positions: Array[float] = [-0.039, -0.013, 0.013, 0.039]
-	for x_position: float in finger_x_positions:
-		_arm_box(Vector3(0.019, 0.044, 0.062), Vector3(x_position, -0.119, -0.570), skin, Vector3(deg_to_rad(9.0), 0.0, deg_to_rad(-3.0)))
-	_arm_box(Vector3(0.027, 0.040, 0.090), Vector3(0.054, -0.052, -0.535), skin, Vector3(deg_to_rad(-5.0), deg_to_rad(-19.0), deg_to_rad(-27.0)))
+
+func _build_profile_hand(
+	grip_position: Vector3,
+	grip_rotation: Vector3,
+	hand_scale: Vector3,
+	arm_origin: Vector3,
+	pose: String,
+	is_right: bool
+) -> void:
+	var hand_root := Node3D.new()
+	hand_root.name = "RightHandPose" if is_right else "LeftHandPose"
+	hand_root.position = grip_position
+	hand_root.rotation = grip_rotation
+	hand_root.scale = hand_scale
+	arms_root.add_child(hand_root)
+
+	var wrist_target := grip_position + Basis.from_euler(grip_rotation) * Vector3(0.0, -0.055, 0.075)
+	var sleeve_end := wrist_target.lerp(arm_origin, 0.22)
+	_arm_segment_between(arm_origin, sleeve_end, 0.044, sleeve)
+	_arm_segment_between(sleeve_end, wrist_target, 0.037, skin)
+
+	var palm_size := Vector3(0.098, 0.110, 0.086)
+	if pose == "underbarrel":
+		palm_size = Vector3(0.108, 0.074, 0.108)
+	_profile_arm_box(hand_root, palm_size, Vector3.ZERO, skin)
+
+	var side := 1.0 if is_right else -1.0
+	if pose == "underbarrel" or pose == "support" or pose == "rail":
+		for x_position: float in [-0.039, -0.013, 0.013, 0.039]:
+			_profile_arm_box(
+				hand_root,
+				Vector3(0.019, 0.044, 0.062),
+				Vector3(x_position, -0.044, -0.005),
+				skin,
+				Vector3(deg_to_rad(9.0), 0.0, deg_to_rad(-3.0))
+			)
+		_profile_arm_box(
+			hand_root,
+			Vector3(0.027, 0.040, 0.090),
+			Vector3(0.060 * side, 0.023, 0.030),
+			skin,
+			Vector3(deg_to_rad(-5.0), deg_to_rad(-19.0) * side, deg_to_rad(-27.0) * side)
+		)
+	else:
+		for y_position: float in [-0.002, -0.033, -0.064]:
+			_profile_arm_box(
+				hand_root,
+				Vector3(0.022, 0.040, 0.064),
+				Vector3(-0.039 * side, y_position, -0.034),
+				skin,
+				Vector3(deg_to_rad(12.0), 0.0, deg_to_rad(8.0) * side)
+			)
+		_profile_arm_box(
+			hand_root,
+			Vector3(0.026, 0.040, 0.082),
+			Vector3(0.038 * side, 0.034, -0.017),
+			skin,
+			Vector3(deg_to_rad(8.0), deg_to_rad(-20.0) * side, deg_to_rad(-24.0) * side)
+		)
+
+
+func _arm_segment_between(start: Vector3, end: Vector3, radius: float, material: Material) -> void:
+	var direction := end - start
+	var length := direction.length()
+	if length <= 0.0001:
+		return
+	var mesh := CylinderMesh.new()
+	mesh.top_radius = radius
+	mesh.bottom_radius = radius * 1.08
+	mesh.height = length
+	mesh.radial_segments = 12
+	mesh.material = material
+	var instance := MeshInstance3D.new()
+	instance.mesh = mesh
+	instance.position = (start + end) * 0.5
+	instance.quaternion = Quaternion(Vector3.UP, direction.normalized())
+	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	arms_root.add_child(instance)
+
+
+func _profile_arm_box(
+	parent: Node3D,
+	size: Vector3,
+	position: Vector3,
+	material: Material,
+	rotation: Vector3 = Vector3.ZERO
+) -> void:
+	var mesh := BoxMesh.new()
+	mesh.size = size
+	mesh.material = material
+	var instance := MeshInstance3D.new()
+	instance.mesh = mesh
+	instance.position = position
+	instance.rotation = rotation
+	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	parent.add_child(instance)
 
 func _prepare_imported_meshes(root: Node) -> void:
 	if root is MeshInstance3D:
@@ -111,25 +218,37 @@ func _auto_orient_long_axis(asset_root: Node3D, anchor: Node3D) -> void:
 	elif bounds.size.y > bounds.size.z * 1.18 and bounds.size.y >= bounds.size.x:
 		asset_root.rotation.x += deg_to_rad(90.0)
 
-func _normalize_imported_weapon(asset_root: Node3D, anchor: Node3D, weapon_id: StringName) -> void:
+func _normalize_imported_weapon(asset_root: Node3D, anchor: Node3D, data: WeaponData) -> void:
 	var bounds: AABB = _bounds_for_subtree(asset_root, anchor)
 	if bounds.size.length_squared() <= 0.000001:
-		push_warning("Production weapon has no measurable mesh bounds: %s" % weapon_id)
+		push_warning("Production weapon has no measurable mesh bounds: %s" % data.id)
 		return
 	var source_length: float = maxf(bounds.size.z, 0.0001)
-	var target_length: float = ZombieTownProductionWeaponAssets.target_length(weapon_id)
+	var target_length: float = (
+		active_profile.target_length
+		if active_profile != null
+		else ZombieTownProductionWeaponAssets.target_length(data.id)
+	)
 	var uniform_scale: float = target_length / source_length
 	asset_root.scale = Vector3.ONE * uniform_scale
 
 	bounds = _bounds_for_subtree(asset_root, anchor)
 	var center: Vector3 = bounds.position + bounds.size * 0.5
-	var desired_back_z: float = ZombieTownProductionWeaponAssets.back_z(weapon_id)
+	var desired_back_z: float = (
+		active_profile.model_back_z
+		if active_profile != null
+		else ZombieTownProductionWeaponAssets.back_z(data.id)
+	)
 	asset_root.position += Vector3(-center.x, -center.y, desired_back_z - bounds.end.z)
+	if active_profile != null:
+		asset_root.position += active_profile.model_offset
 
 	bounds = _bounds_for_subtree(asset_root, anchor)
 	var muzzle_y: float = bounds.position.y + bounds.size.y * 0.57
 	var muzzle_position := Vector3(0.0, muzzle_y, bounds.position.z - 0.025)
-	imported_muzzle_positions[weapon_id] = muzzle_position
+	if active_profile != null and active_profile.use_authored_muzzle:
+		muzzle_position = active_profile.muzzle_position
+	imported_muzzle_positions[data.id] = muzzle_position
 
 func _bounds_for_subtree(subtree: Node, relative_to: Node3D) -> AABB:
 	var mesh_instances: Array[MeshInstance3D] = []
