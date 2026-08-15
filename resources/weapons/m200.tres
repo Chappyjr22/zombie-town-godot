@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+[ext_resource type="Resource" path="res://resources/weapons/viewmodels/candidates/cheytac_m200_production_candidate_viewmodel.tres" id="2_viewmodel"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"m200"
+display_name = "CheyTac M200"
+roster_note = "Core production sniper. Correctly identified replacement for the former generic standard sniper gameplay role."
+weapon_class = &"sniper"
+fire_mode = &"semi"
+damage = 1450.0
+pierce = 4
+magazine_size = 7
+reserve_ammo = 49
+reload_time = 3.5
+fire_interval = 1.2
+range = 260.0
+spread = 0.05
+ads_spread = 0.0003
+recoil_pitch = 2.8
+recoil_yaw = 0.24
+ads_fov = 26.0
+ammo_cost = 1000
+viewmodel_profile = ExtResource("2_viewmodel")

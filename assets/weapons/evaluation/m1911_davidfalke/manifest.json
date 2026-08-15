@@ -1,0 +1,23 @@
+{
+  "asset": "VR Ready: M1911A1",
+  "creator": "DavidFalke",
+  "source_page": "https://sketchfab.com/3d-models/vr-ready-m1911a1-421749c3fa1744a884a340f81ab45e3c",
+  "license": "Creative Commons Attribution (CC Attribution)",
+  "downloaded_archive": "private source archive retained outside repository",
+  "archive_bytes": 171199332,
+  "archive_sha256": "B82936A09E20469B59C79BB195AD80B387310DCD692177BF81DD50AEC8A64D26",
+  "source_fbx_sha256": "E5A47F9FC7243E76EA5CC409DC7D89E73FA9BF4A6EA7F3A56A9A5A539DFF5A68",
+  "source_formats_in_download": ["FBX"],
+  "source_files_modified": false,
+  "decision": "approved with minor Blender preparation",
+  "runtime_promoted": true,
+  "production_roster_changed": true,
+  "evaluation_glb": "runtime/davidfalke_m1911a1.glb",
+  "evaluation_viewmodel_profile": "res://resources/weapons/evaluation/m1911_davidfalke/davidfalke_m1911a1_viewmodel.tres",
+  "single_pistol_triangles": 9498,
+  "separable_mechanical_pieces": 37,
+  "texture_sets": {
+    "gun": "4096x4096 Base Color, DirectX Normal, Roughness, Metallic, Ambient Occlusion",
+    "ammunition": "2048x2048 Base Color, DirectX Normal, Roughness, Metallic, mixed Ambient Occlusion"
+  }
+}

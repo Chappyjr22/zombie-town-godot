@@ -101,7 +101,7 @@ jobs:
           - `grease_gun.glb` -> M3 Grease Gun gameplay slot
           - `luger.glb` -> Luger P08
           - `flare_gun.glb` -> Flare Gun
-          - `shotgun.glb` -> Olympia gameplay slot
+          - `shotgun.glb` -> Pump Shotgun / REM870 gameplay slot
           - `sniper.glb` -> DSR-50 / Sniper Rifle gameplay slot
           EOF
 

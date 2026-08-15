@@ -3,6 +3,11 @@ extends Resource
 
 @export var id: StringName = &"weapon"
 @export var display_name := "Weapon"
+@export_group("Roster")
+@export var standard_gameplay_enabled := true
+@export var deprecated := false
+@export_multiline var roster_note := ""
+@export_group("")
 @export var weapon_class: StringName = &"pistol"
 @export var fire_mode: StringName = &"semi"
 @export var damage := 50.0

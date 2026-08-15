@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="WeaponViewmodelProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_viewmodel_profile.gd" id="1_profile"]
+[ext_resource type="PackedScene" path="res://assets/weapons/runtime/luger.glb" id="2_model"]
+
+[resource]
+script = ExtResource("1_profile")
+model_scene = ExtResource("2_model")
+model_rotation_degrees = Vector3(0, 180, 0)
+target_length = 0.52
+model_back_z = 0.2
+use_advanced_motion = true
+hip_position = Vector3(0.17999999, -0.21, -0.4)
+hip_rotation_degrees = Vector3(-1, -5, 0)
+hip_viewmodel_fov = 72.0
+ads_position = Vector3(-0.044999998, -0.133, -0.16)
+ads_viewmodel_fov = 70.0
+sight_center = Vector3(0.055, 0.132, -0.18)
+sprint_position = Vector3(0.29, -0.21000007, -0.5)
+sprint_rotation_degrees = Vector3(45, -12, -8)
+sprint_viewmodel_fov = 74.0

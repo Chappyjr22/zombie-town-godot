@@ -1,0 +1,239 @@
+{
+  "asset_id": "benelli_m4",
+  "production_candidate": true,
+  "developer_only_until_approved": true,
+  "input_evaluation_derivative": "C:\\Users\\JacobChapman\\Desktop\\zombie-town-godot\\assets\\weapons\\evaluation\\diamo_shotguns\\runtime\\diamo_benelli_m4.glb",
+  "input_sha256": "5B5A49122DD6EF800C79D3A0A8ECFECD632896540E3342AE0BD5933D6E638CE0",
+  "source_archive_sha256": "CDC7881DEF8276562421697262D017299B0E382011755DAEC0921F8C7AD0B197",
+  "source_was_modified": false,
+  "blender_version": "5.2.0 LTS",
+  "output": "benelli_m4.glb",
+  "output_bytes": 11019804,
+  "output_sha256": "438CB42ABB61E952D38CBDBC72D50BEAAD3041EE882B303B8F610DE069872101",
+  "mesh_object_count": 3,
+  "triangle_count": 24021,
+  "bounds_meters": {
+    "minimum": [
+      -0.03030780516564846,
+      -0.10368479043245316,
+      -0.5049999952316284
+    ],
+    "maximum": [
+      0.03030780330300331,
+      0.10368482023477554,
+      0.5049999952316284
+    ],
+    "size": [
+      0.06061560660600662,
+      0.2073696106672287,
+      1.0099999904632568
+    ]
+  },
+  "texture_optimization": {
+    "maximum_runtime_dimension": 2048,
+    "images": [
+      {
+        "name": "Benelli m4 TWO_Benelli m4 TWO - Base Metallic-Benelli m4 TWO_Benelli m4 TWO - Base Roughness",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Benelli m4 TWO_Benelli m4 TWO - Base_BaseColor",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Benelli m4 TWO_Benelli m4 TWO - Base_Normal",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Benelli m4 TWO_Benelli m4 TWO - Bolt Metallic-Benelli m4 TWO_Benelli m4 TWO - Bolt Roughness",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Benelli m4 TWO_Benelli m4 TWO - Bolt_BaseColor",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Benelli m4 TWO_Benelli m4 TWO - Bolt_Normal",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Benelli m4 TWO_Benelli m4 TWO - Trigger Metallic-Benelli m4 TWO_Benelli m4 TWO - Trigger Roughness",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Benelli m4 TWO_Benelli m4 TWO - Trigger_BaseColor",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Benelli m4 TWO_Benelli m4 TWO - Trigger_Normal",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      }
+    ]
+  },
+  "normalization": {
+    "source_long_axis": "Z",
+    "long_axis_rotation_degrees": 0.0,
+    "target_length_meters": 1.01,
+    "uniform_scale": 0.10241148148522414,
+    "centered_origin": true,
+    "canonical_roll_degrees": 0.0,
+    "canonical_yaw_degrees": 0.0
+  },
+  "topology_cleanup": {
+    "zero_area_faces_removed": 160,
+    "objects": [
+      {
+        "object": "Benelli m4 TWO - Base",
+        "zero_area_faces_removed": 160
+      },
+      {
+        "object": "Benelli m4 TWO - Bolt",
+        "zero_area_faces_removed": 0
+      },
+      {
+        "object": "Benelli m4 TWO - Trigger",
+        "zero_area_faces_removed": 0
+      }
+    ]
+  },
+  "orientation_validation": {
+    "canonical_forward_axis": "-Z",
+    "canonical_up_axis": "+Y",
+    "source_evaluation_orientation_preserved": true
+  },
+  "mechanism": {
+    "source_to_production_names": {
+      "Benelli m4 TWO - Base": "ReceiverBody",
+      "Benelli m4 TWO - Bolt": "BoltBody",
+      "Benelli m4 TWO - Trigger": "Trigger"
+    },
+    "semantic_components": [
+      "ReceiverBody",
+      "BoltBody",
+      "Trigger"
+    ],
+    "hierarchy": [
+      "BoltAction",
+      "BoltPivot",
+      "MagazineTubePreparation",
+      "Marker_BoltForward",
+      "Marker_BoltRearward",
+      "Marker_LoadingGatePivot",
+      "Marker_ShellEjected",
+      "Marker_ShellEjectionPort",
+      "Marker_ShellInserted",
+      "Marker_ShellInsertStart",
+      "Receiver"
+    ],
+    "markers": [
+      "Marker_BoltForward",
+      "Marker_BoltRearward",
+      "Marker_LoadingGatePivot",
+      "Marker_ShellInsertStart",
+      "Marker_ShellInserted",
+      "Marker_ShellEjectionPort",
+      "Marker_ShellEjected"
+    ],
+    "pivots": [
+      {
+        "component": "Trigger",
+        "pivot": "TriggerPivot",
+        "axis": "local X"
+      },
+      {
+        "component": "BoltAction",
+        "pivot": "BoltPivot",
+        "axis": "local +Z"
+      }
+    ],
+    "origin_corrections": {},
+    "separate_animation_ready": [
+      "trigger",
+      "bolt_and_charging_handle"
+    ],
+    "embedded_components_requiring_future_mesh_separation": [
+      "loading_gate",
+      "magazine_tube"
+    ],
+    "notes": [
+      "Loading gate and magazine tube remain embedded in the 42-island receiver source; non-destructive reference markers are prepared for the animation pass."
+    ]
+  },
+  "sockets": [
+    "Socket_Optic",
+    "Socket_Muzzle",
+    "Socket_Underbarrel",
+    "Socket_Side",
+    "Socket_Stock",
+    "Socket_Bayonet",
+    "Socket_Magazine",
+    "Socket_PrimaryGrip",
+    "Socket_SupportGrip",
+    "Socket_ShellLoad",
+    "Socket_ShellEject"
+  ],
+  "axis_convention": "Godot viewmodel: -Z muzzle, +Y up, +X across"
+}

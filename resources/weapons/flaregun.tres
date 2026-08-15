@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+[ext_resource type="Resource" path="res://resources/weapons/viewmodels/flaregun_viewmodel.tres" id="2_viewmodel"]
 
 [resource]
 script = ExtResource("1_weapon")
@@ -23,3 +24,4 @@ projectile_speed = 30.0
 projectile_gravity = 4.5
 splash_damage = 380.0
 splash_radius = 4.0
+viewmodel_profile = ExtResource("2_viewmodel")

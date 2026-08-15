@@ -6,6 +6,8 @@
 script = ExtResource("1_weapon")
 id = &"galil"
 display_name = "Galil"
+standard_gameplay_enabled = false
+roster_note = "Preserved for developer access; hidden from standard gameplay until it has a production model and a distinct roster role."
 weapon_class = &"rifle"
 fire_mode = &"auto"
 damage = 60.0

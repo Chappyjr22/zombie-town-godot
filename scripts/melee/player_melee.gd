@@ -29,6 +29,8 @@ func _process(delta: float) -> void:
 		if attacking:
 			_finish_attack()
 		return
+	if player.is_gameplay_input_blocked():
+		return
 	if player.has_method(&"is_downed") and bool(player.call(&"is_downed")):
 		if attacking:
 			_finish_attack()

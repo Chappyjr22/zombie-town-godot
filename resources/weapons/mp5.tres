@@ -1,11 +1,14 @@
-[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+[ext_resource type="Resource" path="res://resources/weapons/viewmodels/mp5_viewmodel.tres" id="2_viewmodel"]
 
 [resource]
 script = ExtResource("1_weapon")
 id = &"mp5"
 display_name = "Suomi KP-31"
+standard_gameplay_enabled = false
+roster_note = "Reserve/map-specific Suomi KP-31. Preserved and developer-accessible after MP7 assumed the standard SMG and Town wall-buy role."
 weapon_class = &"smg"
 fire_mode = &"auto"
 damage = 36.0
@@ -25,3 +28,4 @@ ads_fov = 58.0
 shell_reload = false
 wall_cost = 1000
 ammo_cost = 500
+viewmodel_profile = ExtResource("2_viewmodel")

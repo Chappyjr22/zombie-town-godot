@@ -1,0 +1,138 @@
+{
+  "asset_id": "rpd",
+  "production_candidate": true,
+  "developer_only_until_approved": true,
+  "input_evaluation_derivative": "C:\\Users\\JacobChapman\\Desktop\\zombie-town-godot\\assets\\weapons\\evaluation\\diamo_lmg_marksman\\runtime\\diamo_rpd.glb",
+  "input_sha256": "0B2FFED4AA0EBE783753D6F9CC8FE691E257AF1A8FC77FCB862C4B786E0D0510",
+  "source_archive_sha256": "09CAB962C6C54EF8A7747BB03A9C7694F55269578901F061DCF67D304FBC1E89",
+  "source_was_modified": false,
+  "blender_version": "5.2.0 LTS",
+  "output": "rpd.glb",
+  "output_bytes": 19590040,
+  "output_sha256": "01CF59C758901D8CECE048310C1FEA178BB0AAA3F9C74E7A2638D0EE8ABD7F37",
+  "mesh_object_count": 3,
+  "triangle_count": 62707,
+  "bounds_meters": {
+    "minimum": [
+      -0.08725517988204956,
+      -0.12993861734867096,
+      -0.5200001001358032
+    ],
+    "maximum": [
+      0.08725518733263016,
+      0.12993861734867096,
+      0.5200001001358032
+    ],
+    "size": [
+      0.17451035976409912,
+      0.2598772346973419,
+      1.0400002002716064
+    ]
+  },
+  "texture_optimization": {
+    "maximum_runtime_dimension": 2048,
+    "images": [
+      {
+        "name": "RPD_Base - RPD Metallic-RPD_Base - RPD Roughness",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "RPD_Base - RPD_BaseColor",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "RPD_Base - RPD_Normal",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      }
+    ]
+  },
+  "normalization": {
+    "source_long_axis": "Z",
+    "long_axis_rotation_degrees": 0.0,
+    "target_length_meters": 1.04,
+    "uniform_scale": 0.09558792846781888,
+    "centered_origin": true,
+    "canonical_roll_degrees": 0.0,
+    "canonical_yaw_degrees": 0.0
+  },
+  "orientation_validation": {
+    "canonical_forward_axis": "-Z",
+    "canonical_up_axis": "+Y",
+    "source_evaluation_orientation_preserved": true
+  },
+  "mechanism": {
+    "semantic_components": [
+      "ReceiverBody",
+      "MagazineBody",
+      "Trigger"
+    ],
+    "hierarchy": [
+      "Action",
+      "Magazine",
+      "Marker_BipodPivot",
+      "Marker_BoltForward",
+      "Marker_BoltRearward",
+      "Marker_ChargingHandleForward",
+      "Marker_ChargingHandleRearward",
+      "Marker_FeedCoverPivot",
+      "Marker_MagazineRemoved",
+      "Marker_MagazineSeated",
+      "Receiver"
+    ],
+    "markers": [
+      "Marker_MagazineSeated",
+      "Marker_MagazineRemoved",
+      "Marker_BoltForward",
+      "Marker_BoltRearward",
+      "Marker_ChargingHandleForward",
+      "Marker_ChargingHandleRearward",
+      "Marker_FeedCoverPivot",
+      "Marker_BipodPivot"
+    ],
+    "separate_animation_ready": [
+      "magazine",
+      "trigger"
+    ],
+    "embedded_components_requiring_future_mesh_separation": [
+      "bolt",
+      "charging_handle",
+      "feed_cover",
+      "bipod"
+    ],
+    "excluded_modular_source_components": [],
+    "exclusion_reason": ""
+  },
+  "sockets": [
+    "Socket_Optic",
+    "Socket_Muzzle",
+    "Socket_Underbarrel",
+    "Socket_Side",
+    "Socket_Stock",
+    "Socket_Bayonet",
+    "Socket_Magazine",
+    "Socket_PrimaryGrip",
+    "Socket_SupportGrip"
+  ],
+  "axis_convention": "Godot viewmodel: -Z muzzle, +Y up, +X across"
+}

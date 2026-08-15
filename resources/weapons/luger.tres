@@ -1,11 +1,14 @@
-[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+[ext_resource type="Resource" path="res://resources/weapons/viewmodels/luger_viewmodel.tres" id="2_viewmodel"]
 
 [resource]
 script = ExtResource("1_weapon")
 id = &"luger"
 display_name = "Luger P08"
+standard_gameplay_enabled = false
+roster_note = "Preserved for developer access and possible map-specific use; hidden from standard gameplay for now."
 weapon_class = &"pistol"
 fire_mode = &"semi"
 damage = 82.0
@@ -18,3 +21,4 @@ spread = 0.024
 ads_spread = 0.004
 recoil_pitch = 1.05
 recoil_yaw = 0.28
+viewmodel_profile = ExtResource("2_viewmodel")

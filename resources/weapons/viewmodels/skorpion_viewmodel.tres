@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="WeaponViewmodelProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_viewmodel_profile.gd" id="1_profile"]
+[ext_resource type="PackedScene" path="res://assets/weapons/runtime/grease_gun.glb" id="2_model"]
+
+[resource]
+script = ExtResource("1_profile")
+model_scene = ExtResource("2_model")
+model_back_z = 0.25
+use_profile_hands = true
+use_advanced_motion = true
+hip_position = Vector3(0.109999955, -0.24, -0.34000003)
+hip_rotation_degrees = Vector3(-2, -4, -1)
+hip_viewmodel_fov = 65.0
+ads_position = Vector3(-0.001, -0.19099998, -0.23000029)
+ads_viewmodel_fov = 58.0
+sight_center = Vector3(0, 0.199, -0.32)
+sprint_position = Vector3(0.019999996, -0.4, -0.4600001)
+sprint_rotation_degrees = Vector3(-14, 55, -3)
+sprint_viewmodel_fov = 67.0
+right_hand_position = Vector3(0.075, -0.11, -0.15)
+right_hand_scale = Vector3(0.84, 0.84, 0.84)
+left_hand_position = Vector3(0, -0.025, -0.43)
+left_hand_scale = Vector3(0.86, 0.86, 0.86)

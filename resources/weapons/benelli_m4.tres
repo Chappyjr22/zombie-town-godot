@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+[ext_resource type="Resource" path="res://resources/weapons/viewmodels/candidates/benelli_m4_production_candidate_viewmodel.tres" id="2_viewmodel"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"benelli_m4"
+display_name = "Benelli M4"
+roster_note = "Core production Box-only semi-automatic tube-fed shotgun prepared for future shell-by-shell animation."
+weapon_class = &"shotgun"
+fire_mode = &"semi"
+damage = 31.0
+pellets = 8
+magazine_size = 7
+reserve_ammo = 70
+reload_time = 0.68
+fire_interval = 0.31
+range = 42.0
+spread = 0.048
+ads_spread = 0.031
+recoil_pitch = 2.0
+recoil_yaw = 0.55
+shell_reload = true
+ammo_cost = 750
+viewmodel_profile = ExtResource("2_viewmodel")

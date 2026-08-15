@@ -1,0 +1,381 @@
+{
+  "asset_id": "m1911",
+  "production_candidate": true,
+  "developer_only_until_approved": true,
+  "input_evaluation_derivative": "C:\\Users\\JacobChapman\\Desktop\\zombie-town-godot\\assets\\weapons\\evaluation\\m1911_davidfalke\\runtime\\davidfalke_m1911a1.glb",
+  "input_sha256": "23550B79EDD639736FFCE3291F3854F369A65795AF735533F1DFBBC0CB8D8409",
+  "source_archive_sha256": "B82936A09E20469B59C79BB195AD80B387310DCD692177BF81DD50AEC8A64D26",
+  "source_was_modified": false,
+  "blender_version": "5.2.0 LTS",
+  "output": "m1911.glb",
+  "output_bytes": 32313772,
+  "output_sha256": "9263B2560B06824506AC2CDD1BCC07C818D4D61F38ADFF8C956EA0DF6BA730EB",
+  "mesh_object_count": 37,
+  "triangle_count": 9498,
+  "bounds_meters": {
+    "minimum": [
+      -0.015070599503815174,
+      -0.09738839417695999,
+      -0.10999999940395355
+    ],
+    "maximum": [
+      0.015070603229105473,
+      0.09738840162754059,
+      0.10999999940395355
+    ],
+    "size": [
+      0.030141202732920647,
+      0.19477680325508118,
+      0.2199999988079071
+    ]
+  },
+  "texture_optimization": {
+    "maximum_runtime_dimension": 2048,
+    "images": [
+      {
+        "name": "M1911A1_Used_Base_Color",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "M1911A1_Used_Normal_OpenGL",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Metallic-Roughness",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      }
+    ]
+  },
+  "normalization": {
+    "source_long_axis": "Y",
+    "long_axis_rotation_degrees": 90.0,
+    "target_length_meters": 0.22,
+    "uniform_scale": 0.8981019247543891,
+    "centered_origin": true,
+    "canonical_roll_degrees": 180.0,
+    "canonical_yaw_degrees": 0.0,
+    "mesh_world_transforms_baked": true
+  },
+  "orientation_validation": {
+    "checks": {
+      "front_sight_is_export_forward_positive_z": true,
+      "sights_are_above_slide_positive_y": true,
+      "magazine_is_below_slide_negative_y": true
+    },
+    "component_centers": {
+      "FrontSight": [
+        0.0026360806077718735,
+        0.0711592435836792,
+        0.10558012127876282
+      ],
+      "RearSight": [
+        0.002703729085624218,
+        0.08616630733013153,
+        0.09855210036039352
+      ],
+      "SlideBody": [
+        0.0015337145887315273,
+        0.006870746612548828,
+        0.05032479763031006
+      ],
+      "MagazineBody": [
+        0.0004259892739355564,
+        -0.029682505875825882,
+        -0.040088243782520294
+      ]
+    },
+    "all_component_centers_before_export": {
+      "Barrel": [
+        0.0015075900591909885,
+        0.02819664776325226,
+        0.0687830001115799
+      ],
+      "FrameBody": [
+        0.0009153458522632718,
+        -0.012081988155841827,
+        -0.02132447063922882
+      ],
+      "MagazineBody": [
+        0.0004259892739355564,
+        -0.029682505875825882,
+        -0.040088243782520294
+      ],
+      "FrameHardware_04": [
+        -0.00019822502508759499,
+        -0.03962797299027443,
+        -0.10223960876464844
+      ],
+      "FrameHardware_05": [
+        0.00041704531759023666,
+        -0.07910463958978653,
+        -0.004206416197121143
+      ],
+      "FrameHardware_06": [
+        -0.011809783056378365,
+        -0.0685928612947464,
+        -0.01448659598827362
+      ],
+      "GripPanelLeft": [
+        0.011575916782021523,
+        -0.031888194382190704,
+        -0.04693804308772087
+      ],
+      "GripPanelRight": [
+        -0.010795753449201584,
+        -0.03174355626106262,
+        -0.04677288234233856
+      ],
+      "Hammer": [
+        0.00023122609127312899,
+        -0.06977523118257523,
+        -0.036602240055799484
+      ],
+      "FrameHardware_10": [
+        0.007506513502448797,
+        -0.003242798149585724,
+        0.027537435293197632
+      ],
+      "RearSight": [
+        0.002703729085624218,
+        0.08616630733013153,
+        0.09855210036039352
+      ],
+      "BarrelBushing": [
+        0.002596739213913679,
+        0.09159580618143082,
+        0.08362644910812378
+      ],
+      "FrameHardware_13": [
+        0.008897939696907997,
+        -0.01784922555088997,
+        -0.011977988295257092
+      ],
+      "Trigger": [
+        0.0010135024785995483,
+        -0.006154194474220276,
+        0.000989793799817562
+      ],
+      "FrameHardware_15": [
+        0.005049383267760277,
+        -0.077130526304245,
+        -0.02171342633664608
+      ],
+      "FrameHardware_16": [
+        0.005498973652720451,
+        -0.06833721697330475,
+        -0.012965908274054527
+      ],
+      "FrameHardware_17": [
+        0.005422944203019142,
+        -0.059076327830553055,
+        -0.012572519481182098
+      ],
+      "FrameHardware_18": [
+        -0.0002376670017838478,
+        -0.0396253764629364,
+        -0.10772712528705597
+      ],
+      "FrameHardware_19": [
+        -0.01313124317675829,
+        -0.04167313873767853,
+        -0.007678879424929619
+      ],
+      "FrameHardware_20": [
+        -0.013711743988096714,
+        -0.02460317686200142,
+        -0.08506756275892258
+      ],
+      "FrameHardware_21": [
+        0.014445081353187561,
+        -0.04188857972621918,
+        -0.007924910634756088
+      ],
+      "FrameHardware_22": [
+        0.009596074000000954,
+        -0.014185450971126556,
+        -0.011649470776319504
+      ],
+      "FrameHardware_23": [
+        0.013863992877304554,
+        -0.02481861785054207,
+        -0.0853135883808136
+      ],
+      "FrameHardware_24": [
+        -0.0089063486084342,
+        -0.014842528849840164,
+        -0.01180942077189684
+      ],
+      "SlideStop": [
+        -0.010614550672471523,
+        -0.015807174146175385,
+        0.02035355567932129
+      ],
+      "MagazineRelease": [
+        0.000705959158949554,
+        -0.07184934616088867,
+        0.02233574539422989
+      ],
+      "FrameHardware_27": [
+        -6.555812433362007e-05,
+        -0.04610647261142731,
+        -0.0812525749206543
+      ],
+      "GripSafety": [
+        0.0004941084189340472,
+        -0.03456511348485947,
+        -0.029152624309062958
+      ],
+      "FrameHardware_29": [
+        0.00037517817690968513,
+        -0.06974177807569504,
+        -0.01586955413222313
+      ],
+      "FrameHardware_30": [
+        0.007434283383190632,
+        -0.07778658717870712,
+        0.004724716767668724
+      ],
+      "FrameHardware_31": [
+        -0.009089818224310875,
+        -0.0314745232462883,
+        0.013050757348537445
+      ],
+      "FrameHardware_32": [
+        -0.009483993984758854,
+        -0.06113772094249725,
+        -0.003912709653377533
+      ],
+      "FrameHardware_33": [
+        0.008371274918317795,
+        -0.029265057295560837,
+        0.03324265778064728
+      ],
+      "MagazineBaseplate": [
+        5.667237564921379e-05,
+        -0.013587608933448792,
+        -0.09394577890634537
+      ],
+      "ThumbSafety": [
+        -0.009651611559092999,
+        -0.04628964513540268,
+        0.004575902596116066
+      ],
+      "FrontSight": [
+        0.0026360806077718735,
+        0.0711592435836792,
+        0.10558012127876282
+      ],
+      "SlideBody": [
+        0.0015337145887315273,
+        0.006870746612548828,
+        0.05032479763031006
+      ]
+    }
+  },
+  "mechanism": {
+    "renamed_components": {
+      "Barrel": "Barrel",
+      "Frame": "FrameBody",
+      "Magazine": "MagazineBody",
+      "MechanicalPart_04": "FrameHardware_04",
+      "MechanicalPart_05": "FrameHardware_05",
+      "MechanicalPart_06": "FrameHardware_06",
+      "MechanicalPart_07": "GripPanelLeft",
+      "MechanicalPart_08": "GripPanelRight",
+      "MechanicalPart_09": "Hammer",
+      "MechanicalPart_10": "FrameHardware_10",
+      "MechanicalPart_11": "RearSight",
+      "MechanicalPart_12": "BarrelBushing",
+      "MechanicalPart_13": "FrameHardware_13",
+      "MechanicalPart_14": "Trigger",
+      "MechanicalPart_15": "FrameHardware_15",
+      "MechanicalPart_16": "FrameHardware_16",
+      "MechanicalPart_17": "FrameHardware_17",
+      "MechanicalPart_18": "FrameHardware_18",
+      "MechanicalPart_19": "FrameHardware_19",
+      "MechanicalPart_20": "FrameHardware_20",
+      "MechanicalPart_21": "FrameHardware_21",
+      "MechanicalPart_22": "FrameHardware_22",
+      "MechanicalPart_23": "FrameHardware_23",
+      "MechanicalPart_24": "FrameHardware_24",
+      "MechanicalPart_25": "SlideStop",
+      "MechanicalPart_26": "MagazineRelease",
+      "MechanicalPart_27": "FrameHardware_27",
+      "MechanicalPart_28": "GripSafety",
+      "MechanicalPart_29": "FrameHardware_29",
+      "MechanicalPart_30": "FrameHardware_30",
+      "MechanicalPart_31": "FrameHardware_31",
+      "MechanicalPart_32": "FrameHardware_32",
+      "MechanicalPart_33": "FrameHardware_33",
+      "MechanicalPart_34": "MagazineBaseplate",
+      "MechanicalPart_35": "ThumbSafety",
+      "MechanicalPart_36": "FrontSight",
+      "Slide": "SlideBody"
+    },
+    "pivots": [
+      {
+        "component": "Trigger",
+        "pivot": "TriggerPivot",
+        "axis": "local X"
+      },
+      {
+        "component": "Hammer",
+        "pivot": "HammerPivot",
+        "axis": "local X"
+      },
+      {
+        "component": "SlideStop",
+        "pivot": "SlideStopPivot",
+        "axis": "local X"
+      },
+      {
+        "component": "ThumbSafety",
+        "pivot": "ThumbSafetyPivot",
+        "axis": "local X"
+      }
+    ],
+    "markers": [
+      "Marker_SlideForward",
+      "Marker_SlideRearward",
+      "Marker_SlideLocked",
+      "Marker_MagazineSeated",
+      "Marker_MagazineRemoved",
+      "Marker_HammerCocked"
+    ],
+    "slide_travel_meters": 0.028,
+    "magazine_removal_axis": "local -Y"
+  },
+  "sockets": [
+    "Socket_Optic",
+    "Socket_Muzzle",
+    "Socket_Underbarrel",
+    "Socket_Side",
+    "Socket_Stock",
+    "Socket_Bayonet",
+    "Socket_Magazine",
+    "Socket_PrimaryGrip",
+    "Socket_SupportGrip"
+  ],
+  "axis_convention": "Godot viewmodel: -Z muzzle, +Y up, +X across"
+}

@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+[ext_resource type="Resource" path="res://resources/weapons/viewmodels/m4a1_viewmodel.tres" id="2_viewmodel"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"m4a1"
+display_name = "M4A1"
+standard_gameplay_enabled = false
+roster_note = "Legacy/reserve M4A1 preserved for compatibility and developer access after the live gameplay role migrated to the correctly identified HK416."
+weapon_class = &"rifle"
+fire_mode = &"auto"
+damage = 48.0
+headshot_multiplier = 3.0
+pellets = 1
+magazine_size = 30
+reserve_ammo = 270
+reload_time = 2.1
+fire_interval = 0.078947
+range = 130.0
+spread = 0.030
+ads_spread = 0.0035
+recoil_pitch = 0.92
+recoil_yaw = 0.42
+hip_fov = 75.0
+ads_fov = 58.0
+shell_reload = false
+wall_cost = 0
+ammo_cost = 400
+viewmodel_profile = ExtResource("2_viewmodel")

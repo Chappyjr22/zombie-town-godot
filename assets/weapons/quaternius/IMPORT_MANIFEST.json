@@ -1,0 +1,56 @@
+{
+  "pack": "Quaternius Ultimate Guns Pack",
+  "release": "July 2019",
+  "source_url": "https://quaternius.com/packs/ultimategun.html",
+  "license": "CC0-1.0",
+  "visual_quality_policy": {
+    "production_quality_minimum": "Current detailed CC0 AK first-person asset",
+    "production_quality": "Approved for standard first-person gameplay",
+    "provisional": "Pipeline-ready placeholder retained for developer use while replacement art is sourced",
+    "procedural_fallback": "Generated fallback used when a suitable imported model is unavailable"
+  },
+  "source_formats": ["blend", "fbx", "obj"],
+  "meters_per_source_unit": 0.15,
+  "weapon_inventory": [
+    "AssaultRifle_1", "AssaultRifle_2", "AssaultRifle_3", "AssaultRifle_4", "AssaultRifle_5",
+    "AssaultRifle2_1", "AssaultRifle2_2", "AssaultRifle2_3", "AssaultRifle2_4",
+    "Bullpup_1", "Bullpup_2", "Bullpup_3",
+    "Pistol_1", "Pistol_2", "Pistol_3", "Pistol_4", "Pistol_5", "Pistol_6",
+    "Revolver_1", "Revolver_2", "Revolver_3", "Revolver_4", "Revolver_5",
+    "Shotgun_1", "Shotgun_2", "Shotgun_3", "Shotgun_4", "Shotgun_SawedOff", "Shotgun_ShortStock",
+    "SniperRifle_1", "SniperRifle_2", "SniperRifle_3", "SniperRifle_4", "SniperRifle_5", "SniperRifle_6",
+    "SubmachineGun_1", "SubmachineGun_2", "SubmachineGun_3", "SubmachineGun_4", "SubmachineGun_5"
+  ],
+  "production_weapons": {
+    "mp7": {
+      "source": "source/weapons/SubmachineGun_3.blend",
+      "output": "../runtime/quaternius/mp7.glb",
+      "visual_quality_tier": "provisional",
+      "grip_fraction_from_back": 0.42
+    },
+    "ump": {
+      "source": "source/weapons/SubmachineGun_5.blend",
+      "output": "../runtime/quaternius/ump.glb",
+      "visual_quality_tier": "provisional",
+      "grip_fraction_from_back": 0.45
+    }
+  },
+  "attachment_visual_quality_tier": "provisional",
+  "attachments": {
+    "Bayonet": "bayonet",
+    "Bayonet_2": "bayonet",
+    "Bipod": "underbarrel",
+    "Flashlight": "side",
+    "Grip": "underbarrel",
+    "Scope_1": "optic",
+    "Scope_2": "optic",
+    "Scope_3": "optic",
+    "Silencer_1": "muzzle",
+    "Silencer_2": "muzzle",
+    "Silencer_3": "muzzle",
+    "Silencer_long": "muzzle",
+    "Silencer_Short": "muzzle",
+    "Stock": "stock",
+    "Tripod": "underbarrel"
+  }
+}

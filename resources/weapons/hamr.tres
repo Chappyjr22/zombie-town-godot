@@ -6,6 +6,9 @@
 script = ExtResource("1_weapon")
 id = &"hamr"
 display_name = "HAMR"
+standard_gameplay_enabled = false
+deprecated = true
+roster_note = "Deprecated after the production roster audit; preserved for developer access and future migration/removal work."
 weapon_class = &"lmg"
 fire_mode = &"auto"
 damage = 80.0

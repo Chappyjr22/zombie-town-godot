@@ -4,3 +4,16 @@ export_presets.cfg
 *.tmp
 .DS_Store
 Thumbs.db
+
+# Local/private weapon evaluation material. Production-ready derivatives and
+# provenance live under assets/weapons/runtime/production instead.
+/assets/weapons/evaluation/
+/assets/weapons/quaternius/source/
+/resources/weapons/evaluation/
+/resources/weapons/candidates/*_production_candidate.tres
+/tests/*evaluation_test.gd
+/tests/*evaluation_test.gd.uid
+
+# Generated Python caches are never part of the Blender asset pipeline.
+__pycache__/
+*.py[cod]

@@ -14,6 +14,9 @@ var ads_weapon_rotation := Vector3.ZERO
 var viewmodel_hip_fov := DEFAULT_VIEWMODEL_FOV
 var viewmodel_ads_fov := DEFAULT_VIEWMODEL_FOV
 var active_viewmodel_profile: WeaponViewmodelProfile
+var active_viewmodel_profile_path := ""
+var active_viewmodel_weapon_instance_id := 0
+var viewmodel_tuner: ZombieTownViewmodelTuner
 
 var look_lag_rotation := Vector3.ZERO
 var look_lag_position := Vector3.ZERO
@@ -32,6 +35,16 @@ func _ready() -> void:
 	super._ready()
 	_setup_viewmodel_renderer()
 	_reset_viewmodel_motion()
+	_setup_viewmodel_tuner()
+
+
+func _setup_viewmodel_tuner() -> void:
+	if not ZombieTownViewmodelTuner.available_in_this_build():
+		return
+	viewmodel_tuner = ZombieTownViewmodelTuner.new()
+	viewmodel_tuner.name = "ViewmodelTuner"
+	add_child(viewmodel_tuner)
+	viewmodel_tuner.configure(self)
 
 
 func _setup_viewmodel_renderer() -> void:
@@ -113,6 +126,7 @@ func _sync_viewmodel_viewport_size() -> void:
 
 
 func _update_weapon_visual() -> void:
+	_prepare_active_viewmodel_profile()
 	super._update_weapon_visual()
 	if weapon == null:
 		return
@@ -209,6 +223,12 @@ func _update_standard_viewmodel(delta: float) -> void:
 
 
 func _update_profile_viewmodel(delta: float, profile: WeaponViewmodelProfile) -> void:
+	if is_viewmodel_tuner_active():
+		_apply_viewmodel_tuning_preview(profile)
+		return
+	if not profile.use_advanced_motion:
+		_update_basic_profile_viewmodel(delta, profile)
+		return
 	var move_input := Input.get_vector(&"move_left", &"move_right", &"move_forward", &"move_back")
 	var horizontal_speed := Vector2(velocity.x, velocity.z).length()
 	var moving := is_on_floor() and horizontal_speed > 0.12
@@ -350,6 +370,8 @@ func _animate_viewmodel_fire() -> void:
 	if weapon == null or active_viewmodel_profile == null:
 		return
 	var profile := active_viewmodel_profile
+	if not profile.use_advanced_motion:
+		return
 
 	# Keep the existing mesh kick subtle and let the root spring provide the
 	# heavier shoulder impulse so the whole gun and hands move together.
@@ -382,6 +404,170 @@ func _animate_viewmodel_fire() -> void:
 	visual_recoil_rotation.x = clampf(visual_recoil_rotation.x, -rotation_limit.x, rotation_limit.x)
 	visual_recoil_rotation.y = clampf(visual_recoil_rotation.y, -rotation_limit.y, rotation_limit.y)
 	visual_recoil_rotation.z = clampf(visual_recoil_rotation.z, -rotation_limit.z, rotation_limit.z)
+
+
+func _update_basic_profile_viewmodel(delta: float, profile: WeaponViewmodelProfile) -> void:
+	var state: StringName = &"ads" if ads else &"hip"
+	if _is_player_sprinting():
+		state = &"sprint"
+	var desired_position := profile.state_position(state)
+	var desired_rotation := profile.state_rotation_radians(state)
+	desired_position.z += weapon_kick * 0.06
+	desired_rotation.x += weapon_kick * 0.08
+	var position_response := profile.hip_position_response
+	var rotation_response := profile.hip_rotation_response
+	if state == &"ads":
+		position_response = profile.ads_position_response
+		rotation_response = profile.ads_rotation_response
+	elif state == &"sprint":
+		position_response = profile.sprint_position_response
+		rotation_response = profile.sprint_rotation_response
+	weapon_root.position = weapon_root.position.lerp(
+		desired_position,
+		1.0 - exp(-delta * position_response)
+	)
+	weapon_root.rotation = _lerp_rotation(
+		weapon_root.rotation,
+		desired_rotation,
+		1.0 - exp(-delta * rotation_response)
+	)
+	if viewmodel_camera != null:
+		viewmodel_camera.fov = lerpf(
+			viewmodel_camera.fov,
+			profile.state_viewmodel_fov(state),
+			1.0 - exp(-delta * profile.fov_response)
+		)
+
+
+func _is_player_sprinting() -> bool:
+	var move_input := Input.get_vector(&"move_left", &"move_right", &"move_forward", &"move_back")
+	var horizontal_speed := Vector2(velocity.x, velocity.z).length()
+	return (
+		not ads
+		and not crouched
+		and move_input.y < -0.1
+		and Input.is_action_pressed(&"sprint")
+		and horizontal_speed > walk_speed * 0.72
+	)
+
+
+func _apply_viewmodel_tuning_preview(profile: WeaponViewmodelProfile) -> void:
+	var state := viewmodel_tuner.tuning_state
+	weapon_root.position = profile.state_position(state)
+	weapon_root.rotation = profile.state_rotation_radians(state)
+	if viewmodel_camera != null:
+		viewmodel_camera.fov = profile.state_viewmodel_fov(state)
+
+
+func _prepare_active_viewmodel_profile() -> void:
+	if weapon == null:
+		active_viewmodel_profile = null
+		active_viewmodel_profile_path = ""
+		active_viewmodel_weapon_instance_id = 0
+		return
+	var weapon_instance_id := weapon.get_instance_id()
+	if active_viewmodel_weapon_instance_id == weapon_instance_id:
+		return
+	var source_profile := ZombieTownWeaponViewmodelProfiles.resolve(weapon)
+	active_viewmodel_profile_path = ZombieTownWeaponViewmodelProfiles.profile_path_for(weapon)
+	if source_profile != null:
+		var runtime_profile := source_profile.duplicate(true) as WeaponViewmodelProfile
+		weapon.viewmodel_profile = runtime_profile
+		active_viewmodel_profile = runtime_profile
+	else:
+		weapon.viewmodel_profile = null
+		active_viewmodel_profile = null
+	active_viewmodel_weapon_instance_id = weapon_instance_id
+
+
+func ensure_viewmodel_profile_for_tuning() -> WeaponViewmodelProfile:
+	if weapon == null:
+		return null
+	if active_viewmodel_profile != null:
+		return active_viewmodel_profile
+	var profile := WeaponViewmodelProfile.new()
+	profile.hip_position = hip_weapon_position
+	profile.hip_rotation_degrees = Vector3(
+		rad_to_deg(hip_weapon_rotation.x),
+		rad_to_deg(hip_weapon_rotation.y),
+		rad_to_deg(hip_weapon_rotation.z)
+	)
+	profile.hip_viewmodel_fov = viewmodel_hip_fov
+	profile.ads_position = ads_weapon_position
+	profile.ads_rotation_degrees = Vector3(
+		rad_to_deg(ads_weapon_rotation.x),
+		rad_to_deg(ads_weapon_rotation.y),
+		rad_to_deg(ads_weapon_rotation.z)
+	)
+	profile.ads_viewmodel_fov = viewmodel_ads_fov
+	profile.sprint_position = hip_weapon_position
+	profile.sprint_rotation_degrees = profile.hip_rotation_degrees
+	profile.sprint_viewmodel_fov = viewmodel_hip_fov
+	profile.use_advanced_motion = false
+	profile.use_profile_hands = false
+	if ZombieTownProductionWeaponAssets.asset_available(weapon.id):
+		var model_resource := ResourceLoader.load(ZombieTownProductionWeaponAssets.asset_path(weapon.id))
+		if model_resource is PackedScene:
+			profile.model_scene = model_resource as PackedScene
+			profile.target_length = ZombieTownProductionWeaponAssets.target_length(weapon.id)
+			profile.model_back_z = ZombieTownProductionWeaponAssets.back_z(weapon.id)
+			var model_rotation := ZombieTownProductionWeaponAssets.rotation_radians(weapon.id)
+			profile.model_rotation_degrees = Vector3(
+				rad_to_deg(model_rotation.x),
+				rad_to_deg(model_rotation.y),
+				rad_to_deg(model_rotation.z)
+			)
+	weapon.viewmodel_profile = profile
+	active_viewmodel_profile = profile
+	_update_weapon_visual()
+	return active_viewmodel_profile
+
+
+func save_active_viewmodel_profile(override_path := "") -> Error:
+	var save_path := override_path if not override_path.is_empty() else active_viewmodel_profile_path
+	if active_viewmodel_profile == null or save_path.is_empty():
+		return ERR_INVALID_DATA
+	return ResourceSaver.save(active_viewmodel_profile, save_path)
+
+
+func refresh_viewmodel_tuning_preview() -> void:
+	if active_viewmodel_profile == null:
+		return
+	hip_weapon_position = active_viewmodel_profile.hip_position
+	hip_weapon_rotation = active_viewmodel_profile.hip_rotation_radians()
+	ads_weapon_position = active_viewmodel_profile.resolved_ads_position()
+	ads_weapon_rotation = active_viewmodel_profile.ads_rotation_radians()
+	viewmodel_hip_fov = active_viewmodel_profile.hip_viewmodel_fov
+	viewmodel_ads_fov = active_viewmodel_profile.ads_viewmodel_fov
+	if is_viewmodel_tuner_active():
+		_apply_viewmodel_tuning_preview(active_viewmodel_profile)
+
+
+func on_viewmodel_tuner_opened() -> void:
+	ads = false
+	_reset_viewmodel_motion()
+	refresh_viewmodel_tuning_preview()
+
+
+func on_viewmodel_tuner_closed() -> void:
+	_reset_viewmodel_motion()
+	refresh_viewmodel_tuning_preview()
+
+
+func can_open_viewmodel_tuner() -> bool:
+	if not alive or weapon == null:
+		return false
+	if has_method(&"is_downed") and bool(call(&"is_downed")):
+		return false
+	return true
+
+
+func is_viewmodel_tuner_active() -> bool:
+	return viewmodel_tuner != null and viewmodel_tuner.is_active()
+
+
+func is_gameplay_input_blocked() -> bool:
+	return is_viewmodel_tuner_active()
 
 
 func _reset_viewmodel_motion() -> void:

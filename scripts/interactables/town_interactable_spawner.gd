@@ -68,7 +68,7 @@ func _spawn_perk(marker: Marker3D) -> void:
 func _spawn_wall_weapon(marker: Marker3D) -> void:
 	var item_id: StringName = _marker_item_id(marker)
 	var weapon_data := ZombieTownWeaponCatalog.load_weapon(item_id)
-	if weapon_data == null:
+	if weapon_data == null or not ZombieTownWeaponCatalog.is_standard_gameplay_weapon(item_id):
 		return
 	var interactable := ZombieTownInteractable.new()
 	interactable.name = "%sWallBuy" % weapon_data.display_name.replace(" ", "")
@@ -80,8 +80,13 @@ func _spawn_wall_weapon(marker: Marker3D) -> void:
 
 func _spawn_ammo(marker: Marker3D) -> void:
 	var item_id: StringName = _marker_item_id(marker)
-	var price: int = 250 if item_id == &"m1911" else 400
-	var label: String = "M1911 Ammo" if item_id == &"m1911" else "M4A1 Ammo"
+	if not ZombieTownWeaponCatalog.is_standard_gameplay_weapon(item_id):
+		return
+	var weapon_data := ZombieTownWeaponCatalog.load_weapon(item_id)
+	if weapon_data == null:
+		return
+	var price: int = weapon_data.ammo_cost
+	var label := "%s Ammo" % weapon_data.display_name
 	var interactable := ZombieTownInteractable.new()
 	interactable.name = "%sInteractable" % label.replace(" ", "")
 	get_parent().add_child(interactable)

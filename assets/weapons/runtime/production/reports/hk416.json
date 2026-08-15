@@ -1,0 +1,270 @@
+{
+  "asset_id": "hk416",
+  "production_candidate": true,
+  "developer_only_until_approved": true,
+  "input_evaluation_derivative": "C:\\Users\\JacobChapman\\AppData\\Local\\Temp\\zombie-town-batch2-hk416-evaluation.glb",
+  "input_sha256": "B1A89834E47A0FD57B693958C5248B7E7301D8123DC86BD11BC5BA5CF12D2600",
+  "source_archive_sha256": "81511EEF4B8880CA2990B78F954C8D5FE55A8341252BF7176C071EC6179A4280",
+  "source_was_modified": false,
+  "blender_version": "5.2.0 LTS",
+  "output": "hk416.glb",
+  "output_bytes": 29686396,
+  "output_sha256": "AF2EEA7605A68493C2C86A1B7DEAB86CFAFD0E532BC707910EED5E8B15060A41",
+  "mesh_object_count": 4,
+  "triangle_count": 13130,
+  "bounds_meters": {
+    "minimum": [
+      -0.03560212627053261,
+      -0.16847346723079681,
+      -0.43000003695487976
+    ],
+    "maximum": [
+      0.03547390550374985,
+      0.09111861139535904,
+      0.429999977350235
+    ],
+    "size": [
+      0.07107603549957275,
+      0.25959208607673645,
+      0.8600000143051147
+    ]
+  },
+  "texture_optimization": {
+    "maximum_runtime_dimension": 2048,
+    "images": [
+      {
+        "name": "HK416.A5_Base 1 - HK416.A5_BaseColor",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "HK416.A5_Base 1 - HK416.A5_Normal",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "HK416.A5_Base 2 - HK416.A5_BaseColor",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "HK416.A5_Base 2 - HK416.A5_Normal",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "HK416.A5_Mag - HK416.A5_BaseColor",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "HK416.A5_Mag - HK416.A5_Normal",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "HK416.A5_Scope - HK416.A5_BaseColor",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "HK416.A5_Scope - HK416.A5_Normal",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "HK416.A5_Trigger - HK416.A5_BaseColor",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "HK416.A5_Trigger - HK416.A5_Normal",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Metallic-Roughness",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Metallic-Roughness.001",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Metallic-Roughness.002",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Metallic-Roughness.003",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Metallic-Roughness.004",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      }
+    ]
+  },
+  "normalization": {
+    "source_long_axis": "Z",
+    "long_axis_rotation_degrees": 0.0,
+    "target_length_meters": 0.86,
+    "uniform_scale": 0.1216840408733531,
+    "centered_origin": true,
+    "canonical_roll_degrees": 0.0,
+    "canonical_yaw_degrees": 0.0
+  },
+  "orientation_validation": {
+    "canonical_forward_axis": "-Z",
+    "canonical_up_axis": "+Y",
+    "source_evaluation_orientation_preserved": true
+  },
+  "mechanism": {
+    "semantic_components": [
+      "ReceiverBody",
+      "StockBody",
+      "MagazineBody",
+      "Trigger"
+    ],
+    "hierarchy": [
+      "Action",
+      "Magazine",
+      "Marker_BoltForward",
+      "Marker_BoltRearward",
+      "Marker_ChargingHandleForward",
+      "Marker_ChargingHandleRearward",
+      "Marker_MagazineRemoved",
+      "Marker_MagazineSeated",
+      "Receiver",
+      "Stock"
+    ],
+    "markers": [
+      "Marker_MagazineSeated",
+      "Marker_MagazineRemoved",
+      "Marker_BoltForward",
+      "Marker_BoltRearward",
+      "Marker_ChargingHandleForward",
+      "Marker_ChargingHandleRearward"
+    ],
+    "separate_animation_ready": [
+      "magazine",
+      "trigger",
+      "stock"
+    ],
+    "embedded_components_requiring_future_mesh_separation": [
+      "bolt",
+      "charging_handle"
+    ],
+    "excluded_modular_source_components": [
+      "Scope - HK416.A5",
+      "Scope - HK416.A5 - 2x"
+    ],
+    "exclusion_reason": "HK416 showcase optics remain available in the private source/evaluation material and are not merged into the production base weapon."
+  },
+  "sockets": [
+    "Socket_Optic",
+    "Socket_Muzzle",
+    "Socket_Underbarrel",
+    "Socket_Side",
+    "Socket_Stock",
+    "Socket_Bayonet",
+    "Socket_Magazine",
+    "Socket_PrimaryGrip",
+    "Socket_SupportGrip"
+  ],
+  "axis_convention": "Godot viewmodel: -Z muzzle, +Y up, +X across"
+}

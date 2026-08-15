@@ -87,6 +87,15 @@ func _physics_process(delta: float) -> void:
 		_apply_gravity(delta)
 		move_and_slide()
 		return
+	if is_gameplay_input_blocked():
+		_apply_gravity(delta)
+		velocity.x = move_toward(velocity.x, 0.0, acceleration * delta)
+		velocity.z = move_toward(velocity.z, 0.0, acceleration * delta)
+		_update_camera_and_weapon(delta)
+		_update_reload(delta)
+		_update_muzzle_flash(delta)
+		move_and_slide()
+		return
 
 	_update_controller_look(delta)
 	_update_actions(delta)
@@ -95,6 +104,10 @@ func _physics_process(delta: float) -> void:
 	_update_reload(delta)
 	_update_muzzle_flash(delta)
 	move_and_slide()
+
+
+func is_gameplay_input_blocked() -> bool:
+	return false
 
 func _update_actions(_delta: float) -> void:
 	if Input.is_action_just_pressed(&"crouch"):

@@ -1,0 +1,198 @@
+{
+  "asset_id": "m16",
+  "production_candidate": true,
+  "developer_only_until_approved": true,
+  "input_evaluation_derivative": "C:\\Users\\JacobChapman\\Desktop\\zombie-town-godot\\assets\\weapons\\evaluation\\diamo_rifles\\runtime\\diamo_m16.glb",
+  "input_sha256": "E14DF64C92FDDFDBFC55E81599AC0BAC6CA7C9B3E131B4D792EBF631B62DEF04",
+  "source_archive_sha256": "81511EEF4B8880CA2990B78F954C8D5FE55A8341252BF7176C071EC6179A4280",
+  "source_was_modified": false,
+  "blender_version": "5.2.0 LTS",
+  "output": "m16.glb",
+  "output_bytes": 21556524,
+  "output_sha256": "B38623D7C514F5F293315AFF6C4272BE2E2F8C5B35A01D9CEF3B712197C4AE58",
+  "mesh_object_count": 3,
+  "triangle_count": 30821,
+  "bounds_meters": {
+    "minimum": [
+      -0.03526492789387703,
+      -0.13456080853939056,
+      -0.5
+    ],
+    "maximum": [
+      0.03526492789387703,
+      0.13456082344055176,
+      0.5
+    ],
+    "size": [
+      0.07052985578775406,
+      0.2691216468811035,
+      1.0
+    ]
+  },
+  "texture_optimization": {
+    "maximum_runtime_dimension": 2048,
+    "images": [
+      {
+        "name": "M16_Base - M16_BaseColor",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "M16_Base - M16_Normal",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "M16_Mag - M16_BaseColor",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "M16_Mag - M16_Normal",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "M16_Trigger - M16_BaseColor",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "M16_Trigger - M16_Normal",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Metallic-Roughness",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Metallic-Roughness.001",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Metallic-Roughness.002",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      }
+    ]
+  },
+  "normalization": {
+    "source_long_axis": "Z",
+    "long_axis_rotation_degrees": 0.0,
+    "target_length_meters": 1.0,
+    "uniform_scale": 0.1843165539644281,
+    "centered_origin": true,
+    "canonical_roll_degrees": 0.0,
+    "canonical_yaw_degrees": 0.0
+  },
+  "orientation_validation": {
+    "canonical_forward_axis": "-Z",
+    "canonical_up_axis": "+Y",
+    "source_evaluation_orientation_preserved": true
+  },
+  "mechanism": {
+    "semantic_components": [
+      "ReceiverBody",
+      "MagazineBody",
+      "Trigger"
+    ],
+    "hierarchy": [
+      "Action",
+      "Magazine",
+      "Marker_BoltForward",
+      "Marker_BoltRearward",
+      "Marker_ChargingHandleForward",
+      "Marker_ChargingHandleRearward",
+      "Marker_MagazineRemoved",
+      "Marker_MagazineSeated",
+      "Receiver"
+    ],
+    "markers": [
+      "Marker_MagazineSeated",
+      "Marker_MagazineRemoved",
+      "Marker_BoltForward",
+      "Marker_BoltRearward",
+      "Marker_ChargingHandleForward",
+      "Marker_ChargingHandleRearward"
+    ],
+    "separate_animation_ready": [
+      "magazine",
+      "trigger"
+    ],
+    "embedded_components_requiring_future_mesh_separation": [
+      "bolt",
+      "charging_handle"
+    ],
+    "excluded_modular_source_components": [],
+    "exclusion_reason": ""
+  },
+  "sockets": [
+    "Socket_Optic",
+    "Socket_Muzzle",
+    "Socket_Underbarrel",
+    "Socket_Side",
+    "Socket_Stock",
+    "Socket_Bayonet",
+    "Socket_Magazine",
+    "Socket_PrimaryGrip",
+    "Socket_SupportGrip"
+  ],
+  "axis_convention": "Godot viewmodel: -Z muzzle, +Y up, +X across"
+}

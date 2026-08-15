@@ -1,0 +1,44 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://cuyx2vpotvhgp"
+path.s3tc="res://.godot/imported/m16_M16_Base - M16_Normal.png-25f05211876ec779ff6c4c7740ec7b6d.s3tc.ctex"
+metadata={
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
+}
+generator_parameters={
+"md5": "00f9c6a4786faf0a4aaca3c8beed7884"
+}
+
+[deps]
+
+source_file="res://assets/weapons/runtime/production/diamo/m16_M16_Base - M16_Normal.png"
+dest_files=["res://.godot/imported/m16_M16_Base - M16_Normal.png-25f05211876ec779ff6c4c7740ec7b6d.s3tc.ctex"]
+
+[params]
+
+compress/mode=2
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/uastc_level=0
+compress/rdo_quality_loss=0.0
+compress/hdr_compression=1
+compress/normal_map=1
+compress/channel_pack=0
+mipmaps/generate=true
+mipmaps/limit=-1
+roughness/mode=1
+roughness/src_normal="res://assets/weapons/runtime/production/diamo/m16_M16_Base - M16_Normal.png"
+process/channel_remap/red=0
+process/channel_remap/green=1
+process/channel_remap/blue=2
+process/channel_remap/alpha=3
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=0

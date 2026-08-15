@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+[ext_resource type="Resource" path="res://resources/weapons/viewmodels/candidates/m16_production_candidate_viewmodel.tres" id="2_viewmodel"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"m16"
+display_name = "M16"
+roster_note = "Core production three-round burst rifle using the approved Diamo model and presentation."
+weapon_class = &"rifle"
+fire_mode = &"burst"
+damage = 52.0
+headshot_multiplier = 3.0
+magazine_size = 30
+reserve_ammo = 270
+reload_time = 2.25
+fire_interval = 0.28
+burst_count = 3
+burst_interval = 0.075
+range = 140.0
+spread = 0.028
+ads_spread = 0.003
+recoil_pitch = 1.05
+recoil_yaw = 0.36
+ammo_cost = 500
+viewmodel_profile = ExtResource("2_viewmodel")

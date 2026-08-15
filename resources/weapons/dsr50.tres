@@ -1,11 +1,14 @@
-[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+[ext_resource type="Resource" path="res://resources/weapons/viewmodels/dsr50_viewmodel.tres" id="2_viewmodel"]
 
 [resource]
 script = ExtResource("1_weapon")
 id = &"dsr50"
 display_name = "Sniper Rifle"
+standard_gameplay_enabled = false
+roster_note = "Legacy standard sniper preserved for compatibility and developer access after its live role migrated to the correctly identified CheyTac M200."
 weapon_class = &"sniper"
 fire_mode = &"semi"
 damage = 1250.0
@@ -20,3 +23,4 @@ ads_spread = 0.0004
 recoil_pitch = 2.25
 recoil_yaw = 0.20
 ads_fov = 28.0
+viewmodel_profile = ExtResource("2_viewmodel")

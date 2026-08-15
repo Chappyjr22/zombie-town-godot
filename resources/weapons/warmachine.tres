@@ -6,6 +6,9 @@
 script = ExtResource("1_weapon")
 id = &"warmachine"
 display_name = "War Machine"
+standard_gameplay_enabled = false
+deprecated = true
+roster_note = "Retired from new standard gameplay and Mystery Box pity. Preserved loadable for legacy saves while shared projectile/splash infrastructure remains active."
 weapon_class = &"wonder"
 fire_mode = &"semi"
 damage = 0.0

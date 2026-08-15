@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+[ext_resource type="Resource" path="res://resources/weapons/viewmodels/mp7_viewmodel.tres" id="2_viewmodel"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"mp7"
+display_name = "MP7"
+standard_gameplay_enabled = true
+roster_note = "Core production lightweight, high-rate point-building SMG using the approved Diamo model and presentation."
+weapon_class = &"smg"
+fire_mode = &"auto"
+damage = 31.0
+headshot_multiplier = 3.0
+magazine_size = 40
+reserve_ammo = 320
+reload_time = 1.85
+fire_interval = 0.06
+range = 65.0
+spread = 0.032
+ads_spread = 0.006
+recoil_pitch = 0.58
+recoil_yaw = 0.24
+wall_cost = 1100
+ammo_cost = 550
+viewmodel_profile = ExtResource("2_viewmodel")

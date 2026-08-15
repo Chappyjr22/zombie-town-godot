@@ -6,6 +6,9 @@
 script = ExtResource("1_weapon")
 id = &"m14"
 display_name = "M14"
+standard_gameplay_enabled = false
+deprecated = true
+roster_note = "Retired from new standard gameplay. Preserved loadable for legacy saves and developer compatibility testing; Town marker infrastructure remains inactive."
 weapon_class = &"rifle"
 fire_mode = &"semi"
 damage = 118.0

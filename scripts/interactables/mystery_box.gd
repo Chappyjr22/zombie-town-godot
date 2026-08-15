@@ -8,35 +8,32 @@ const BASE_CYCLE_INTERVAL := 0.065
 const FINAL_CYCLE_INTERVAL := 0.23
 
 const WEAPON_WEIGHTS := {
-	&"m14": 12.0,
-	&"olympia": 12.0,
-	&"mp5": 12.0,
+	&"mp7": 12.0,
 	&"ak74u": 12.0,
-	&"galil": 12.0,
 	&"rem870": 12.0,
-	&"an94": 7.0,
-	&"skorpion": 7.0,
-	&"luger": 8.0,
+	&"ump": 7.0,
+	&"hk416": 7.0,
+	&"m16": 7.0,
+	&"benelli_m4": 6.0,
+	&"aa12": 6.0,
+	&"rpd": 6.0,
+	&"m200": 5.0,
 	&"flaregun": 3.0,
-	&"rpk": 6.0,
-	&"hamr": 6.0,
-	&"m1216": 6.0,
-	&"dsr50": 5.0,
+	&"rpg7": 1.89,
 	&"raygun": 2.08,
 	&"raygun2": 2.08,
-	&"warmachine": 1.89,
 	&"thunder": 1.6793,
 	&"waffe": 1.6793
 }
 
 const WONDER_WEAPONS: Array[StringName] = [
-	&"raygun", &"raygun2", &"warmachine", &"thunder", &"waffe"
+	&"raygun", &"raygun2", &"thunder", &"waffe"
 ]
 
 const CYCLE_POOL: Array[StringName] = [
-	&"m14", &"olympia", &"mp5", &"ak74u", &"galil", &"rem870",
-	&"an94", &"skorpion", &"luger", &"flaregun", &"rpk", &"hamr",
-	&"m1216", &"dsr50", &"raygun", &"raygun2", &"warmachine", &"thunder", &"waffe"
+	&"mp7", &"ak74u", &"rem870", &"ump", &"hk416", &"m16",
+	&"benelli_m4", &"aa12", &"rpd", &"m200", &"flaregun", &"rpg7",
+	&"raygun", &"raygun2", &"thunder", &"waffe"
 ]
 
 enum BoxState {
@@ -58,6 +55,10 @@ var lid_pivot: Node3D
 var weapon_label: Label3D
 var weapon_preview: MeshInstance3D
 var box_light: OmniLight3D
+var preview_mesh: BoxMesh
+var standard_preview_material: StandardMaterial3D
+var wonder_preview_material: StandardMaterial3D
+var preview_weapon_data_cache: Dictionary = {}
 
 func _ready() -> void:
 	interaction_kind = &"mystery_box"
@@ -69,6 +70,7 @@ func _ready() -> void:
 	monitoring = false
 	monitorable = true
 	_build_visuals()
+	_warm_preview_cache()
 	_update_idle_visual()
 
 func _process(delta: float) -> void:
@@ -174,7 +176,7 @@ func _choose_result() -> StringName:
 	var pity_multiplier := minf(4.0, 1.0 + float(dry_streak) * 0.13)
 	for weapon_variant: Variant in WEAPON_WEIGHTS.keys():
 		var weapon_id := StringName(str(weapon_variant))
-		if weapon_id in held_ids:
+		if weapon_id in held_ids or not ZombieTownWeaponCatalog.is_standard_gameplay_weapon(weapon_id):
 			continue
 		var weight_variant: Variant = WEAPON_WEIGHTS.get(weapon_id, 0.0)
 		var weight := float(weight_variant)
@@ -185,7 +187,7 @@ func _choose_result() -> StringName:
 		total_weight += weight
 
 	if weighted_ids.is_empty() or total_weight <= 0.0:
-		return &"m14"
+		return &"ak74u"
 	var roll := randf() * total_weight
 	for index in weighted_ids.size():
 		roll -= weighted_values[index]
@@ -233,15 +235,14 @@ func _update_idle_visual() -> void:
 		box_light.light_energy = 1.1
 
 func _show_weapon(weapon_id: StringName) -> void:
-	var weapon_data: WeaponData = ZombieTownWeaponCatalog.load_weapon(weapon_id)
-	if weapon_data == null:
+	var weapon_data := _preview_weapon_data(weapon_id)
+	if weapon_data == null or preview_mesh == null:
 		return
 	weapon_label.text = weapon_data.display_name.to_upper()
-	var preview_mesh := BoxMesh.new()
 	preview_mesh.size = _preview_size_for(weapon_data.weapon_class)
-	preview_mesh.material = _preview_material(weapon_data)
-	weapon_preview.mesh = preview_mesh
-	if weapon_data.weapon_class == &"wonder":
+	var is_wonder := weapon_data.weapon_class == &"wonder"
+	preview_mesh.material = wonder_preview_material if is_wonder else standard_preview_material
+	if is_wonder:
 		weapon_label.modulate = Color(0.58, 1.0, 0.72, 1.0)
 		box_light.light_color = Color(0.22, 1.0, 0.46, 1.0)
 	else:
@@ -260,22 +261,37 @@ func _preview_size_for(weapon_class: StringName) -> Vector3:
 			return Vector3(0.20, 0.22, 1.38)
 		&"sniper":
 			return Vector3(0.12, 0.14, 1.55)
+		&"launcher":
+			return Vector3(0.18, 0.20, 1.30)
 		&"wonder":
 			return Vector3(0.22, 0.24, 0.92)
 		_:
 			return Vector3(0.12, 0.15, 0.55)
 
-func _preview_material(weapon_data: WeaponData) -> StandardMaterial3D:
-	var color := Color(0.22, 0.58, 1.0, 1.0)
-	if weapon_data.weapon_class == &"wonder":
-		color = Color(0.18, 1.0, 0.42, 1.0)
+func _preview_weapon_data(weapon_id: StringName) -> WeaponData:
+	var cached: Variant = preview_weapon_data_cache.get(weapon_id)
+	if cached is WeaponData:
+		return cached as WeaponData
+	var weapon_data := ZombieTownWeaponCatalog.load_weapon(weapon_id)
+	if weapon_data != null:
+		preview_weapon_data_cache[weapon_id] = weapon_data
+	return weapon_data
+
+func _warm_preview_cache() -> void:
+	for weapon_id: StringName in CYCLE_POOL:
+		_preview_weapon_data(weapon_id)
+	# Gameplay Mystery Box adds Ballistic Knife to its inherited preview path.
+	_preview_weapon_data(&"bknife")
+
+func _create_preview_material(is_wonder: bool) -> StandardMaterial3D:
+	var color := Color(0.18, 1.0, 0.42, 1.0) if is_wonder else Color(0.22, 0.58, 1.0, 1.0)
 	var material := StandardMaterial3D.new()
 	material.albedo_color = color.lightened(0.34)
 	material.metallic = 0.35
 	material.roughness = 0.28
 	material.emission_enabled = true
 	material.emission = color
-	material.emission_energy_multiplier = 2.4 if weapon_data.weapon_class != &"wonder" else 4.2
+	material.emission_energy_multiplier = 4.2 if is_wonder else 2.4
 	return material
 
 func _build_visuals() -> void:
@@ -332,6 +348,12 @@ func _build_visuals() -> void:
 	weapon_preview.position = Vector3(0.0, 1.88, 0.0)
 	weapon_preview.visible = false
 	weapon_preview.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	standard_preview_material = _create_preview_material(false)
+	wonder_preview_material = _create_preview_material(true)
+	preview_mesh = BoxMesh.new()
+	preview_mesh.size = _preview_size_for(&"pistol")
+	preview_mesh.material = standard_preview_material
+	weapon_preview.mesh = preview_mesh
 	add_child(weapon_preview)
 
 	weapon_label = Label3D.new()

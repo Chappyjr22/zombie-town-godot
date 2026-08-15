@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="WeaponViewmodelProfile" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_viewmodel_profile.gd" id="1_profile"]
+[ext_resource type="PackedScene" path="res://assets/weapons/runtime/flare_gun.glb" id="2_model"]
+
+[resource]
+script = ExtResource("1_profile")
+model_scene = ExtResource("2_model")
+target_length = 0.54
+model_back_z = 0.20
+use_advanced_motion = true
+hip_position = Vector3(0.28, -0.245, -0.43)
+hip_rotation_degrees = Vector3(-1, -5, -3)
+hip_viewmodel_fov = 72.0
+ads_position = Vector3(0, 0, -0.18)
+ads_viewmodel_fov = 70.0
+align_ads_to_sight = true
+sight_center = Vector3(-0.001, 0.160, -0.19)
+sprint_position = Vector3(0.30, -0.35, -0.52)
+sprint_rotation_degrees = Vector3(46, 5, -9)
+sprint_viewmodel_fov = 74.0
+

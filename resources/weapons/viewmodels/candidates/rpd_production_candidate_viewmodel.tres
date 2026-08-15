@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="WeaponViewmodelProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_viewmodel_profile.gd" id="1_profile"]
+[ext_resource type="PackedScene" path="res://assets/weapons/runtime/production/diamo/rpd.glb" id="2_model"]
+[ext_resource type="Resource" path="res://resources/weapons/attachment_layouts/rpd_attachments.tres" id="3_layout"]
+
+[resource]
+script = ExtResource("1_profile")
+model_scene = ExtResource("2_model")
+target_length = 1.04
+model_back_z = 0.3
+use_profile_hands = true
+use_advanced_motion = true
+attachment_layout = ExtResource("3_layout")
+hip_position = Vector3(0.19499998, -0.19499996, -0.32000005)
+hip_rotation_degrees = Vector3(-3, -5, -3)
+hip_viewmodel_fov = 63.0
+ads_position = Vector3(0.017, -0.12699996, -0.21000004)
+ads_viewmodel_fov = 57.0
+sprint_position = Vector3(0.1, -0.47, -0.62)
+sprint_rotation_degrees = Vector3(-14, 54, -4)
+right_hand_position = Vector3(0.085, -0.105, -0.19)
+right_hand_scale = Vector3(0.84, 0.84, 0.84)
+left_hand_position = Vector3(0.02, -0.025, -0.56)
+left_hand_scale = Vector3(0.86, 0.86, 0.86)
+recoil_position_impulse = Vector3(0, 0.0008, 0.046)
+recoil_rotation_impulse_degrees = Vector3(1.75, 0, 0)
+recoil_yaw_random_degrees = 0.38
+recoil_roll_random_degrees = 0.48

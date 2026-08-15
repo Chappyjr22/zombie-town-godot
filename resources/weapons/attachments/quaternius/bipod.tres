@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="WeaponAttachmentData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_attachment_data.gd" id="1_data"]
+[ext_resource type="PackedScene" path="res://assets/weapons/runtime/quaternius/attachments/bipod.glb" id="2_model"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"quaternius_bipod"
+display_name = "Bipod"
+slot = "underbarrel"
+socket_name = &"Socket_Underbarrel"
+model_scene = ExtResource("2_model")
+notes = "Deployed static mesh; no folding animation or armature."
+

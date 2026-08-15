@@ -6,6 +6,8 @@
 script = ExtResource("1_weapon")
 id = &"rpk"
 display_name = "RPK"
+standard_gameplay_enabled = false
+roster_note = "Legacy RPK preserved for compatibility and developer access after its standard LMG role migrated to RPD."
 weapon_class = &"lmg"
 fire_mode = &"auto"
 damage = 72.0

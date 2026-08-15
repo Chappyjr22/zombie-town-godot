@@ -109,6 +109,13 @@ Status: Town structural/navigation baseline validated, gameplay systems in progr
 
 ## Prototype 0.3: Production combat framework
 
+The coordinated production-roster migration is implemented locally and tracked
+in [`WEAPON_ROSTER_PLAN.md`](WEAPON_ROSTER_PLAN.md). M14, Olympia, War Machine,
+and HAMR are non-standard/deprecated while their resources remain available for
+old-save compatibility and developer testing. DavidFalke's M1911A1 now supplies
+the authentic M1911 identity, and the approved former Makarov presentation is
+preserved under standalone `makarov` identity.
+
 - [x] Reusable first-person weapon viewmodel architecture
 - [x] First procedural first-person arms/hands pass
 - [x] First fire/reload viewmodel animation pass
@@ -125,18 +132,27 @@ Status: Town structural/navigation baseline validated, gameplay systems in progr
 - [x] Add imported-model auto scaling/centering, dynamic muzzle placement and procedural fallback
 - [ ] Validate production firearm orientation, hand placement, ADS and muzzle positions in live Godot test
 - [ ] Replace remaining temporary procedural firearm viewmodels with production assets where matching models exist
+- [x] Connect DavidFalke's approved M1911A1 to the existing M1911 identity and preserve the approved former Makarov presentation under standalone `makarov.tres`
+- [x] Promote Diamo MP7 and UMP as the two core production SMGs; retain Suomi KP-31 and M3 Grease Gun as classic-themed reserve/map-specific weapons
+- [x] Preserve the approved existing AK-47 and CC0 Pump Shotgun production direction
+- [x] Promote the Diamo HK416 under truthful `hk416` identity, migrate the standard M4A1 role and save mapping, and retain the old M4A1 resource for compatibility
+- [x] Promote Diamo M16, Benelli M4, AA-12, RPD, CheyTac M200, and RPG-7 under truthful new weapon identities while preserving their legacy predecessors
+- [x] Migrate Mystery Box pools/cycles, Town MP7 and HK416 assignments, legacy save IDs, and comprehensive production-roster tests
+- [ ] Preserve Diamo Kriss Vector and CZ Scorpion EVO 3 as preferred modern reserve candidates, but do not include them in immediate production-preparation batches without explicit authorization
+- [ ] Preserve Luger and Galil resources for compatibility/developer access without prioritizing production work or future placement
+- [ ] Keep KSG, XM250, MG42, and other specifically justified weapons deferred until a later map or role explicitly requires them
 - [ ] Inspect animation framework
 - [x] Base weapon behavior profiles for semi/auto/shotgun wall guns
 - [x] Burst-fire framework
 - [x] Piercing hitscan framework
 - [x] Reusable projectile framework
 - [x] Flare Gun projectile/splash prototype
-- [x] War Machine projectile/splash prototype
+- [x] War Machine projectile/splash prototype (retained only for compatibility pending retirement)
 - [x] Ray Gun projectile/splash prototype
 - [x] Ray Gun Mark II burst/projectile prototype
 - [x] Thundergun cone-blast prototype
 - [x] Wunderwaffe chain-lightning prototype
-- [x] Add AN-94, Grease Gun, Luger, RPK, HAMR, M1216 and sniper box resources
+- [x] Add M4A1, Grease Gun, Luger, RPK, HAMR, M1216 and sniper box resources
 - [x] Validate expanded box weapons in live Godot test
 - [x] Frag grenade throw/fuse/bounce/splash prototype
 - [x] Claymore placement/arming/directional blast prototype

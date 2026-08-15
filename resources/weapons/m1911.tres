@@ -1,11 +1,13 @@
-[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+[ext_resource type="Resource" path="res://resources/weapons/viewmodels/candidates/m1911_production_candidate_viewmodel.tres" id="2_viewmodel"]
 
 [resource]
 script = ExtResource("1_weapon")
 id = &"m1911"
 display_name = "M1911"
+roster_note = "Authentic DavidFalke M1911A1 production presentation. The m1911 save identity remains stable; the former Makarov presentation is preserved separately as makarov."
 weapon_class = &"pistol"
 fire_mode = &"semi"
 damage = 74.0
@@ -25,3 +27,4 @@ ads_fov = 58.0
 shell_reload = false
 wall_cost = 0
 ammo_cost = 250
+viewmodel_profile = ExtResource("2_viewmodel")

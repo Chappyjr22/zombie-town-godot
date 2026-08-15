@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="WeaponViewmodelProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_viewmodel_profile.gd" id="1_profile"]
+[ext_resource type="PackedScene" path="res://assets/weapons/runtime/sniper.glb" id="2_model"]
+
+[resource]
+script = ExtResource("1_profile")
+model_scene = ExtResource("2_model")
+target_length = 1.14
+model_back_z = 0.32
+use_profile_hands = true
+use_advanced_motion = true
+hip_position = Vector3(0.15999994, -0.12999994, -0.29000017)
+hip_rotation_degrees = Vector3(-13, -5, -4)
+hip_viewmodel_fov = 62.0
+ads_position = Vector3(0.006, -0.060000006, -0.18000038)
+ads_rotation_degrees = Vector3(-6, 0, 0)
+ads_viewmodel_fov = 48.0
+sight_center = Vector3(-0.007, 0.063, -0.27)
+sprint_position = Vector3(0.020000003, -0.38000005, -0.66)
+sprint_rotation_degrees = Vector3(-30, 47, -2)
+right_hand_position = Vector3(0.08, -0.115, -0.15)
+right_hand_scale = Vector3(0.84, 0.84, 0.84)
+left_hand_position = Vector3(0, -0.055, -0.52)
+left_hand_scale = Vector3(0.88, 0.88, 0.88)

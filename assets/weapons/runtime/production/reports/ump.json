@@ -1,0 +1,104 @@
+{
+  "asset_id": "ump",
+  "production_candidate": true,
+  "developer_only_until_approved": true,
+  "input_evaluation_derivative": "C:\\Users\\JacobChapman\\Desktop\\zombie-town-godot\\assets\\weapons\\evaluation\\diamo_smg\\runtime\\diamo_ump.glb",
+  "input_sha256": "5BD28B67F92E80E7EE1AA7E548C3A0A555DA2CBEB815EEFE91775B0CD507935B",
+  "source_archive_sha256": "B03AA1700D2E53D212C3FC2185AFD3A1C4CFA20285ECB91E9DD366B3EA9FB33C",
+  "source_was_modified": false,
+  "blender_version": "5.2.0 LTS",
+  "output": "ump.glb",
+  "output_bytes": 13089868,
+  "output_sha256": "0F41E10CBE4230054D6A4059269AD3FC43B50B3C400774F4D0F640FD74DEFC2B",
+  "mesh_object_count": 4,
+  "triangle_count": 6213,
+  "bounds_meters": {
+    "minimum": [
+      -0.033654436469078064,
+      -0.160824254155159,
+      -0.3475000560283661
+    ],
+    "maximum": [
+      0.033654436469078064,
+      0.16082429885864258,
+      0.3475000858306885
+    ],
+    "size": [
+      0.06730887293815613,
+      0.3216485381126404,
+      0.695000171661377
+    ]
+  },
+  "texture_optimization": {
+    "maximum_runtime_dimension": 2048,
+    "images": [
+      {
+        "name": "HK - UMP_HK - UM_BaseColor",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "HK - UMP_HK - UM_Normal",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Metallic-Roughness",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      }
+    ]
+  },
+  "normalization": {
+    "source_long_axis": "Z",
+    "target_length_meters": 0.695,
+    "uniform_scale": 1.2869494817673517,
+    "centered_origin": true,
+    "canonical_roll_degrees": 180.0,
+    "canonical_yaw_degrees": 180.0
+  },
+  "mechanism": {
+    "semantic_components": [
+      "Base",
+      "Bolt",
+      "Magazine",
+      "Trigger"
+    ],
+    "excluded_modular_source_components": [
+      "HK - UMP - Grip",
+      "HK - UMP - Scope",
+      "HK - UMP - Silencer"
+    ],
+    "exclusion_reason": "Authored UMP optic, suppressor, and grip remain modular in the private source/evaluation derivative and are not merged into the production base weapon."
+  },
+  "sockets": [
+    "Socket_Optic",
+    "Socket_Muzzle",
+    "Socket_Underbarrel",
+    "Socket_Side",
+    "Socket_Stock",
+    "Socket_Bayonet",
+    "Socket_Magazine",
+    "Socket_PrimaryGrip",
+    "Socket_SupportGrip"
+  ],
+  "axis_convention": "Godot viewmodel: -Z muzzle, +Y up, +X across"
+}

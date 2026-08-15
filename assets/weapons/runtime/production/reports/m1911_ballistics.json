@@ -1,0 +1,24 @@
+{
+  "source_archive_sha256": "B82936A09E20469B59C79BB195AD80B387310DCD692177BF81DD50AEC8A64D26",
+  "source_was_modified": false,
+  "blender_version": "5.2.0 LTS",
+  "texture_size": 1024,
+  "components": [
+    {
+      "name": "Cartridge",
+      "triangles": 760,
+      "target_length_meters": 0.032,
+      "output": "m1911_cartridge.glb",
+      "bytes": 2426280,
+      "sha256": "EC53EC7A863B980AD9545C744C8CEEFCFD53C4737932558CC3E90AE35971EDBC"
+    },
+    {
+      "name": "Casing",
+      "triangles": 600,
+      "target_length_meters": 0.023,
+      "output": "m1911_casing.glb",
+      "bytes": 2423488,
+      "sha256": "A587880C4A15968E9B4DEBE2F8DCE4C323DE608CE29CF5B3846E4BD1FA5F6055"
+    }
+  ]
+}

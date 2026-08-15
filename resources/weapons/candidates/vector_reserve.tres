@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"dev_vector"
+display_name = "Kriss Vector (Reserve Placeholder)"
+standard_gameplay_enabled = false
+roster_note = "Developer-only reserve identity. The approved production batches did not prepare a Vector model/config, so this deliberately uses procedural fallback until source material is restored and separately authorized."
+weapon_class = &"smg"
+fire_mode = &"auto"
+damage = 34.0
+magazine_size = 30
+reserve_ammo = 270
+reload_time = 2.1
+fire_interval = 0.055
+range = 95.0
+spread = 0.035
+ads_spread = 0.005
+recoil_pitch = 0.8
+recoil_yaw = 0.3
+ammo_cost = 650

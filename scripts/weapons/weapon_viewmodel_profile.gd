@@ -9,6 +9,9 @@ extends Resource
 @export var model_offset := Vector3.ZERO
 @export var target_length := 0.8
 @export var model_back_z := 0.24
+@export var use_profile_hands := false
+@export var use_advanced_motion := false
+@export var attachment_layout: WeaponAttachmentLayout
 
 ## Each presentation state is independently authored in screen space. ADS is
 ## intentionally not derived from the hip transform.
@@ -133,6 +136,124 @@ func recoil_rotation_limit_radians() -> Vector3:
 
 func look_lag_limit_radians() -> Vector3:
 	return _radians(look_lag_limit_degrees)
+
+
+func state_position(state: StringName) -> Vector3:
+	match state:
+		&"ads":
+			return resolved_ads_position()
+		&"sprint":
+			return sprint_position
+		_:
+			return hip_position
+
+
+func state_rotation_degrees(state: StringName) -> Vector3:
+	match state:
+		&"ads":
+			return ads_rotation_degrees
+		&"sprint":
+			return sprint_rotation_degrees
+		_:
+			return hip_rotation_degrees
+
+
+func state_rotation_radians(state: StringName) -> Vector3:
+	return _radians(state_rotation_degrees(state))
+
+
+func state_viewmodel_fov(state: StringName) -> float:
+	match state:
+		&"ads":
+			return ads_viewmodel_fov
+		&"sprint":
+			return sprint_viewmodel_fov
+		_:
+			return hip_viewmodel_fov
+
+
+func set_state_position(state: StringName, value: Vector3) -> void:
+	match state:
+		&"ads":
+			_prepare_manual_ads_transform()
+			ads_position = value
+		&"sprint":
+			sprint_position = value
+		_:
+			hip_position = value
+
+
+func set_state_rotation_degrees(state: StringName, value: Vector3) -> void:
+	match state:
+		&"ads":
+			_prepare_manual_ads_transform()
+			ads_rotation_degrees = value
+		&"sprint":
+			sprint_rotation_degrees = value
+		_:
+			hip_rotation_degrees = value
+
+
+func set_state_viewmodel_fov(state: StringName, value: float) -> void:
+	var clamped_value := clampf(value, 15.0, 120.0)
+	match state:
+		&"ads":
+			ads_viewmodel_fov = clamped_value
+		&"sprint":
+			sprint_viewmodel_fov = clamped_value
+		_:
+			hip_viewmodel_fov = clamped_value
+
+
+func copy_state_from(source: WeaponViewmodelProfile, state: StringName) -> void:
+	if source == null:
+		return
+	match state:
+		&"ads":
+			ads_position = source.ads_position
+			ads_rotation_degrees = source.ads_rotation_degrees
+			ads_viewmodel_fov = source.ads_viewmodel_fov
+			align_ads_to_sight = source.align_ads_to_sight
+			sight_center = source.sight_center
+		&"sprint":
+			sprint_position = source.sprint_position
+			sprint_rotation_degrees = source.sprint_rotation_degrees
+			sprint_viewmodel_fov = source.sprint_viewmodel_fov
+		_:
+			hip_position = source.hip_position
+			hip_rotation_degrees = source.hip_rotation_degrees
+			hip_viewmodel_fov = source.hip_viewmodel_fov
+
+
+func reusable_configuration_text() -> String:
+	return "\n".join([
+		"hip_position = %s" % _vector3_text(hip_position),
+		"hip_rotation_degrees = %s" % _vector3_text(hip_rotation_degrees),
+		"hip_viewmodel_fov = %.3f" % hip_viewmodel_fov,
+		"ads_position = %s" % _vector3_text(ads_position),
+		"ads_rotation_degrees = %s" % _vector3_text(ads_rotation_degrees),
+		"ads_viewmodel_fov = %.3f" % ads_viewmodel_fov,
+		"align_ads_to_sight = %s" % str(align_ads_to_sight).to_lower(),
+		"sight_center = %s" % _vector3_text(sight_center),
+		"sprint_position = %s" % _vector3_text(sprint_position),
+		"sprint_rotation_degrees = %s" % _vector3_text(sprint_rotation_degrees),
+		"sprint_viewmodel_fov = %.3f" % sprint_viewmodel_fov,
+		"model_rotation_degrees = %s" % _vector3_text(model_rotation_degrees),
+		"model_offset = %s" % _vector3_text(model_offset),
+		"target_length = %.4f" % target_length,
+		"model_back_z = %.4f" % model_back_z
+	])
+
+
+func _prepare_manual_ads_transform() -> void:
+	if not align_ads_to_sight:
+		return
+	ads_position = resolved_ads_position()
+	align_ads_to_sight = false
+
+
+func _vector3_text(value: Vector3) -> String:
+	return "Vector3(%.6f, %.6f, %.6f)" % [value.x, value.y, value.z]
 
 
 func _radians(value: Vector3) -> Vector3:

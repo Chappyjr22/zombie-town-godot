@@ -333,14 +333,13 @@ func _build_gameplay_markers() -> void:
 	for i in box_spots.size():
 		_add_marker("MysteryBox%02d" % i, box_spots[i], &"mystery_box_spot")
 
-	_add_buy_marker("M14", Vector3(13.7, 2.3, -12.5), &"wall_buy", "m14", -PI * 0.5)
-	_add_buy_marker("Olympia", Vector3(-26.0, 2.2, -6.2), &"wall_buy", "olympia", PI)
-	_add_buy_marker("MP5", Vector3(-16.7, 2.2, 10.5), &"wall_buy", "mp5", PI * 0.5)
+	_add_inactive_buy_marker("M14", Vector3(13.7, 2.3, -12.5), "m14", -PI * 0.5)
+	_add_inactive_buy_marker("Olympia", Vector3(-26.0, 2.2, -6.2), "olympia", PI)
+	_add_buy_marker("MP7", Vector3(-16.7, 2.2, 10.5), &"wall_buy", "mp7", PI * 0.5)
 	_add_buy_marker("AK74U", Vector3(5.5, 2.4, 19.7), &"wall_buy", "ak74u", PI)
-	_add_buy_marker("Galil", Vector3(16.7, 2.2, 10.5), &"wall_buy", "galil", -PI * 0.5)
 	_add_buy_marker("Remington870", Vector3(-13.7, 2.2, -19.5), &"wall_buy", "rem870", PI * 0.5)
 	_add_buy_marker("M1911Ammo", Vector3(-20.0, 2.2, 20.3), &"ammo_buy", "m1911", 0.0)
-	_add_buy_marker("M4A1Ammo", Vector3(30.7, 2.2, -9.0), &"ammo_buy", "m4a1", -PI * 0.5)
+	_add_buy_marker("HK416Ammo", Vector3(30.7, 2.2, -9.0), &"ammo_buy", "hk416", -PI * 0.5)
 
 	_add_buy_marker("Juggernog", Vector3(-28.6, 0.05, -9.0), &"perk_spot", "jugg", -PI * 0.5)
 	_add_buy_marker("SpeedCola", Vector3(18.0, 0.05, -20.8), &"perk_spot", "speed", PI)
@@ -354,6 +353,14 @@ func _build_gameplay_markers() -> void:
 
 func _add_buy_marker(node_name: String, position: Vector3, group_name: StringName, item_id: String, yaw: float) -> void:
 	_add_marker(node_name, position, group_name, {"item_id": item_id, "yaw": yaw})
+
+func _add_inactive_buy_marker(node_name: String, position: Vector3, former_item_id: String, yaw: float) -> void:
+	_add_marker(
+		node_name,
+		position,
+		&"inactive_wall_buy",
+		{"former_item_id": former_item_id, "yaw": yaw, "inactive": true}
+	)
 
 func _add_marker(node_name: String, position: Vector3, group_name: StringName, metadata: Dictionary = {}) -> Marker3D:
 	var marker := Marker3D.new()

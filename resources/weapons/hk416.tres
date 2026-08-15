@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+[ext_resource type="Resource" path="res://resources/weapons/viewmodels/candidates/hk416_production_candidate_viewmodel.tres" id="2_viewmodel"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"hk416"
+display_name = "HK416"
+roster_note = "Core production HK416. Correctly identified replacement for the former standard M4A1 gameplay role."
+weapon_class = &"rifle"
+fire_mode = &"auto"
+damage = 48.0
+headshot_multiplier = 3.0
+magazine_size = 30
+reserve_ammo = 270
+reload_time = 2.1
+fire_interval = 0.078947
+range = 130.0
+spread = 0.03
+ads_spread = 0.0035
+recoil_pitch = 0.92
+recoil_yaw = 0.42
+ammo_cost = 400
+viewmodel_profile = ExtResource("2_viewmodel")

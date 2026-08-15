@@ -46,10 +46,6 @@ func _try_build_production_asset(data: WeaponData) -> bool:
 		packed_scene = loaded_resource as PackedScene
 		asset_label = asset_path
 	var instance_node: Node = packed_scene.instantiate()
-	if not instance_node is Node3D:
-		instance_node.queue_free()
-		push_warning("Production weapon asset root is not Node3D: %s" % asset_label)
-		return false
 
 	current_weapon_id = data.id
 	_clear_children(model_root)
@@ -58,10 +54,20 @@ func _try_build_production_asset(data: WeaponData) -> bool:
 
 	var anchor := Node3D.new()
 	anchor.name = "ProductionAssetAnchor"
+	anchor.set_meta(&"production_weapon_asset", true)
 	model_root.add_child(anchor)
-	var asset_root: Node3D = instance_node as Node3D
-	asset_root.name = "ImportedWeapon"
-	anchor.add_child(asset_root)
+	var asset_root: Node3D
+	if instance_node is Node3D:
+		# Preserve the proven AK/Makarov path exactly. Some multi-root GLBs import
+		# with a generic Node root and need a transformable wrapper instead.
+		asset_root = instance_node as Node3D
+		asset_root.name = "ImportedWeapon"
+		anchor.add_child(asset_root)
+	else:
+		asset_root = Node3D.new()
+		asset_root.name = "ImportedWeapon"
+		anchor.add_child(asset_root)
+		asset_root.add_child(instance_node)
 	asset_root.rotation = (
 		active_profile.model_rotation_radians()
 		if active_profile != null
@@ -82,7 +88,7 @@ func _remove_known_loose_components(asset_root: Node3D, weapon_id: StringName) -
 		loose_magazine.free()
 
 func _build_arms(weapon_class: StringName) -> void:
-	if active_profile != null:
+	if active_profile != null and active_profile.use_profile_hands:
 		_build_profile_hands(active_profile)
 		return
 	super._build_arms(weapon_class)

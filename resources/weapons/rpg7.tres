@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+[ext_resource type="Resource" path="res://resources/weapons/viewmodels/candidates/rpg7_production_candidate_viewmodel.tres" id="2_viewmodel"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"rpg7"
+display_name = "RPG-7"
+roster_note = "Core production Box launcher with its own identity and presentation; it does not inherit War Machine identity."
+weapon_class = &"launcher"
+fire_mode = &"semi"
+damage = 0.0
+magazine_size = 1
+reserve_ammo = 8
+reload_time = 3.2
+fire_interval = 1.1
+range = 90.0
+spread = 0.015
+ads_spread = 0.005
+recoil_pitch = 3.0
+recoil_yaw = 0.32
+projectile_type = &"rocket"
+projectile_speed = 38.0
+projectile_gravity = 0.0
+splash_damage = 650.0
+splash_radius = 6.0
+self_damage = true
+ammo_cost = 1200
+viewmodel_profile = ExtResource("2_viewmodel")

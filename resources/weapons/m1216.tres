@@ -6,6 +6,8 @@
 script = ExtResource("1_weapon")
 id = &"m1216"
 display_name = "M1216"
+standard_gameplay_enabled = false
+roster_note = "Legacy M1216 preserved for compatibility and developer access after its standard automatic-shotgun role migrated to AA-12."
 weapon_class = &"shotgun"
 fire_mode = &"burst"
 damage = 26.0

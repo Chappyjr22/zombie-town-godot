@@ -1,0 +1,232 @@
+{
+  "asset_id": "cheytac_m200",
+  "production_candidate": true,
+  "developer_only_until_approved": true,
+  "input_evaluation_derivative": "C:\\Users\\JacobChapman\\Desktop\\zombie-town-godot\\assets\\weapons\\evaluation\\diamo_launcher_sniper\\runtime\\diamo_cheytac_m200.glb",
+  "input_sha256": "1F4688B5717CEAF10DD4F2F4A9CB2AB801629F6375048B65D9CC0F0F3B09B7A2",
+  "source_archive_sha256": "C81BB8A85835BB6E648A0A8C5517C3048189503709A5701296A750796A20BA74",
+  "source_was_modified": false,
+  "blender_version": "5.2.0 LTS",
+  "output": "cheytac_m200.glb",
+  "output_bytes": 24908340,
+  "output_sha256": "C7C80230F454B67B99F6A629B81A87178F260F445BCA7B5D91CAC7734538BE71",
+  "mesh_object_count": 6,
+  "triangle_count": 43413,
+  "bounds_meters": {
+    "minimum": [
+      -0.18898440897464752,
+      -0.16077940165996552,
+      -0.699999988079071
+    ],
+    "maximum": [
+      0.18898440897464752,
+      0.16077938675880432,
+      0.699999988079071
+    ],
+    "size": [
+      0.37796881794929504,
+      0.32155877351760864,
+      1.399999976158142
+    ]
+  },
+  "texture_optimization": {
+    "maximum_runtime_dimension": 2048,
+    "images": [
+      {
+        "name": "CHEYTAC-CHEYTAC",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "CHEYTAC-CHEYTAC.001",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "CHEYTAC.M200_M200 - Base Body 2_BaseColor",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "CHEYTAC.M200_M200 - Base Body 2_Normal",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "CHEYTAC.M200_M200 - Base Body_BaseColor",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "CHEYTAC.M200_M200 - Base Body_Normal",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      }
+    ]
+  },
+  "normalization": {
+    "source_long_axis": "Z",
+    "long_axis_rotation_degrees": 0.0,
+    "target_length_meters": 1.4,
+    "uniform_scale": 0.15812278482307934,
+    "centered_origin": true,
+    "canonical_roll_degrees": 0.0,
+    "canonical_yaw_degrees": 180.0
+  },
+  "topology_cleanup": {
+    "zero_area_faces_removed": 5,
+    "objects": [
+      {
+        "object": "M200 - Base Body",
+        "zero_area_faces_removed": 5
+      },
+      {
+        "object": "M200 - Bipod",
+        "zero_area_faces_removed": 0
+      },
+      {
+        "object": "M200 - BoltHandle",
+        "zero_area_faces_removed": 0
+      },
+      {
+        "object": "M200 - Magazine",
+        "zero_area_faces_removed": 0
+      },
+      {
+        "object": "M200 - Scope",
+        "zero_area_faces_removed": 0
+      },
+      {
+        "object": "M200 - Trigger",
+        "zero_area_faces_removed": 0
+      }
+    ]
+  },
+  "orientation_validation": {
+    "canonical_forward_axis": "-Z",
+    "canonical_up_axis": "+Y",
+    "source_evaluation_orientation_preserved": false,
+    "asset_yaw_correction_degrees": 180.0
+  },
+  "mechanism": {
+    "source_to_production_names": {
+      "M200 - Base Body": "ReceiverBody",
+      "M200 - Bipod": "BipodBody",
+      "M200 - BoltHandle": "BoltHandleBody",
+      "M200 - Magazine": "MagazineBody",
+      "M200 - Scope": "ScopeBody",
+      "M200 - Trigger": "Trigger"
+    },
+    "semantic_components": [
+      "ReceiverBody",
+      "BipodBody",
+      "BoltHandleBody",
+      "MagazineBody",
+      "ScopeBody",
+      "Trigger"
+    ],
+    "hierarchy": [
+      "Bipod",
+      "BipodPivot",
+      "BoltAction",
+      "BoltPivot",
+      "Magazine",
+      "MagazinePivot",
+      "Marker_BoltLocked",
+      "Marker_BoltRearward",
+      "Marker_BoltUnlocked",
+      "Marker_MagazineRemoved",
+      "Marker_MagazineSeated",
+      "Receiver",
+      "Scope"
+    ],
+    "markers": [
+      "Marker_BoltLocked",
+      "Marker_BoltUnlocked",
+      "Marker_BoltRearward",
+      "Marker_MagazineSeated",
+      "Marker_MagazineRemoved"
+    ],
+    "pivots": [
+      {
+        "component": "Trigger",
+        "pivot": "TriggerPivot",
+        "axis": "local X"
+      },
+      {
+        "component": "BoltAction",
+        "pivot": "BoltPivot",
+        "translation_axis": "local +Z",
+        "rotation_axis": "local Z"
+      },
+      {
+        "component": "Magazine",
+        "pivot": "MagazinePivot",
+        "axis": "local -Y"
+      },
+      {
+        "component": "Bipod",
+        "pivot": "BipodPivot",
+        "axis": "local X"
+      }
+    ],
+    "origin_corrections": {},
+    "separate_animation_ready": [
+      "trigger",
+      "bolt_handle_action",
+      "magazine",
+      "scope",
+      "bipod"
+    ],
+    "embedded_components_requiring_future_mesh_separation": [],
+    "notes": []
+  },
+  "sockets": [
+    "Socket_Optic",
+    "Socket_Muzzle",
+    "Socket_Underbarrel",
+    "Socket_Side",
+    "Socket_Stock",
+    "Socket_Bayonet",
+    "Socket_Magazine",
+    "Socket_PrimaryGrip",
+    "Socket_SupportGrip"
+  ],
+  "axis_convention": "Godot viewmodel: -Z muzzle, +Y up, +X across"
+}

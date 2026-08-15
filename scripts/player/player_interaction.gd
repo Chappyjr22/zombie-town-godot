@@ -26,6 +26,9 @@ func _physics_process(_delta: float) -> void:
 	if player == null or not player.alive or camera == null:
 		_set_current(null)
 		return
+	if player.is_gameplay_input_blocked():
+		_set_current(null)
+		return
 	_scan_interactable()
 	if Input.is_action_just_pressed(&"interact") and current_interactable != null:
 		_activate(current_interactable)

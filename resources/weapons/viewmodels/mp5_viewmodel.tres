@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="WeaponViewmodelProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_viewmodel_profile.gd" id="1_profile"]
+[ext_resource type="PackedScene" path="res://assets/weapons/runtime/suomi_kp.glb" id="2_model"]
+
+[resource]
+script = ExtResource("1_profile")
+model_scene = ExtResource("2_model")
+target_length = 0.9
+model_back_z = 0.28
+use_profile_hands = true
+use_advanced_motion = true
+hip_position = Vector3(0.18999998, -0.20999998, -0.30000004)
+hip_rotation_degrees = Vector3(-1, -4, -4)
+hip_viewmodel_fov = 65.0
+ads_position = Vector3(-2.803281e-10, -0.10300003, -0.060000304)
+ads_rotation_degrees = Vector3(-0.4999999, 0, 0)
+ads_viewmodel_fov = 58.0
+sight_center = Vector3(0.004, 0.098, -0.36)
+sprint_position = Vector3(0.049999997, -0.39000002, -0.59000003)
+sprint_rotation_degrees = Vector3(-13, 50, -3)
+sprint_viewmodel_fov = 67.0
+right_hand_position = Vector3(0.075, -0.11, -0.15)
+right_hand_scale = Vector3(0.84, 0.84, 0.84)
+left_hand_position = Vector3(0.01, -0.03, -0.48)
+left_hand_scale = Vector3(0.86, 0.86, 0.86)

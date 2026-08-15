@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+[ext_resource type="Resource" path="res://resources/weapons/viewmodels/candidates/rpd_production_candidate_viewmodel.tres" id="2_viewmodel"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"rpd"
+display_name = "RPD"
+roster_note = "Core production LMG. Correctly identified replacement for the former standard RPK gameplay role."
+weapon_class = &"lmg"
+fire_mode = &"auto"
+damage = 72.0
+headshot_multiplier = 3.0
+magazine_size = 100
+reserve_ammo = 400
+reload_time = 4.2
+fire_interval = 0.09375
+range = 150.0
+spread = 0.036
+ads_spread = 0.005
+recoil_pitch = 1.0
+recoil_yaw = 0.26
+ammo_cost = 900
+viewmodel_profile = ExtResource("2_viewmodel")

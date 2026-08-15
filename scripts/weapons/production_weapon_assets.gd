@@ -9,6 +9,12 @@ const ASSET_ROOT := "res://assets/weapons/runtime"
 
 const CONFIG := {
 	&"m1911": {
+		"path": ASSET_ROOT + "/production/m1911.glb",
+		"target_length": 0.50,
+		"back_z": 0.20,
+		"rotation_degrees": Vector3.ZERO
+	},
+	&"makarov": {
 		"path": ASSET_ROOT + "/makarov.glb",
 		"target_length": 0.50,
 		"back_z": 0.20,
@@ -17,6 +23,24 @@ const CONFIG := {
 	&"ak74u": {
 		"path": ASSET_ROOT + "/ak47.glb",
 		"target_length": 0.98,
+		"back_z": 0.28,
+		"rotation_degrees": Vector3.ZERO
+	},
+	&"m4a1": {
+		"path": ASSET_ROOT + "/m4a1.glb",
+		"target_length": 1.00,
+		"back_z": 0.28,
+		"rotation_degrees": Vector3.ZERO
+	},
+	&"mp7": {
+		"path": ASSET_ROOT + "/production/diamo/mp7.glb",
+		"target_length": 0.70,
+		"back_z": 0.25,
+		"rotation_degrees": Vector3.ZERO
+	},
+	&"ump": {
+		"path": ASSET_ROOT + "/production/diamo/ump.glb",
+		"target_length": 0.82,
 		"back_z": 0.28,
 		"rotation_degrees": Vector3.ZERO
 	},
@@ -44,7 +68,7 @@ const CONFIG := {
 		"back_z": 0.20,
 		"rotation_degrees": Vector3.ZERO
 	},
-	&"olympia": {
+	&"rem870": {
 		"path": ASSET_ROOT + "/shotgun.glb",
 		"target_length": 1.06,
 		"back_z": 0.31,
@@ -55,11 +79,53 @@ const CONFIG := {
 		"target_length": 1.14,
 		"back_z": 0.32,
 		"rotation_degrees": Vector3.ZERO
+	},
+	&"hk416": {
+		"path": ASSET_ROOT + "/production/diamo/hk416.glb",
+		"target_length": 0.86,
+		"back_z": 0.27,
+		"rotation_degrees": Vector3.ZERO
+	},
+	&"m16": {
+		"path": ASSET_ROOT + "/production/diamo/m16.glb",
+		"target_length": 1.00,
+		"back_z": 0.28,
+		"rotation_degrees": Vector3.ZERO
+	},
+	&"rpd": {
+		"path": ASSET_ROOT + "/production/diamo/rpd.glb",
+		"target_length": 1.04,
+		"back_z": 0.30,
+		"rotation_degrees": Vector3.ZERO
+	},
+	&"benelli_m4": {
+		"path": ASSET_ROOT + "/production/diamo/benelli_m4.glb",
+		"target_length": 1.01,
+		"back_z": 0.30,
+		"rotation_degrees": Vector3.ZERO
+	},
+	&"aa12": {
+		"path": ASSET_ROOT + "/production/diamo/aa12.glb",
+		"target_length": 0.98,
+		"back_z": 0.29,
+		"rotation_degrees": Vector3.ZERO
+	},
+	&"m200": {
+		"path": ASSET_ROOT + "/production/diamo/cheytac_m200.glb",
+		"target_length": 1.20,
+		"back_z": 0.34,
+		"rotation_degrees": Vector3.ZERO
+	},
+	&"rpg7": {
+		"path": ASSET_ROOT + "/production/diamo/rpg7.glb",
+		"target_length": 1.00,
+		"back_z": 0.30,
+		"rotation_degrees": Vector3.ZERO
 	}
 }
 
 static func supports(weapon_id: StringName) -> bool:
-	return PRODUCTION_ASSETS_ENABLED and (weapon_id == &"m1911" or weapon_id == &"ak74u") and CONFIG.has(weapon_id)
+	return PRODUCTION_ASSETS_ENABLED and CONFIG.has(weapon_id)
 
 static func asset_path(weapon_id: StringName) -> String:
 	var config_variant: Variant = CONFIG.get(weapon_id, {})

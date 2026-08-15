@@ -1,0 +1,172 @@
+{
+  "asset_id": "aa12",
+  "production_candidate": true,
+  "developer_only_until_approved": true,
+  "input_evaluation_derivative": "C:\\Users\\JacobChapman\\Desktop\\zombie-town-godot\\assets\\weapons\\evaluation\\diamo_shotguns\\runtime\\diamo_aa12.glb",
+  "input_sha256": "C84D42C956333FF09D87E8B2632F48AD70301417539A0251DAD992490889456D",
+  "source_archive_sha256": "CDC7881DEF8276562421697262D017299B0E382011755DAEC0921F8C7AD0B197",
+  "source_was_modified": false,
+  "blender_version": "5.2.0 LTS",
+  "output": "aa12.glb",
+  "output_bytes": 12615992,
+  "output_sha256": "BFFF63884E7798B9046A2303E4DAC7942441E790CD7B2F663AD924E3A5EB0C4C",
+  "mesh_object_count": 4,
+  "triangle_count": 12968,
+  "bounds_meters": {
+    "minimum": [
+      -0.039103008806705475,
+      -0.15266874432563782,
+      -0.49000000953674316
+    ],
+    "maximum": [
+      0.039103008806705475,
+      0.1526687890291214,
+      0.4899999797344208
+    ],
+    "size": [
+      0.07820601761341095,
+      0.3053375482559204,
+      0.9800000190734863
+    ]
+  },
+  "texture_optimization": {
+    "maximum_runtime_dimension": 2048,
+    "images": [
+      {
+        "name": "AA-AA",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "AA.12_AA-12_Material_BaseColor",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "AA.12_AA-12_Material_Normal",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      }
+    ]
+  },
+  "normalization": {
+    "source_long_axis": "Z",
+    "long_axis_rotation_degrees": 0.0,
+    "target_length_meters": 0.98,
+    "uniform_scale": 0.3600811300316988,
+    "centered_origin": true,
+    "canonical_roll_degrees": 0.0,
+    "canonical_yaw_degrees": 0.0
+  },
+  "topology_cleanup": {
+    "zero_area_faces_removed": 0,
+    "objects": [
+      {
+        "object": "AA.12 - Base",
+        "zero_area_faces_removed": 0
+      },
+      {
+        "object": "AA.12 - Bolt",
+        "zero_area_faces_removed": 0
+      },
+      {
+        "object": "AA.12 - Mag",
+        "zero_area_faces_removed": 0
+      },
+      {
+        "object": "AA.12 - Trigger",
+        "zero_area_faces_removed": 0
+      }
+    ]
+  },
+  "orientation_validation": {
+    "canonical_forward_axis": "-Z",
+    "canonical_up_axis": "+Y",
+    "source_evaluation_orientation_preserved": true
+  },
+  "mechanism": {
+    "source_to_production_names": {
+      "AA.12 - Base": "ReceiverBody",
+      "AA.12 - Bolt": "BoltBody",
+      "AA.12 - Mag": "SideShellCarrier",
+      "AA.12 - Trigger": "Trigger"
+    },
+    "semantic_components": [
+      "ReceiverBody",
+      "BoltBody",
+      "SideShellCarrier",
+      "Trigger"
+    ],
+    "hierarchy": [
+      "BoltAction",
+      "BoltPivot",
+      "MagazinePreparation",
+      "Marker_BoltForward",
+      "Marker_BoltRearward",
+      "Marker_MagazineRemoved",
+      "Marker_MagazineSeated",
+      "Receiver"
+    ],
+    "markers": [
+      "Marker_BoltForward",
+      "Marker_BoltRearward",
+      "Marker_MagazineSeated",
+      "Marker_MagazineRemoved"
+    ],
+    "pivots": [
+      {
+        "component": "Trigger",
+        "pivot": "TriggerPivot",
+        "axis": "local X"
+      },
+      {
+        "component": "BoltAction",
+        "pivot": "BoltPivot",
+        "axis": "local +Z"
+      }
+    ],
+    "origin_corrections": {},
+    "separate_animation_ready": [
+      "trigger",
+      "bolt_and_charging_handle",
+      "side_shell_carrier"
+    ],
+    "embedded_components_requiring_future_mesh_separation": [
+      "actual_box_magazine",
+      "charging_action_details"
+    ],
+    "notes": [
+      "The source-named Mag object is a side shell carrier. The actual box magazine is embedded in the 253-island receiver and was not destructively auto-separated."
+    ]
+  },
+  "sockets": [
+    "Socket_Optic",
+    "Socket_Muzzle",
+    "Socket_Underbarrel",
+    "Socket_Side",
+    "Socket_Stock",
+    "Socket_Bayonet",
+    "Socket_Magazine",
+    "Socket_PrimaryGrip",
+    "Socket_SupportGrip"
+  ],
+  "axis_convention": "Godot viewmodel: -Z muzzle, +Y up, +X across"
+}

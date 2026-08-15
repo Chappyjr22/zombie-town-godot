@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"dev_cz_scorpion"
+display_name = "CZ Scorpion EVO 3 (Reserve Placeholder)"
+standard_gameplay_enabled = false
+roster_note = "Developer-only reserve identity. The approved production batches did not prepare a Scorpion model/config, so this deliberately uses procedural fallback until source material is restored and separately authorized."
+weapon_class = &"smg"
+fire_mode = &"auto"
+damage = 38.0
+magazine_size = 30
+reserve_ammo = 270
+reload_time = 2.15
+fire_interval = 0.065
+range = 100.0
+spread = 0.034
+ads_spread = 0.0045
+recoil_pitch = 0.9
+recoil_yaw = 0.32
+ammo_cost = 650

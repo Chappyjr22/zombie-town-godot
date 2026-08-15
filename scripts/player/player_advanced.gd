@@ -274,7 +274,7 @@ func _spawn_beam(from_position: Vector3, to_position: Vector3, color: Color) -> 
 	get_tree().current_scene.add_child(visual)
 	var tween := visual.create_tween()
 	tween.tween_interval(0.09)
-	tween.tween_property(visual, "modulate:a", 0.0, 0.10)
+	tween.tween_property(visual, "transparency", 1.0, 0.10)
 	tween.tween_callback(visual.queue_free)
 
 func _spawn_cone_flash(origin: Vector3, direction: Vector3) -> void:
@@ -291,11 +291,11 @@ func _spawn_cone_flash(origin: Vector3, direction: Vector3) -> void:
 	material.emission_energy_multiplier = 4.0
 	mesh.material = material
 	visual.mesh = mesh
-	visual.global_position = origin + direction * 1.2
 	get_tree().current_scene.add_child(visual)
+	visual.global_position = origin + direction * 1.2
 	var tween := visual.create_tween()
 	tween.tween_property(visual, "scale", Vector3(9.0, 5.0, 15.0), 0.18)
-	tween.parallel().tween_property(visual, "modulate:a", 0.0, 0.18)
+	tween.parallel().tween_property(visual, "transparency", 1.0, 0.18)
 	tween.tween_callback(visual.queue_free)
 
 func _update_weapon_visual() -> void:

@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="WeaponViewmodelProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_viewmodel_profile.gd" id="1_profile"]
+[ext_resource type="PackedScene" path="res://assets/weapons/runtime/makarov.glb" id="2_model"]
+
+[resource]
+script = ExtResource("1_profile")
+model_scene = ExtResource("2_model")
+target_length = 0.5
+model_back_z = 0.2
+hip_position = Vector3(0.275, -0.235, -0.3500002)
+hip_rotation_degrees = Vector3(0, -6, 0)
+ads_position = Vector3(-0.001, -0.12499999, -0.18000017)
+ads_rotation_degrees = Vector3(1, 0, 0)
+ads_viewmodel_fov = 75.0
+sprint_position = Vector3(0.285, -0.235, -0.39000016)
+sprint_rotation_degrees = Vector3(51, 0, 0)
+sprint_viewmodel_fov = 75.0
+hip_position_response = 15.0
+hip_rotation_response = 14.0
+ads_position_response = 15.0
+ads_rotation_response = 14.0
+sprint_position_response = 15.0
+sprint_rotation_response = 14.0
+fov_response = 14.0

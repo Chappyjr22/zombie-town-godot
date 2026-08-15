@@ -7,32 +7,29 @@ const RELOCATION_HIDDEN_TIME := 0.85
 const LOCATOR_BEAM_TIME := 10.0
 
 const GAMEPLAY_WEAPON_WEIGHTS := {
-	&"m14": 12.0,
-	&"olympia": 12.0,
-	&"mp5": 12.0,
+	&"mp7": 12.0,
 	&"ak74u": 12.0,
-	&"galil": 12.0,
 	&"rem870": 12.0,
-	&"an94": 7.0,
-	&"skorpion": 7.0,
-	&"luger": 8.0,
+	&"ump": 7.0,
+	&"hk416": 7.0,
+	&"m16": 7.0,
+	&"benelli_m4": 6.0,
+	&"aa12": 6.0,
+	&"rpd": 6.0,
+	&"m200": 5.0,
 	&"flaregun": 3.0,
-	&"rpk": 6.0,
-	&"hamr": 6.0,
-	&"m1216": 6.0,
-	&"dsr50": 5.0,
 	&"bknife": 5.0,
+	&"rpg7": 1.89,
 	&"raygun": 2.08,
 	&"raygun2": 2.08,
-	&"warmachine": 1.89,
 	&"thunder": 1.6793,
 	&"waffe": 1.6793
 }
 
 const GAMEPLAY_CYCLE_POOL: Array[StringName] = [
-	&"m14", &"olympia", &"mp5", &"ak74u", &"galil", &"rem870",
-	&"an94", &"skorpion", &"luger", &"flaregun", &"rpk", &"hamr",
-	&"m1216", &"dsr50", &"bknife", &"raygun", &"raygun2", &"warmachine", &"thunder", &"waffe"
+	&"mp7", &"ak74u", &"rem870", &"ump", &"hk416", &"m16",
+	&"benelli_m4", &"aa12", &"rpd", &"m200", &"flaregun", &"bknife",
+	&"rpg7", &"raygun", &"raygun2", &"thunder", &"waffe"
 ]
 
 var teddy_active := false
@@ -256,7 +253,7 @@ func _choose_result() -> StringName:
 	var pity_multiplier := minf(4.0, 1.0 + float(dry_streak) * 0.13)
 	for weapon_variant: Variant in GAMEPLAY_WEAPON_WEIGHTS.keys():
 		var weapon_id := StringName(str(weapon_variant))
-		if weapon_id in held_ids:
+		if weapon_id in held_ids or not ZombieTownWeaponCatalog.is_standard_gameplay_weapon(weapon_id):
 			continue
 		var weight_variant: Variant = GAMEPLAY_WEAPON_WEIGHTS.get(weapon_id, 0.0)
 		var weight := float(weight_variant)
@@ -267,7 +264,7 @@ func _choose_result() -> StringName:
 		total_weight += weight
 
 	if weighted_ids.is_empty() or total_weight <= 0.0:
-		return &"m14"
+		return &"ak74u"
 	var roll := randf() * total_weight
 	for index in weighted_ids.size():
 		roll -= weighted_values[index]

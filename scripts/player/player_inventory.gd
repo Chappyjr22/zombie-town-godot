@@ -219,6 +219,87 @@ func weapon_slot_summary() -> String:
 		parts.append("%s%d:%s" % [marker, index + 1, label])
 	return "   ".join(parts)
 
+## Stable, resource-path-independent inventory representation for future disk
+## saves and current migration tests. Runtime WeaponData objects are never
+## serialized directly: only their stable IDs and per-slot state are stored.
+func serialize_inventory_state() -> Dictionary:
+	_save_active_slot()
+	var serialized_slots: Array[Dictionary] = []
+	for slot: Dictionary in weapon_slots:
+		var weapon_variant: Variant = slot.get("weapon")
+		if not weapon_variant is WeaponData:
+			continue
+		var slot_weapon := weapon_variant as WeaponData
+		serialized_slots.append({
+			"weapon_id": String(slot_weapon.id),
+			"ammo": int(slot.get("ammo", slot_weapon.magazine_size)),
+			"reserve": int(slot.get("reserve", slot_weapon.reserve_ammo)),
+			"pack_level": int(slot.get("pack_level", 0)),
+		})
+	return {
+		"version": 1,
+		"weapon_slots": serialized_slots,
+		"active_weapon_slot": active_weapon_slot,
+		"max_weapon_slots": max_weapon_slots,
+	}
+
+
+func restore_inventory_state(saved_state: Dictionary) -> bool:
+	var slots_variant: Variant = saved_state.get("weapon_slots", [])
+	if not slots_variant is Array:
+		return false
+	var restored_slots: Array[Dictionary] = []
+	for entry_variant: Variant in slots_variant:
+		if not entry_variant is Dictionary:
+			continue
+		var entry := entry_variant as Dictionary
+		var saved_id := StringName(str(entry.get("weapon_id", entry.get("id", ""))))
+		if saved_id.is_empty():
+			continue
+		var source_weapon := ZombieTownWeaponCatalog.load_saved_weapon(saved_id)
+		if source_weapon == null:
+			continue
+		var runtime_weapon := source_weapon.duplicate(true) as WeaponData
+		if runtime_weapon == null:
+			continue
+		var pack_level_value := clampi(int(entry.get("pack_level", 0)), 0, 3)
+		_apply_saved_pack_level(runtime_weapon, pack_level_value)
+		restored_slots.append(_make_slot(
+			runtime_weapon,
+			int(entry.get("ammo", runtime_weapon.magazine_size)),
+			int(entry.get("reserve", runtime_weapon.reserve_ammo)),
+			pack_level_value
+		))
+	if restored_slots.is_empty():
+		return false
+	weapon_slots = restored_slots
+	max_weapon_slots = clampi(
+		maxi(int(saved_state.get("max_weapon_slots", 2)), 3 if weapon_slots.size() >= 3 else 2),
+		2,
+		3
+	)
+	active_weapon_slot = clampi(
+		int(saved_state.get("active_weapon_slot", 0)),
+		0,
+		weapon_slots.size() - 1
+	)
+	inventory_ready = true
+	_load_active_slot()
+	return true
+
+
+func _apply_saved_pack_level(slot_weapon: WeaponData, pack_level_value: int) -> void:
+	if pack_level_value >= 1:
+		slot_weapon.damage *= 2.0
+	if pack_level_value >= 2:
+		slot_weapon.damage *= 1.7
+		slot_weapon.magazine_size = roundi(float(slot_weapon.magazine_size) * 1.5)
+		slot_weapon.reserve_ammo = roundi(float(slot_weapon.reserve_ammo) * 1.5)
+	if pack_level_value >= 3:
+		slot_weapon.damage *= 3.0
+		slot_weapon.magazine_size = roundi(float(slot_weapon.magazine_size) * (4.0 / 3.0))
+		slot_weapon.reserve_ammo = roundi(float(slot_weapon.reserve_ammo) * (4.0 / 3.0))
+
 func _make_slot(slot_weapon: WeaponData, current_ammo: int, current_reserve: int, pack_level: int) -> Dictionary:
 	return {
 		"weapon": slot_weapon,

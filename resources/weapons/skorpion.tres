@@ -1,11 +1,14 @@
-[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+[ext_resource type="Resource" path="res://resources/weapons/viewmodels/skorpion_viewmodel.tres" id="2_viewmodel"]
 
 [resource]
 script = ExtResource("1_weapon")
 id = &"skorpion"
 display_name = "M3 Grease Gun"
+standard_gameplay_enabled = false
+roster_note = "Reserve/map-specific M3 Grease Gun. Preserved and developer-accessible after UMP assumed its standard Mystery Box role."
 weapon_class = &"smg"
 fire_mode = &"auto"
 damage = 30.0
@@ -18,3 +21,4 @@ spread = 0.036
 ads_spread = 0.007
 recoil_pitch = 0.72
 recoil_yaw = 0.28
+viewmodel_profile = ExtResource("2_viewmodel")

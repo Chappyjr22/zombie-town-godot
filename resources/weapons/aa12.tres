@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+[ext_resource type="Resource" path="res://resources/weapons/viewmodels/candidates/aa12_production_candidate_viewmodel.tres" id="2_viewmodel"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"aa12"
+display_name = "AA-12"
+roster_note = "Core production automatic shotgun. Correctly identified replacement for the former standard M1216 gameplay role."
+weapon_class = &"shotgun"
+fire_mode = &"auto"
+damage = 22.0
+pellets = 8
+magazine_size = 20
+reserve_ammo = 160
+reload_time = 3.25
+fire_interval = 0.2
+range = 38.0
+spread = 0.054
+ads_spread = 0.036
+recoil_pitch = 1.25
+recoil_yaw = 0.38
+ammo_cost = 950
+viewmodel_profile = ExtResource("2_viewmodel")

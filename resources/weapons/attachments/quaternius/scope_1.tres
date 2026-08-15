@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="WeaponAttachmentData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_attachment_data.gd" id="1_data"]
+[ext_resource type="PackedScene" path="res://assets/weapons/runtime/quaternius/attachments/scope_1.glb" id="2_model"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"quaternius_scope_1"
+display_name = "Scope 1"
+slot = "optic"
+socket_name = &"Socket_Optic"
+model_scene = ExtResource("2_model")
+notes = "Long optic; glass is material-only and has no reticle implementation."
+

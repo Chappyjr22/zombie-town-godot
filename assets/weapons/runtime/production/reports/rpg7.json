@@ -1,0 +1,198 @@
+{
+  "asset_id": "rpg7",
+  "production_candidate": true,
+  "developer_only_until_approved": true,
+  "input_evaluation_derivative": "C:\\Users\\JacobChapman\\Desktop\\zombie-town-godot\\assets\\weapons\\evaluation\\diamo_launcher_sniper\\runtime\\diamo_rpg7.glb",
+  "input_sha256": "C0475053D73D6193304A16E814097ABB584C5C774E6F28E729232836DB319289",
+  "source_archive_sha256": "CC7A1FE05F81CDC5105439079614C3C4CCFC1ABA3B51109551B57BC167A6F740",
+  "source_was_modified": false,
+  "blender_version": "5.2.0 LTS",
+  "output": "rpg7.glb",
+  "output_bytes": 27684252,
+  "output_sha256": "A24DD7DED6411CBA3C3EA4656303EFD7252DC916EBA3C46F1A5631B39BC62421",
+  "mesh_object_count": 2,
+  "triangle_count": 4534,
+  "bounds_meters": {
+    "minimum": [
+      -0.04214846342802048,
+      -0.0988098531961441,
+      -0.49000003933906555
+    ],
+    "maximum": [
+      0.04214845970273018,
+      0.0988098680973053,
+      0.49000003933906555
+    ],
+    "size": [
+      0.08429692685604095,
+      0.1976197212934494,
+      0.9800000786781311
+    ]
+  },
+  "texture_optimization": {
+    "maximum_runtime_dimension": 2048,
+    "images": [
+      {
+        "name": "RPG.7_Base  - RPG-RPG.7_Base  - RPG",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "RPG.7_Base  - RPG.7_BaseColor",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "RPG.7_Base  - RPG.7_Normal",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "RPG.7_Rocket - RPG-RPG.7_Rocket - RPG",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "RPG.7_Rocket - RPG.7_BaseColor",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "RPG.7_Rocket - RPG.7_Normal",
+        "before": [
+          4096,
+          4096
+        ],
+        "runtime": [
+          2048,
+          2048
+        ]
+      }
+    ]
+  },
+  "normalization": {
+    "source_long_axis": "Z",
+    "long_axis_rotation_degrees": 0.0,
+    "target_length_meters": 0.98,
+    "uniform_scale": 0.09168392506129819,
+    "centered_origin": true,
+    "canonical_roll_degrees": 0.0,
+    "canonical_yaw_degrees": 0.0
+  },
+  "topology_cleanup": {
+    "zero_area_faces_removed": 0,
+    "objects": [
+      {
+        "object": "Base  - RPG.7",
+        "zero_area_faces_removed": 0
+      },
+      {
+        "object": "Rocket - RPG.7",
+        "zero_area_faces_removed": 0
+      }
+    ]
+  },
+  "orientation_validation": {
+    "canonical_forward_axis": "-Z",
+    "canonical_up_axis": "+Y",
+    "source_evaluation_orientation_preserved": true
+  },
+  "mechanism": {
+    "source_to_production_names": {
+      "Base  - RPG.7": "LauncherBody",
+      "Rocket - RPG.7": "RocketBody"
+    },
+    "semantic_components": [
+      "LauncherBody",
+      "RocketBody"
+    ],
+    "hierarchy": [
+      "Launcher",
+      "Marker_RocketRemoved",
+      "Marker_RocketSeated",
+      "Rocket",
+      "RocketPivot",
+      "Socket_Projectile"
+    ],
+    "markers": [
+      "Marker_RocketSeated",
+      "Marker_RocketRemoved"
+    ],
+    "pivots": [
+      {
+        "component": "Rocket",
+        "pivot": "RocketPivot",
+        "axis": "local -Z"
+      }
+    ],
+    "origin_corrections": {
+      "RocketBody": {
+        "before": [
+          -2.60770320892334e-08,
+          0.02504177764058113,
+          -0.2634691596031189
+        ],
+        "after": [
+          -1.210719347000122e-08,
+          0.025011636316776276,
+          -0.20252493023872375
+        ],
+        "correction_distance_meters": 0.06094423751611304
+      }
+    },
+    "separate_animation_ready": [
+      "rocket"
+    ],
+    "embedded_components_requiring_future_mesh_separation": [
+      "trigger",
+      "iron_sights",
+      "grips"
+    ],
+    "notes": [
+      "The source provides a clean separate rocket; launcher trigger and sight controls remain embedded in the base body."
+    ]
+  },
+  "sockets": [
+    "Socket_Optic",
+    "Socket_Muzzle",
+    "Socket_Underbarrel",
+    "Socket_Side",
+    "Socket_Stock",
+    "Socket_Bayonet",
+    "Socket_Magazine",
+    "Socket_PrimaryGrip",
+    "Socket_SupportGrip",
+    "Socket_Projectile"
+  ],
+  "axis_convention": "Godot viewmodel: -Z muzzle, +Y up, +X across"
+}

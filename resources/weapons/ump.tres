@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_weapon"]
+[ext_resource type="Resource" path="res://resources/weapons/viewmodels/ump_viewmodel.tres" id="2_viewmodel"]
+
+[resource]
+script = ExtResource("1_weapon")
+id = &"ump"
+display_name = "UMP-45"
+standard_gameplay_enabled = true
+roster_note = "Core production slower-firing, higher-damage heavy SMG using the approved Diamo model and presentation."
+weapon_class = &"smg"
+fire_mode = &"auto"
+damage = 58.0
+headshot_multiplier = 3.0
+magazine_size = 30
+reserve_ammo = 240
+reload_time = 2.2
+fire_interval = 0.10
+range = 85.0
+spread = 0.03
+ads_spread = 0.005
+recoil_pitch = 0.95
+recoil_yaw = 0.42
+ammo_cost = 700
+viewmodel_profile = ExtResource("2_viewmodel")

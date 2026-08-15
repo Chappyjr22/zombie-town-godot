@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="WeaponAttachmentLayout" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_attachment_layout.gd" id="1_layout"]
+
+[resource]
+script = ExtResource("1_layout")
+supported_slots = Array[StringName]([&"optic", &"muzzle", &"side", &"stock", &"projectile"])
